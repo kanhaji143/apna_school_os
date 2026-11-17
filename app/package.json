@@ -1,0 +1,22 @@
+{
+  "name": "apna-computer-school-rms",
+  "version": "2.0.0",
+  "description": "APNA Computer RMS Enterprise v2.0 - Offline-First Multi-Board School Management Desktop Application",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node src/test_suite.js",
+    "seed": "python src/database/seed_lakshya.py"
+  },
+  "keywords": [
+    "school-management",
+    "offline-first",
+    "marksheet",
+    "salary-slip",
+    "question-paper",
+    "sqlite",
+    "lakshya"
+  ],
+  "author": "Apna Computer (Hanu Ganeshan)",
+  "license": "Commercial"
+}

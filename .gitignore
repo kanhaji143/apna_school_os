@@ -1,0 +1,23 @@
+# Security & Master Secrets (Strictly Local)
+SUPER_ADMIN_CONFIDENTIAL_MASTER.txt
+
+# Archived & Heavy Unrelated Files (>100MB limits on GitHub)
+_ARCHIVED_UNRELATED_FILES/
+*.zip
+*.rar
+
+# Dependencies & Node modules
+node_modules/
+npm-debug.log*
+
+# Database & Runtime Data
+*.db
+*.db-journal
+*.vault.db
+backups/
+
+# Logs & Temporary Files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
