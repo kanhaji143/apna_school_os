@@ -666,35 +666,63 @@
 
             <!-- 3. STUDENTS (426 Enrolled) -->
             <div id="pane-students" class="tab-pane">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <!-- Header Row -->
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                     <div>
-                        <h2 style="font-size:20px; font-weight:800;">Students Master Directory (426 Records)</h2>
-                        <p style="font-size:12px; color:var(--text-muted);">All students loaded from School_ERP_V1.1.3_Updated_Lakshya.xlsx</p>
+                        <h2 style="font-size:20px; font-weight:800;">Students Master Directory</h2>
+                        <p style="font-size:12px; color:var(--text-muted);" id="stu-record-count-label">Loading records...</p>
                     </div>
                     <div style="display:flex; gap:8px; align-items:center;">
                         <button class="btn btn-outline" onclick="exportStudentsToExcel()" style="display:flex; align-items:center; gap:6px; font-size:12px; padding:6px 12px;">
                             <span>📑</span> Export to Excel (.xlsx)
                         </button>
-                        <select id="stu-filter-class" style="padding:6px 10px; border-radius:6px; border:1px solid var(--border);" onchange="filterStudentList()">
-                            <option value="">All Classes</option>
-                            <option value="PG">PG</option>
-                            <option value="LKG">LKG</option>
-                            <option value="UKG">UKG</option>
-                            <option value="Class 1">Class 1</option>
-                            <option value="Class 2">Class 2</option>
-                            <option value="Class 3">Class 3</option>
-                            <option value="Class 4">Class 4</option>
-                            <option value="Class 5">Class 5</option>
-                            <option value="Class 6">Class 6</option>
-                            <option value="Class 7">Class 7</option>
-                            <option value="Class 8">Class 8</option>
-                        </select>
                     </div>
                 </div>
+
+                <!-- Search + Filter Bar (like APNA RMS) -->
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:14px; flex-wrap:wrap;">
+                    <div style="position:relative; flex:1; min-width:260px;">
+                        <span style="position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:14px;">🔍</span>
+                        <input type="text" id="stu-live-search"
+                            placeholder="नाम, फ़ोन, Adm No या पिता का नाम खोजें..."
+                            oninput="filterStudentList()"
+                            style="width:100%; padding:8px 12px 8px 34px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; background:var(--bg-page); color:var(--text-heading);">
+                    </div>
+                    <select id="stu-filter-class" style="padding:8px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:13px; background:var(--bg-page); color:var(--text-heading);" onchange="filterStudentList()">
+                        <option value="">All Classes</option>
+                        <option value="PG">PG</option>
+                        <option value="LKG">LKG</option>
+                        <option value="UKG">UKG</option>
+                        <option value="Class 1">Class 1</option>
+                        <option value="Class 2">Class 2</option>
+                        <option value="Class 3">Class 3</option>
+                        <option value="Class 4">Class 4</option>
+                        <option value="Class 5">Class 5</option>
+                        <option value="Class 6">Class 6</option>
+                        <option value="Class 7">Class 7</option>
+                        <option value="Class 8">Class 8</option>
+                    </select>
+                    <select id="stu-filter-status" style="padding:8px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:13px; background:var(--bg-page); color:var(--text-heading);" onchange="filterStudentList()">
+                        <option value="">All Status</option>
+                        <option value="Active">✅ Active</option>
+                        <option value="Inactive">🔴 Inactive</option>
+                    </select>
+                    <span id="stu-filtered-count" style="font-size:12px; font-weight:700; color:var(--text-muted); white-space:nowrap;"></span>
+                </div>
+
                 <div class="table-card">
                     <table class="app-table">
                         <thead>
-                            <tr><th>Adm No</th><th>Roll</th><th>Student Name</th><th>Father Name</th><th>Class</th><th>Transport Route</th><th>Fee Status</th><th>Actions</th></tr>
+                            <tr>
+                                <th>Adm No</th>
+                                <th>Student Name</th>
+                                <th>Father Name</th>
+                                <th>Phone 📱</th>
+                                <th>Class</th>
+                                <th>Enrollment</th>
+                                <th>Fee Status</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
                         <tbody id="student-master-tbody"></tbody>
                     </table>
@@ -4640,29 +4668,80 @@ Bhadar, Amethi (U.P.)`;
 
         function renderMasterStudents(students) {
             const tbody = document.getElementById('student-master-tbody');
-            tbody.innerHTML = students.map(s => `
+            // Update count label
+            const countLabel = document.getElementById('stu-record-count-label');
+            if (countLabel) countLabel.textContent = `${students.length} छात्र मिले (Records Found)`;
+            const filteredCount = document.getElementById('stu-filtered-count');
+            if (filteredCount) filteredCount.textContent = allStudents && allStudents.length !== students.length ? `${students.length} / ${allStudents.length} दिखाए` : '';
+
+            if (students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--text-muted); font-size:13px;">
+                    🔍 कोई छात्र नहीं मिला — खोज बदलकर देखें</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = students.map(s => {
+                // Enrollment status pill
+                const isActive = !s.status || s.status === 'Active' || s.status === 'active';
+                const statusPill = isActive
+                    ? `<span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:2px 9px; border-radius:20px; font-size:11px; font-weight:700;">✓ Active</span>`
+                    : `<span style="background:#fef3c7; color:#b45309; border:1px solid #fcd34d; padding:2px 9px; border-radius:20px; font-size:11px; font-weight:700;">⏸ Inactive</span>`;
+
+                // Fee badge
+                const feeBadge = s.fee_badge || 'Paid';
+                const feePill = feeBadge && (feeBadge.toLowerCase().includes('due') || feeBadge.toLowerCase().includes('pending') || feeBadge.toLowerCase().includes('बकाया'))
+                    ? `<span style="background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; padding:2px 9px; border-radius:20px; font-size:11px; font-weight:700;">⚠ ${feeBadge}</span>`
+                    : `<span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:2px 9px; border-radius:20px; font-size:11px; font-weight:700;">✓ ${feeBadge}</span>`;
+
+                return `
                 <tr>
-                    <td><strong>${s.admission_no}</strong></td>
-                    <td>${s.roll_no || '—'}</td>
-                    <td><strong>${s.student_name}</strong></td>
-                    <td>${s.father_name}</td>
-                    <td>${s.class}</td>
-                    <td>${s.route_name || 'Self'}</td>
-                    <td><span style="color:#15803d; font-weight:700;">${s.fee_badge}</span></td>
-                    <td>
+                    <td><strong style="font-size:12px; color:var(--text-heading);">${s.admission_no}</strong></td>
+                    <td><strong>${s.student_name}</strong><br><span style="font-size:10.5px; color:var(--text-muted);">${s.class || ''}</span></td>
+                    <td>${s.father_name || '—'}</td>
+                    <td style="font-size:12px; font-weight:600;">${s.phone || s.mobile || s.contact || '—'}</td>
+                    <td><span style="background:var(--bg-page); border:1px solid var(--border); padding:2px 7px; border-radius:5px; font-size:11.5px; font-weight:700;">${s.class || '—'}</span></td>
+                    <td>${statusPill}</td>
+                    <td>${feePill}</td>
+                    <td style="white-space:nowrap;">
                         <button class="btn" style="padding:3px 7px; font-size:11px;" onclick="viewStudentMarksheet(${s.id})">📜 Marksheet</button>
                         <button class="btn btn-outline" style="padding:3px 7px; font-size:11px;" onclick="openStudentLedger(${s.id})">📑 Ledger</button>
                         <button class="btn btn-success" style="padding:3px 7px; font-size:11px;" onclick="openFeeCollectModal(${s.id})">💳 Pay</button>
                         <button class="btn btn-purple" style="padding:3px 7px; font-size:11px;" onclick="viewIDCard(${s.id})">🪪 ID</button>
-                        <button class="btn" style="padding:3px 7px; font-size:11px; background:#10b981; color:#ffffff; border:1px solid #059669;" onclick="sendStudentWhatsApp(${s.id})" title="अभिभावक को व्हाट्सएप भेजें">💬 WhatsApp</button>
+                        <button class="btn" style="padding:3px 7px; font-size:11px; background:#10b981; color:#ffffff; border:1px solid #059669;" onclick="sendStudentWhatsApp(${s.id})" title="अभिभावक को व्हाट्सएप भेजें">💬 WA</button>
                     </td>
-                </tr>
-            `).join('');
+                </tr>`;
+            }).join('');
         }
 
         function filterStudentList() {
-            const cls = document.getElementById('stu-filter-class').value;
-            const filtered = cls ? allStudents.filter(s => s.class === cls) : allStudents;
+            const searchVal = (document.getElementById('stu-live-search')?.value || '').toLowerCase().trim();
+            const cls = document.getElementById('stu-filter-class')?.value || '';
+            const statusFilter = document.getElementById('stu-filter-status')?.value || '';
+
+            let filtered = allStudents || [];
+
+            // Live text search — name, father name, phone, adm no
+            if (searchVal) {
+                filtered = filtered.filter(s => {
+                    const name = (s.student_name || '').toLowerCase();
+                    const father = (s.father_name || '').toLowerCase();
+                    const phone = (s.phone || s.mobile || s.contact || '').toString();
+                    const adm = (s.admission_no || '').toLowerCase();
+                    return name.includes(searchVal) || father.includes(searchVal) || phone.includes(searchVal) || adm.includes(searchVal);
+                });
+            }
+
+            // Class filter
+            if (cls) filtered = filtered.filter(s => s.class === cls);
+
+            // Enrollment status filter
+            if (statusFilter) {
+                filtered = filtered.filter(s => {
+                    const st = s.status || 'Active';
+                    return st === statusFilter;
+                });
+            }
+
             renderMasterStudents(filtered);
         }
 
