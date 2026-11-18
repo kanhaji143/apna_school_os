@@ -92,16 +92,39 @@ function initDatabase() {
     // SELF-HEALING RECOVERY CHECK
     if (!primaryExists && vaultExists) {
         console.warn('⚠️ Primary database missing! Initiating Self-Healing recovery from Shadow Vault...');
-        fs.copyFileSync(VAULT_DB_PATH, PRIMARY_DB_PATH);
-        logRecoveryEvent('Primary database was restored automatically from %LOCALAPPDATA% Shadow Vault.');
+        try {
+            fs.copyFileSync(VAULT_DB_PATH, PRIMARY_DB_PATH);
+            logRecoveryEvent('Primary database was restored automatically from %LOCALAPPDATA% Shadow Vault.');
+        } catch (e) {}
     }
 
-    dbInstance = new DatabaseSync(PRIMARY_DB_PATH);
+    try {
+        dbInstance = new DatabaseSync(PRIMARY_DB_PATH);
+    } catch (dbErr) {
+        console.error('⚠️ Could not open primary DB at ' + PRIMARY_DB_PATH + ': ' + dbErr.message);
+        console.warn('🔄 Safely falling back to local AppData database...');
+        const emergencyPath = path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE || 'C:\\ProgramData', 'APNA_RMS_DATA', 'apna_records.db');
+        try {
+            const emergencyDir = path.dirname(emergencyPath);
+            if (!fs.existsSync(emergencyDir)) fs.mkdirSync(emergencyDir, { recursive: true });
+            if (!fs.existsSync(emergencyPath) && fs.existsSync(templatePath)) {
+                fs.copyFileSync(templatePath, emergencyPath);
+            }
+            dbInstance = new DatabaseSync(emergencyPath);
+        } catch (emErr) {
+            console.error('Critical fallback to in-memory DB:', emErr.message);
+            dbInstance = new DatabaseSync(':memory:');
+        }
+    }
     
     // Enable WAL mode & foreign keys
-    dbInstance.exec('PRAGMA foreign_keys = ON;');
-    dbInstance.exec('PRAGMA journal_mode = WAL;');
-    dbInstance.exec('PRAGMA synchronous = NORMAL;');
+    try {
+        dbInstance.exec('PRAGMA foreign_keys = ON;');
+        dbInstance.exec('PRAGMA journal_mode = WAL;');
+        dbInstance.exec('PRAGMA synchronous = NORMAL;');
+    } catch (pragmaErr) {
+        console.warn('Pragma warning:', pragmaErr.message);
+    }
 
     // Load schema if fresh
     const schemaPath = path.join(__dirname, 'schema.sql');

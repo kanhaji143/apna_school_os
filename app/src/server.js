@@ -1111,20 +1111,24 @@ let activePort = parseInt(process.env.PORT, 10) || 8085;
 const MAX_FALLBACKS = 10;
 let fallbackCount = 0;
 
-function tryListen(portToTry) {
-    server.listen(portToTry, '0.0.0.0', () => {
+function tryListen(portToTry, hostToTry = '0.0.0.0') {
+    server.listen(portToTry, hostToTry, () => {
         activePort = portToTry;
-        console.log(`🚀 Apna School OS Server running at http://127.0.0.1:${activePort}`);
-        console.log(`🌐 Also accessible on LAN at port ${activePort}`);
+        console.log(`🚀 Apna School OS Server running at http://127.0.0.1:${activePort} (interface: ${hostToTry})`);
+        console.log(`🌐 Application ready for desktop window`);
         
         // Write active port to files so launcher and utilities always know exact port
         try {
             const portFiles = [
                 path.join(__dirname, '..', '..', 'active_port.txt'),
-                path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE, 'APNA_RMS_DATA', 'active_port.txt')
+                path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE || 'C:\\ProgramData', 'APNA_RMS_DATA', 'active_port.txt')
             ];
             for (const pf of portFiles) {
-                fs.writeFileSync(pf, activePort.toString(), 'utf8');
+                try {
+                    const pDir = path.dirname(pf);
+                    if (!fs.existsSync(pDir)) fs.mkdirSync(pDir, { recursive: true });
+                    fs.writeFileSync(pf, activePort.toString(), 'utf8');
+                } catch (pe) {}
             }
         } catch (e) {}
     });
@@ -1142,6 +1146,12 @@ server.on('error', (err) => {
             }, 100);
             return;
         }
+    } else if (err.code === 'EACCES') {
+        console.warn(`Permission restricted on 0.0.0.0:${activePort}, safely falling back to loopback 127.0.0.1...`);
+        setTimeout(() => {
+            tryListen(activePort, '127.0.0.1');
+        }, 100);
+        return;
     }
     console.error('Fatal Server Socket Error:', err.message);
 });
