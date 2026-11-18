@@ -72,7 +72,8 @@ const server = http.createServer(async (req, res) => {
         // 0. Authentication & Security
         if (pathname === '/api/auth/login' && method === 'POST') {
             const body = await parseBody(req);
-            const authResult = AuthService.login(body.username, body.password);
+            const ident = body.username || body.identifier || body.email || body.phone;
+            const authResult = AuthService.login(ident, body.password);
             return sendJson(res, authResult.success ? 200 : 401, authResult);
         }
         if (pathname === '/api/auth/reset' && method === 'POST') {
