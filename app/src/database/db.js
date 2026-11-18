@@ -136,12 +136,60 @@ function initDatabase() {
     // Initialize Default Profiles & Super Admin if not present
     seedDefaults();
 
+    // Auto-migrate schema for legacy databases (ensure phone, email, etc. exist)
+    ensureSchemaMigrations(dbInstance);
+
     // Mirror to Vault
     syncShadowVault();
 
     console.log(`✅ APNA Computer RMS Database initialized at: ${PRIMARY_DB_PATH}`);
     console.log(`🛡️ Self-Healing Shadow Vault active at: ${VAULT_DB_PATH}`);
     return dbInstance;
+}
+
+function ensureSchemaMigrations(db) {
+    if (!db) return;
+    try {
+        // 1. Ensure 'users' table columns exist
+        const userCols = db.prepare("PRAGMA table_info(users)").all().map(c => c.name.toLowerCase());
+        if (!userCols.includes('phone')) {
+            db.exec("ALTER TABLE users ADD COLUMN phone TEXT DEFAULT '';");
+            console.log('✅ Migrated users table: added phone column');
+        }
+        if (!userCols.includes('email')) {
+            db.exec("ALTER TABLE users ADD COLUMN email TEXT DEFAULT '';");
+            console.log('✅ Migrated users table: added email column');
+        }
+        if (!userCols.includes('status')) {
+            db.exec("ALTER TABLE users ADD COLUMN status TEXT DEFAULT 'active';");
+            console.log('✅ Migrated users table: added status column');
+        }
+        if (!userCols.includes('last_login')) {
+            db.exec("ALTER TABLE users ADD COLUMN last_login DATETIME;");
+            console.log('✅ Migrated users table: added last_login column');
+        }
+
+        // Update default accounts with phone & email if empty
+        try {
+            db.exec(`
+                UPDATE users SET phone = '8504985149', email = 'krishnaskb143@gmail.com' WHERE LOWER(username) = 'hanuganeshan' AND (phone IS NULL OR phone = '');
+                UPDATE users SET phone = '8303324088', email = 'lakshyaschool@gmail.com' WHERE LOWER(username) = 'admin' AND (phone IS NULL OR phone = '');
+                UPDATE users SET phone = '8303324088', email = 'accountant@lakshyaschool.in' WHERE LOWER(username) = 'accountant' AND (phone IS NULL OR phone = '');
+                UPDATE users SET phone = '8303324088', email = 'admissions@lakshyaschool.in' WHERE LOWER(username) = 'counselor' AND (phone IS NULL OR phone = '');
+            `);
+        } catch (uErr) {}
+
+        // 2. Ensure 'students' table columns exist
+        const studentCols = db.prepare("PRAGMA table_info(students)").all().map(c => c.name.toLowerCase());
+        if (studentCols.length > 0) {
+            if (!studentCols.includes('sr_number')) db.exec("ALTER TABLE students ADD COLUMN sr_number TEXT DEFAULT '';");
+            if (!studentCols.includes('apaar_id')) db.exec("ALTER TABLE students ADD COLUMN apaar_id TEXT DEFAULT '';");
+            if (!studentCols.includes('pen_number')) db.exec("ALTER TABLE students ADD COLUMN pen_number TEXT DEFAULT '';");
+            if (!studentCols.includes('route_id')) db.exec("ALTER TABLE students ADD COLUMN route_id INTEGER DEFAULT 0;");
+        }
+    } catch (migErr) {
+        console.warn('Schema migration notice:', migErr.message);
+    }
 }
 
 function seedDefaults() {
@@ -204,6 +252,7 @@ function getDb() {
 module.exports = {
     initDatabase,
     getDb,
+    ensureSchemaMigrations,
     syncShadowVault,
     PRIMARY_DB_PATH,
     VAULT_DB_PATH,

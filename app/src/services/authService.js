@@ -1,8 +1,10 @@
-const { getDb } = require('../database/db');
+const { getDb, ensureSchemaMigrations } = require('../database/db');
 
 class AuthService {
     static login(inputIdentifier, inputPassword) {
         const db = getDb();
+        ensureSchemaMigrations(db);
+
         const ident = (inputIdentifier || '').trim();
         const pwd = (inputPassword || '').trim();
 
@@ -23,13 +25,33 @@ class AuthService {
             };
         }
 
-        // Case-insensitive lookup across username, phone, and email
-        let user = db.prepare(`
-            SELECT * FROM users 
-            WHERE LOWER(username) = LOWER(?) 
-               OR phone = ? 
-               OR (email != '' AND LOWER(email) = LOWER(?))
-        `).get(ident, ident, ident);
+        // Dynamically inspect columns to ensure 100% compatibility with legacy/upgraded databases
+        let user = null;
+        try {
+            const userCols = db.prepare("PRAGMA table_info(users)").all().map(c => c.name.toLowerCase());
+            const hasPhone = userCols.includes('phone');
+            const hasEmail = userCols.includes('email');
+
+            if (hasPhone && hasEmail) {
+                user = db.prepare(`
+                    SELECT * FROM users 
+                    WHERE LOWER(username) = LOWER(?) 
+                       OR phone = ? 
+                       OR (email != '' AND LOWER(email) = LOWER(?))
+                `).get(ident, ident, ident);
+            } else if (hasPhone) {
+                user = db.prepare(`
+                    SELECT * FROM users 
+                    WHERE LOWER(username) = LOWER(?) OR phone = ?
+                `).get(ident, ident);
+            } else {
+                user = db.prepare("SELECT * FROM users WHERE LOWER(username) = LOWER(?)").get(ident);
+            }
+        } catch (dbErr) {
+            try {
+                user = db.prepare("SELECT * FROM users WHERE LOWER(username) = LOWER(?)").get(ident);
+            } catch (e) {}
+        }
 
         // Aliases for director phone or school email
         if (!user) {
@@ -60,7 +82,11 @@ class AuthService {
             return { success: false, error: 'पासवर्ड सही नहीं है (Incorrect password)! कृपया पासवर्ड दोबारा जांचें।' };
         }
 
-        if (user.status !== 'active') {
+        // Status verification (supports both new 'status' and legacy 'is_active')
+        if (user.status && user.status !== 'active') {
+            return { success: false, error: 'खाता निष्क्रिय या लॉक है (User account is locked or inactive).' };
+        }
+        if (user.is_active !== undefined && user.is_active === 0) {
             return { success: false, error: 'खाता निष्क्रिय या लॉक है (User account is locked or inactive).' };
         }
 
