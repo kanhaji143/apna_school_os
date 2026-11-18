@@ -12,13 +12,15 @@ echo.
 
 cd /d "%~dp0"
 
-:: 1. Check if server is already running on port 8085
-netstat -ano | findstr /R /C:":8085 " >nul 2>&1
-if %ERRORLEVEL% EQU 0 (
-    echo [INFO] School OS is already running on port 8085!
-    echo [INFO] Opening School Management Dashboard in your browser...
-    start http://127.0.0.1:8085
-    exit /b 0
+:: 1. Check if server is already running on any port 8085-8095
+for /L %%P in (8085,1,8095) do (
+    netstat -ano | findstr /R /C:":%%P " >nul 2>&1
+    if !ERRORLEVEL! EQU 0 (
+        echo [INFO] School OS is already running on port %%P!
+        echo [INFO] Opening School Management Dashboard in your browser...
+        start http://127.0.0.1:%%P
+        exit /b 0
+    )
 )
 
 :: 2. Locate Node.js executable (bundled or installed)
@@ -43,9 +45,9 @@ if "%NODE_EXE%"=="" (
     exit /b 1
 )
 
-:: 3. Start server in background
+:: 3. Start server in background with auto-port hunting
 echo [1/2] Initializing SQLite Database & Self-Healing Shadow Vault...
-echo [2/2] Starting School OS Server on Dedicated Port 8085...
+echo [2/2] Starting School OS Server with Auto-Port Selection...
 echo Using runtime: %NODE_EXE%
 echo.
 
@@ -53,9 +55,16 @@ start "" /b "%NODE_EXE%" "%~dp0app\src\server.js"
 
 :: 4. Wait for server to bind port and launch browser
 timeout /t 2 /nobreak >nul
-start http://127.0.0.1:8085
+
+set "TARGET_PORT=8085"
+if exist "%~dp0active_port.txt" (
+    set /p TARGET_PORT=<"%~dp0active_port.txt"
+)
+
+start http://127.0.0.1:%TARGET_PORT%
 
 echo =========================================================================
-echo Server is running in the background. You can close this window anytime.
+echo Server is running on port %TARGET_PORT%.
+echo You can close this window anytime.
 echo To stop the server, run Stop_School_RMS.bat
 echo =========================================================================

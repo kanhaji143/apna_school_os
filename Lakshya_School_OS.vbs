@@ -1,8 +1,10 @@
 ' Apna School OS - Enterprise Desktop Launcher
 ' Maintained by Apna Software Hub | 100% Offline Secured | Helpline: +91 8504985149
+' Auto-Port Scanning & Zero-Error Fallback Engine (Ports 8085 - 8095)
 
 Option Explicit
-Dim WshShell, fso, strDir, nodeExe, serverScript, logFile, isRunning, http, attempts
+Dim WshShell, fso, strDir, nodeExe, serverScript, logFile
+Dim testPort, foundPort, attempts, activePort, http, launchCmd
 
 Set WshShell = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
@@ -40,66 +42,64 @@ If Not fso.FileExists(serverScript) Then
     WScript.Quit 1
 End If
 
-' 2. Check if server is already responding on port 8085
-isRunning = False
-On Error Resume Next
-Set http = CreateObject("MSXML2.ServerXMLHTTP.6.0")
-http.setTimeouts 800, 800, 800, 800
-http.Open "GET", "http://127.0.0.1:8085/", False
-http.Send
-If http.Status = 200 Then
-    isRunning = True
-End If
-On Error GoTo 0
+' 2. Check if server is already running on any port between 8085 and 8095
+foundPort = 0
+For testPort = 8085 To 8095
+    On Error Resume Next
+    Set http = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    http.setTimeouts 300, 300, 300, 300
+    http.Open "GET", "http://127.0.0.1:" & testPort & "/api/profile", False
+    http.Send
+    If http.Status = 200 Then
+        foundPort = testPort
+        Exit For
+    End If
+    On Error GoTo 0
+Next
 
-' 3. If not running, start server in background with error logging
-If Not isRunning Then
-    WshShell.CurrentDirectory = strDir
-    
-    ' Launch node server with stdout/stderr logged to server_startup.log
-    Dim launchCmd
-    launchCmd = "cmd.exe /c " & Chr(34) & Chr(34) & nodeExe & Chr(34) & " " & Chr(34) & serverScript & Chr(34) & " > " & Chr(34) & logFile & Chr(34) & " 2>&1" & Chr(34)
-    WshShell.Run launchCmd, 0, False
-    
-    ' Wait for server to bind port and accept connections (max 6 seconds)
-    attempts = 0
-    Do While attempts < 6
-        WScript.Sleep 1000
-        attempts = attempts + 1
+' If already running on any port, just open browser immediately!
+If foundPort > 0 Then
+    WshShell.Run "http://127.0.0.1:" & foundPort
+    WScript.Quit 0
+End If
+
+' 3. Start server in background with auto-port hunting
+WshShell.CurrentDirectory = strDir
+launchCmd = "cmd.exe /c " & Chr(34) & Chr(34) & nodeExe & Chr(34) & " " & Chr(34) & serverScript & Chr(34) & " > " & Chr(34) & logFile & Chr(34) & " 2>&1" & Chr(34)
+WshShell.Run launchCmd, 0, False
+
+' 4. Wait up to 6 seconds for whichever port binds successfully
+activePort = 0
+For attempts = 1 To 6
+    WScript.Sleep 1000
+    For testPort = 8085 To 8095
         On Error Resume Next
         Set http = CreateObject("MSXML2.ServerXMLHTTP.6.0")
-        http.setTimeouts 800, 800, 800, 800
-        http.Open "GET", "http://127.0.0.1:8085/", False
+        http.setTimeouts 300, 300, 300, 300
+        http.Open "GET", "http://127.0.0.1:" & testPort & "/api/profile", False
         http.Send
         If http.Status = 200 Then
-            isRunning = True
-            Exit Do
+            activePort = testPort
+            Exit For
         End If
         On Error GoTo 0
-    Loop
-End If
+    Next
+    If activePort > 0 Then Exit For
+Next
 
-' 4. Open browser directly to 127.0.0.1 (immune to localhost DNS quirks)
-If isRunning Then
-    WshShell.Run "http://127.0.0.1:8085"
-Else
-    ' If server failed to start, read log and inform user
-    Dim errMsg: errMsg = ""
-    If fso.FileExists(logFile) Then
+If activePort = 0 Then
+    ' Fallback to active_port.txt if written
+    If fso.FileExists(strDir & "\active_port.txt") Then
         On Error Resume Next
-        Dim tf: Set tf = fso.OpenTextFile(logFile, 1)
-        errMsg = tf.ReadAll()
-        tf.Close
+        Dim pf: Set pf = fso.OpenTextFile(strDir & "\active_port.txt", 1)
+        Dim pt: pt = Trim(pf.ReadLine())
+        pf.Close
+        If IsNumeric(pt) Then activePort = CInt(pt)
         On Error GoTo 0
     End If
-    
-    If InStr(errMsg, "EADDRINUSE") > 0 Then
-        MsgBox "पोर्ट 8085 पहले से व्यस्त है (Port 8085 is in use)!" & vbCrLf & vbCrLf & _
-               "कृपया 'Stop_School_RMS.bat' चलाएं अथवा कंप्यूटर रीस्टार्ट करके पुनः खोलें।", vbExclamation, "Apna School OS"
-    ElseIf errMsg <> "" Then
-        ' Still try opening browser in case it took slightly longer
-        WshShell.Run "http://127.0.0.1:8085"
-    Else
-        WshShell.Run "http://127.0.0.1:8085"
-    End If
 End If
+
+If activePort = 0 Then activePort = 8085
+
+' 5. Open browser seamlessly to the live running port
+WshShell.Run "http://127.0.0.1:" & activePort

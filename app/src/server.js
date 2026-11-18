@@ -1102,18 +1102,45 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
+let activePort = parseInt(process.env.PORT, 10) || 8085;
+const MAX_FALLBACKS = 10;
+let fallbackCount = 0;
+
+function tryListen(portToTry) {
+    server.listen(portToTry, '0.0.0.0', () => {
+        activePort = portToTry;
+        console.log(`🚀 Apna School OS Server running at http://127.0.0.1:${activePort}`);
+        console.log(`🌐 Also accessible on LAN at port ${activePort}`);
+        
+        // Write active port to files so launcher and utilities always know exact port
+        try {
+            const portFiles = [
+                path.join(__dirname, '..', '..', 'active_port.txt'),
+                path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE, 'APNA_RMS_DATA', 'active_port.txt')
+            ];
+            for (const pf of portFiles) {
+                fs.writeFileSync(pf, activePort.toString(), 'utf8');
+            }
+        } catch (e) {}
+    });
+}
+
 server.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
-        console.error(`❌ Port ${PORT} is already in use by another application or previous session.`);
-        console.error('Please run Stop_School_RMS.bat or restart your PC to free the port.');
-    } else {
-        console.error('Fatal Server Socket Error:', err.message);
+        fallbackCount++;
+        if (fallbackCount <= MAX_FALLBACKS) {
+            const nextPort = 8085 + fallbackCount;
+            console.log(`Port ${activePort} is occupied, automatically shifting to fallback port ${nextPort}...`);
+            activePort = nextPort;
+            setTimeout(() => {
+                tryListen(nextPort);
+            }, 100);
+            return;
+        }
     }
+    console.error('Fatal Server Socket Error:', err.message);
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Apna School OS Server running at http://127.0.0.1:${PORT}`);
-    console.log(`🌐 Also accessible on LAN at port ${PORT}`);
-});
+tryListen(activePort);
 
 module.exports = server;
