@@ -42,6 +42,7 @@ Source: "d:\School_Lakshya\CLIENT_INSTALLATION_&_TROUBLESHOOTING_GUIDE.pdf"; Des
 
 [Icons]
 Name: "{group}\Apna School OS"; Filename: "{app}\Lakshya_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{sys}\shell32.dll"; IconIndex: 264
+Name: "{group}\Start School OS (Console Log Mode)"; Filename: "{app}\Launch_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\📖 Staff Training Manual (PDF)"; Filename: "{app}\STAFF_TRAINING_MANUAL.pdf"; WorkingDir: "{app}"
 Name: "{group}\📖 User Operating Manual (PDF)"; Filename: "{app}\USER_OPERATING_MANUAL.pdf"; WorkingDir: "{app}"
 Name: "{group}\🔧 Installation & Troubleshooting Guide (PDF)"; Filename: "{app}\CLIENT_INSTALLATION_&_TROUBLESHOOTING_GUIDE.pdf"; WorkingDir: "{app}"
