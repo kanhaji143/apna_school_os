@@ -41,13 +41,15 @@ Source: "d:\School_Lakshya\Backup_Database.bat"; DestDir: "{app}"; Flags: ignore
 Source: "d:\School_Lakshya\STAFF_TRAINING_MANUAL.pdf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\USER_OPERATING_MANUAL.pdf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\CLIENT_INSTALLATION_&_TROUBLESHOOTING_GUIDE.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\CAMPUS_MULTI_STATION_DEPLOYMENT_GUIDE_EN.pdf"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\Apna School OS"; Filename: "{app}\Lakshya_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"
 Name: "{group}\Start School OS (Console Log Mode)"; Filename: "{app}\Launch_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\📖 Staff Training Manual (PDF)"; Filename: "{app}\STAFF_TRAINING_MANUAL.pdf"; WorkingDir: "{app}"
 Name: "{group}\📖 User Operating Manual (PDF)"; Filename: "{app}\USER_OPERATING_MANUAL.pdf"; WorkingDir: "{app}"
-Name: "{group}\🔧 Installation & Troubleshooting Guide (PDF)"; Filename: "{app}\CLIENT_INSTALLATION_&_TROUBLESHOOTING_GUIDE.pdf"; WorkingDir: "{app}"
+Name: "{group}\🔧 Installation & Troubleshooting Guide (Hindi PDF)"; Filename: "{app}\CLIENT_INSTALLATION_&_TROUBLESHOOTING_GUIDE.pdf"; WorkingDir: "{app}"
+Name: "{group}\🌐 Multi-Station Deployment Guide (English PDF)"; Filename: "{app}\CAMPUS_MULTI_STATION_DEPLOYMENT_GUIDE_EN.pdf"; WorkingDir: "{app}"
 Name: "{group}\Backup School Database"; Filename: "{app}\Backup_Database.bat"; WorkingDir: "{app}"
 Name: "{group}\Stop School OS"; Filename: "{app}\Stop_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\{cm:UninstallProgram,Apna School OS}"; Filename: "{uninstallexe}"
