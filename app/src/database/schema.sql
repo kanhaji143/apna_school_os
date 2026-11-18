@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
-    role TEXT NOT NULL CHECK (role IN ('super_admin', 'admin', 'accountant', 'counselor', 'demo')),
+    role TEXT NOT NULL CHECK (role IN ('super_admin', 'admin', 'accountant', 'counselor', 'clerk', 'teacher', 'demo')),
     full_name TEXT NOT NULL,
     phone TEXT DEFAULT '',
     email TEXT DEFAULT '',

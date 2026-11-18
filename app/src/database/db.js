@@ -169,15 +169,52 @@ function ensureSchemaMigrations(db) {
             console.log('✅ Migrated users table: added last_login column');
         }
 
-        // Update default accounts with phone & email if empty
+        // 2. Ensure official user accounts exist and match official training manual (admin, clerk, teacher, hanuganeshan)
         try {
-            db.exec(`
-                UPDATE users SET phone = '8504985149', email = 'krishnaskb143@gmail.com' WHERE LOWER(username) = 'hanuganeshan' AND (phone IS NULL OR phone = '');
-                UPDATE users SET phone = '8303324088', email = 'lakshyaschool@gmail.com' WHERE LOWER(username) = 'admin' AND (phone IS NULL OR phone = '');
-                UPDATE users SET phone = '8303324088', email = 'accountant@lakshyaschool.in' WHERE LOWER(username) = 'accountant' AND (phone IS NULL OR phone = '');
-                UPDATE users SET phone = '8303324088', email = 'admissions@lakshyaschool.in' WHERE LOWER(username) = 'counselor' AND (phone IS NULL OR phone = '');
-            `);
-        } catch (uErr) {}
+            // Check & seed / sync 'admin' (Director / Principal)
+            const adminUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'admin'").get();
+            if (adminUser) {
+                db.prepare("UPDATE users SET password_hash = 'admin123', role = 'admin', full_name = 'School Director / Principal', phone = '9005924960', email = 'lakshyaschool@gmail.com' WHERE id = ?").run(adminUser.id);
+            } else {
+                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('admin', 'admin123', 'admin', 'School Director / Principal', '9005924960', 'lakshyaschool@gmail.com', 'active')").run();
+            }
+
+            // Check & seed / sync 'clerk' (Accounts Clerk / Cashier)
+            const clerkUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'clerk'").get();
+            if (clerkUser) {
+                db.prepare("UPDATE users SET password_hash = 'clerk123', role = 'accountant', full_name = 'Accounts Clerk / Cashier', phone = '8303324088', email = 'accountant@lakshyaschool.in' WHERE id = ?").run(clerkUser.id);
+            } else {
+                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('clerk', 'clerk123', 'accountant', 'Accounts Clerk / Cashier', '8303324088', 'accountant@lakshyaschool.in', 'active')").run();
+            }
+
+            // Check & seed / sync 'teacher' (Academic In-charge / Teacher)
+            const teacherUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'teacher'").get();
+            if (teacherUser) {
+                db.prepare("UPDATE users SET password_hash = 'teacher123', role = 'counselor', full_name = 'Academic In-charge / Teacher', phone = '8303324089', email = 'academics@lakshyaschool.in' WHERE id = ?").run(teacherUser.id);
+            } else {
+                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('teacher', 'teacher123', 'counselor', 'Academic In-charge / Teacher', '8303324089', 'academics@lakshyaschool.in', 'active')").run();
+            }
+
+            // Keep legacy aliases (accountant & counselor) in sync so old shortcuts never break
+            const accUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'accountant'").get();
+            if (accUser) {
+                db.prepare("UPDATE users SET password_hash = 'clerk123', role = 'accountant', full_name = 'Accounts Clerk / Cashier', phone = '8303324088', email = 'accountant@lakshyaschool.in' WHERE id = ?").run(accUser.id);
+            }
+            const counsUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'counselor'").get();
+            if (counsUser) {
+                db.prepare("UPDATE users SET password_hash = 'teacher123', role = 'counselor', full_name = 'Academic In-charge / Teacher', phone = '8303324089', email = 'academics@lakshyaschool.in' WHERE id = ?").run(counsUser.id);
+            }
+
+            // Super Admin: Ensure untouched vendor authority
+            const superUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'hanuganeshan'").get();
+            if (!superUser) {
+                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('hanuganeshan', 'Admin@123', 'super_admin', 'Platform Owner', '8504985149', 'krishnaskb143@gmail.com', 'active')").run();
+            } else {
+                db.prepare("UPDATE users SET phone = '8504985149', email = 'krishnaskb143@gmail.com' WHERE id = ? AND (phone IS NULL OR phone = '')").run(superUser.id);
+            }
+        } catch (uErr) {
+            console.warn('User account sync notice:', uErr.message);
+        }
 
         // 2. Ensure 'students' table columns exist
         const studentCols = db.prepare("PRAGMA table_info(students)").all().map(c => c.name.toLowerCase());
@@ -218,14 +255,14 @@ function seedDefaults() {
             INSERT INTO users (username, password_hash, role, full_name, phone)
             VALUES (?, ?, ?, ?, ?)
         `);
-        // Super Admin (Vendor-protected developer authority)
+        // Super Admin (Vendor-protected developer authority - STRICTLY CONFIDENTIAL)
         insertUser.run('hanuganeshan', 'Admin@123', 'super_admin', 'Platform Owner', '8504985149');
-        // School Owner / Director
-        insertUser.run('admin', 'Admin@123', 'admin', 'School Director', '8303324088');
-        // Accountant
-        insertUser.run('accountant', 'accountant@123', 'accountant', 'Chief Accountant', '8303324088');
-        // Counselor (Reception)
-        insertUser.run('counselor', 'staff@123', 'counselor', 'Admission Counselor', '8303324088');
+        // 1. School Owner / Director
+        insertUser.run('admin', 'admin123', 'admin', 'School Director / Principal', '9005924960');
+        // 2. Accounts Clerk / Cashier
+        insertUser.run('clerk', 'clerk123', 'clerk', 'Accounts Clerk / Cashier', '8303324088');
+        // 3. Academic In-charge / Teacher
+        insertUser.run('teacher', 'teacher123', 'teacher', 'Academic In-charge / Teacher', '8303324089');
     }
 
     // 3. Check Exam Terms (Universal 4-Pillar Configuration)

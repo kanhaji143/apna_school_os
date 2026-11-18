@@ -348,27 +348,27 @@
                 <div class="nav-item" onclick="navigate('profile')"><span>🏫</span> School Profile</div>
 
                 <!-- ── STUDENTS & ADMISSIONS ── -->
-                <div style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">👥 Students & Admissions</div>
+                <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">👥 Students & Admissions</div>
                 <div class="nav-item" onclick="navigate('students')"><span>🎓</span> Students Directory</div>
                 <div class="nav-item" onclick="navigate('id-cards')"><span>🪪</span> ID Cards</div>
                 <div class="nav-item" onclick="navigate('classes')"><span>🏫</span> Class & Section Setup</div>
                 <div class="nav-item" onclick="navigate('growth-passport')"><span>🌟</span> Growth Passport</div>
 
                 <!-- ── ACADEMICS ── -->
-                <div style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">📚 Academics</div>
+                <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">📚 Academics</div>
                 <div class="nav-item" onclick="navigate('attendance')"><span>📅</span> Attendance</div>
                 <div class="nav-item" onclick="navigate('exams')"><span>📜</span> Marksheets (4-Pillar)</div>
                 <div class="nav-item" onclick="navigate('papers')"><span>📝</span> Question Paper Maker</div>
                 <div class="nav-item" onclick="navigate('ai-tools')" style="color:#38bdf8; font-weight:700;"><span>🤖</span> AI Teacher Tools</div>
 
                 <!-- ── FINANCE ── -->
-                <div style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">💰 Finance</div>
+                <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">💰 Finance</div>
                 <div class="nav-item" onclick="navigate('fees')"><span>💳</span> Fee Collection</div>
                 <div class="nav-item" onclick="navigate('expenses')"><span>💰</span> Expenses & Budget</div>
                 <div class="nav-item" onclick="navigate('payroll')"><span>💸</span> Salary & Payslips</div>
 
                 <!-- ── ADMINISTRATION ── -->
-                <div style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">🏫 Administration</div>
+                <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">🏫 Administration</div>
                 <div class="nav-item" onclick="navigate('teachers')"><span>👨‍🏫</span> Teachers</div>
                 <div class="nav-item" onclick="navigate('staff')"><span>👥</span> Non-Teaching Staff</div>
                 <div class="nav-item" onclick="navigate('transport')"><span>🚌</span> Transport & Routes</div>
@@ -376,7 +376,7 @@
                 <div class="nav-item" onclick="navigate('opportunity')"><span>🎯</span> Opportunity Desk</div>
 
                 <!-- ── REPORTS & SYSTEM ── -->
-                <div style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">📈 Reports & System</div>
+                <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">📈 Reports & System</div>
                 <div class="nav-item" onclick="navigate('reports')"><span>📑</span> Reports & Ledgers</div>
                 <div class="nav-item" onclick="navigate('quality-score')"><span>🏆</span> School Quality Score</div>
                 <div class="nav-item" onclick="navigate('settings')"><span>⚙️</span> Settings & Data Safety</div>
@@ -3034,21 +3034,80 @@
             const demoBadge = document.getElementById('demo-mode-badge');
 
             let cleanName = user.full_name || 'User';
+            let roleBadge = (user.role || '').toUpperCase();
             if (user.role === 'super_admin' || user.username === 'hanuganeshan') {
-                cleanName = 'Super Admin';
+                cleanName = 'Platform Owner';
+                roleBadge = 'SUPER ADMIN';
+            } else if (user.role === 'admin') {
+                cleanName = 'School Director';
+                roleBadge = 'DIRECTOR / ADMIN';
+            } else if (user.role === 'clerk' || user.role === 'accountant' || user.username === 'clerk') {
+                cleanName = 'Accounts Clerk';
+                roleBadge = 'ACCOUNTS / CASHIER';
+            } else if (user.role === 'teacher' || user.role === 'counselor' || user.username === 'teacher') {
+                cleanName = 'Academic In-charge';
+                roleBadge = 'TEACHER / ACADEMICS';
             }
 
-            if (nameEl) nameEl.innerText = `${cleanName} (${(user.role || '').toUpperCase()})`;
+            if (nameEl) nameEl.innerText = `${cleanName} (${roleBadge})`;
             if (avatarEl) avatarEl.innerText = (cleanName || 'U')[0].toUpperCase();
             if (demoBadge) demoBadge.style.display = user.is_demo ? 'inline-block' : 'none';
 
-            // Strict Super Admin Navigation Visibility Control (Vendor Authority)
-            const isSuper = user && (user.role === 'super_admin' || user.username === 'hanuganeshan') && !user.is_demo;
+            // Strict Role-Based Navigation & Menu Partitioning
+            applyRoleBasedNavigation(user);
+
+            updateDynamicGreeting();
+        }
+
+        function applyRoleBasedNavigation(user) {
+            if (!user) return;
+            const role = (user.role || '').toLowerCase();
+            const isSuper = (role === 'super_admin' || user.username === 'hanuganeshan') && !user.is_demo;
+            const isAdmin = isSuper || role === 'admin' || user.is_demo;
+            const isClerk = role === 'clerk' || role === 'accountant' || user.username === 'clerk';
+            const isTeacher = role === 'teacher' || role === 'counselor' || user.username === 'teacher';
+
+            // Allowed tabs per role
+            const clerkAllowedTabs = ['dashboard', 'students', 'id-cards', 'fees', 'expenses', 'transport', 'reports', 'contact-support'];
+            const teacherAllowedTabs = ['dashboard', 'students', 'classes', 'growth-passport', 'attendance', 'exams', 'papers', 'ai-tools', 'opportunity', 'contact-support'];
+
+            // Super Admin customizer item
             document.querySelectorAll('.super-admin-item').forEach(el => {
                 el.style.display = isSuper ? 'flex' : 'none';
             });
 
-            updateDynamicGreeting();
+            // Filter standard nav items
+            document.querySelectorAll('.sidebar-menu .nav-item').forEach(item => {
+                if (item.classList.contains('super-admin-item')) return;
+                const onclickAttr = item.getAttribute('onclick') || '';
+                const match = onclickAttr.match(/navigate\(['"]([^'"]+)['"]\)/);
+                if (match) {
+                    const tab = match[1];
+                    let visible = true;
+                    if (isSuper || isAdmin) {
+                        visible = true;
+                    } else if (isClerk) {
+                        visible = clerkAllowedTabs.includes(tab);
+                    } else if (isTeacher) {
+                        visible = teacherAllowedTabs.includes(tab);
+                    }
+                    item.style.display = visible ? 'flex' : 'none';
+                }
+            });
+
+            // Filter Section Headers if all items in section are hidden
+            document.querySelectorAll('.sidebar-menu .menu-section-header').forEach(header => {
+                let sibling = header.nextElementSibling;
+                let hasVisibleChild = false;
+                while (sibling && !sibling.classList.contains('menu-section-header')) {
+                    if (sibling.classList.contains('nav-item') && sibling.style.display !== 'none') {
+                        hasVisibleChild = true;
+                        break;
+                    }
+                    sibling = sibling.nextElementSibling;
+                }
+                header.style.display = hasVisibleChild ? 'block' : 'none';
+            });
         }
 
         function updateDynamicGreeting() {
@@ -4532,7 +4591,35 @@ Bhadar, Amethi (U.P.)`;
             generateAIOfflineDraft();
         }
 
+        function isTabAllowedForCurrentUser(tabId) {
+            if (!currentUser) return true;
+            const role = (currentUser.role || '').toLowerCase();
+            const uName = (currentUser.username || '').toLowerCase();
+            const isSuper = (role === 'super_admin' || uName === 'hanuganeshan') && !currentUser.is_demo;
+            if (isSuper) return true;
+            if (tabId === 'super-admin') return false;
+            if (role === 'admin' || currentUser.is_demo) return true;
+            if (role === 'clerk' || role === 'accountant' || uName === 'clerk') {
+                const clerkAllowed = ['dashboard', 'students', 'id-cards', 'fees', 'expenses', 'transport', 'reports', 'contact-support'];
+                return clerkAllowed.includes(tabId);
+            }
+            if (role === 'teacher' || role === 'counselor' || uName === 'teacher') {
+                const teacherAllowed = ['dashboard', 'students', 'classes', 'growth-passport', 'attendance', 'exams', 'papers', 'ai-tools', 'opportunity', 'contact-support'];
+                return teacherAllowed.includes(tabId);
+            }
+            return true;
+        }
+
         function navigate(tabId) {
+            if (!isTabAllowedForCurrentUser(tabId)) {
+                let roleName = 'वर्तमान रोल';
+                const r = (currentUser?.role || '').toLowerCase();
+                if (r === 'clerk' || r === 'accountant') roleName = 'अकाउंट्स क्लर्क (Accounts)';
+                else if (r === 'teacher' || r === 'counselor') roleName = 'शिक्षक / एकेडमिक्स (Teacher)';
+                alert(`⚠️ एक्सेस अस्वीकृत (Access Restricted): यह मॉड्यूल आपके अधिकृत पद (${roleName}) के अधिकार क्षेत्र में नहीं है।`);
+                return;
+            }
+
             if (tabId === 'super-admin') {
                 if (!currentUser || (currentUser.role !== 'super_admin' && currentUser.username !== 'hanuganeshan') || currentUser.is_demo) {
                     alert('⚠️ Access Denied: The Super Admin Master Control Center is restricted to authorized Platform Owners (Vendor Authority) only.');
