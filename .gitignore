@@ -8,6 +8,7 @@ _ARCHIVED_UNRELATED_FILES/
 
 # Dependencies & Node modules
 node_modules/
+bin/
 npm-debug.log*
 
 # Database & Runtime Data

@@ -30,6 +30,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkablealone
 
 [Files]
+Source: "d:\School_Lakshya\bin\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "d:\School_Lakshya\app\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "d:\School_Lakshya\Launch_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\Lakshya_School_OS.vbs"; DestDir: "{app}"; Flags: ignoreversion

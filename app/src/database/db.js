@@ -44,6 +44,19 @@ function initDatabase() {
     const primaryExists = fs.existsSync(PRIMARY_DB_PATH);
     const vaultExists = fs.existsSync(VAULT_DB_PATH);
 
+    // Fresh Installation Check: Seed from bundled template if both primary and vault are absent
+    const templatePath = path.join(__dirname, 'template_records.db');
+    if (!primaryExists && !vaultExists && fs.existsSync(templatePath)) {
+        console.log('📦 Fresh installation detected! Initializing database from bundled template...');
+        try {
+            fs.copyFileSync(templatePath, PRIMARY_DB_PATH);
+            fs.copyFileSync(templatePath, VAULT_DB_PATH);
+            logRecoveryEvent('Primary database and Shadow Vault initialized from bundled institutional template.');
+        } catch (copyErr) {
+            console.error('Error copying template database:', copyErr.message);
+        }
+    }
+
     // SELF-HEALING RECOVERY CHECK
     if (!primaryExists && vaultExists) {
         console.warn('⚠️ Primary database missing! Initiating Self-Healing recovery from Shadow Vault...');
