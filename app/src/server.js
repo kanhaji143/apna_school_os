@@ -64,6 +64,11 @@ const server = http.createServer(async (req, res) => {
     try {
         const db = getDb();
 
+        // Health & Readiness Check for Desktop App Window Launcher
+        if (pathname === '/api/health') {
+            return sendJson(res, 200, { status: 'ok', port: PORT, uptime: process.uptime() });
+        }
+
         // 0. Authentication & Security
         if (pathname === '/api/auth/login' && method === 'POST') {
             const body = await parseBody(req);

@@ -16,6 +16,7 @@ AllowNoIcons=yes
 LicenseFile=
 OutputDir=d:\School_Lakshya
 OutputBaseFilename=Setup_Apna_School_OS
+SetupIconFile=d:\School_Lakshya\app_icon.ico
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
@@ -32,6 +33,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "d:\School_Lakshya\bin\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "d:\School_Lakshya\app\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "d:\School_Lakshya\app_icon.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\Launch_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\Lakshya_School_OS.vbs"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\Stop_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
@@ -41,7 +43,7 @@ Source: "d:\School_Lakshya\USER_OPERATING_MANUAL.pdf"; DestDir: "{app}"; Flags: 
 Source: "d:\School_Lakshya\CLIENT_INSTALLATION_&_TROUBLESHOOTING_GUIDE.pdf"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\Apna School OS"; Filename: "{app}\Lakshya_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{sys}\shell32.dll"; IconIndex: 264
+Name: "{group}\Apna School OS"; Filename: "{app}\Lakshya_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"
 Name: "{group}\Start School OS (Console Log Mode)"; Filename: "{app}\Launch_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\📖 Staff Training Manual (PDF)"; Filename: "{app}\STAFF_TRAINING_MANUAL.pdf"; WorkingDir: "{app}"
 Name: "{group}\📖 User Operating Manual (PDF)"; Filename: "{app}\USER_OPERATING_MANUAL.pdf"; WorkingDir: "{app}"
@@ -49,7 +51,7 @@ Name: "{group}\🔧 Installation & Troubleshooting Guide (PDF)"; Filename: "{app
 Name: "{group}\Backup School Database"; Filename: "{app}\Backup_Database.bat"; WorkingDir: "{app}"
 Name: "{group}\Stop School OS"; Filename: "{app}\Stop_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\{cm:UninstallProgram,Apna School OS}"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\Apna School OS"; Filename: "{app}\Lakshya_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{sys}\shell32.dll"; IconIndex: 264; Tasks: desktopicon
+Name: "{autodesktop}\Apna School OS"; Filename: "{app}\Lakshya_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\Lakshya_School_OS.vbs"; Description: "{cm:LaunchProgram,Lakshya Institute School OS}"; Flags: shellexec postinstall nowait skipifsilent
