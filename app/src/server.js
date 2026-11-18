@@ -1102,8 +1102,18 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
-server.listen(PORT, '127.0.0.1', () => {
-    console.log(`🚀 Apna School OS Server running at http://localhost:${PORT}`);
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use by another application or previous session.`);
+        console.error('Please run Stop_School_RMS.bat or restart your PC to free the port.');
+    } else {
+        console.error('Fatal Server Socket Error:', err.message);
+    }
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Apna School OS Server running at http://127.0.0.1:${PORT}`);
+    console.log(`🌐 Also accessible on LAN at port ${PORT}`);
 });
 
 module.exports = server;

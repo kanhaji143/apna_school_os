@@ -17,7 +17,7 @@ netstat -ano | findstr /R /C:":8085 " >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo [INFO] School OS is already running on port 8085!
     echo [INFO] Opening School Management Dashboard in your browser...
-    start http://localhost:8085
+    start http://127.0.0.1:8085
     exit /b 0
 )
 
@@ -53,7 +53,7 @@ start "" /b "%NODE_EXE%" "%~dp0app\src\server.js"
 
 :: 4. Wait for server to bind port and launch browser
 timeout /t 2 /nobreak >nul
-start http://localhost:8085
+start http://127.0.0.1:8085
 
 echo =========================================================================
 echo Server is running in the background. You can close this window anytime.

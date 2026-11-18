@@ -2,18 +2,50 @@ const { DatabaseSync } = require('node:sqlite');
 const fs = require('node:fs');
 const path = require('node:path');
 
-// Primary & Shadow Vault Paths
-const PRIMARY_DIR = fs.existsSync('D:\\') ? 'D:\\APNA_RMS_DATA' : path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE, 'APNA_RMS_DATA');
+// Primary & Shadow Vault Paths with write-safe fallback
+function resolvePrimaryDir() {
+    if (fs.existsSync('D:\\')) {
+        try {
+            const candidate = 'D:\\APNA_RMS_DATA';
+            if (!fs.existsSync(candidate)) fs.mkdirSync(candidate, { recursive: true });
+            const testFile = path.join(candidate, '.write_test');
+            fs.writeFileSync(testFile, '1');
+            fs.unlinkSync(testFile);
+            return candidate;
+        } catch (e) {
+            console.warn('⚠️ D:\\ drive is not writable or is an optical drive. Safely falling back to %LOCALAPPDATA%');
+        }
+    }
+    const fallback = path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE || 'C:\\ProgramData', 'APNA_RMS_DATA');
+    try {
+        if (!fs.existsSync(fallback)) fs.mkdirSync(fallback, { recursive: true });
+    } catch (e) {}
+    return fallback;
+}
+
+function resolveVaultDir() {
+    const vDir = path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE || 'C:\\ProgramData', 'APNA_Computer_RMS', 'vault');
+    try {
+        if (!fs.existsSync(vDir)) fs.mkdirSync(vDir, { recursive: true });
+    } catch (e) {}
+    return vDir;
+}
+
+const PRIMARY_DIR = resolvePrimaryDir();
 const PRIMARY_DB_PATH = path.join(PRIMARY_DIR, 'apna_records.db');
 
-const VAULT_DIR = path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE, 'APNA_Computer_RMS', 'vault');
+const VAULT_DIR = resolveVaultDir();
 const VAULT_DB_PATH = path.join(VAULT_DIR, 'apna_records.vault.db');
 const RECOVERY_LOG_PATH = path.join(PRIMARY_DIR, 'SECURITY_RECOVERY_LOG.txt');
 
 // Ensure directories exist
 function ensureDirs() {
-    if (!fs.existsSync(PRIMARY_DIR)) fs.mkdirSync(PRIMARY_DIR, { recursive: true });
-    if (!fs.existsSync(VAULT_DIR)) fs.mkdirSync(VAULT_DIR, { recursive: true });
+    try {
+        if (!fs.existsSync(PRIMARY_DIR)) fs.mkdirSync(PRIMARY_DIR, { recursive: true });
+        if (!fs.existsSync(VAULT_DIR)) fs.mkdirSync(VAULT_DIR, { recursive: true });
+    } catch (err) {
+        console.error('Directory creation warning:', err.message);
+    }
 }
 
 let dbInstance = null;
