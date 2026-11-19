@@ -426,16 +426,16 @@ class MigrationService {
 
         // 1. Create Pre-Import Database Backup Snapshot
         const backupDir = path.join(
-            fs.existsSync('D:\\APNA_RMS_DATA') ? 'D:\\APNA_RMS_DATA' : (process.env.LOCALAPPDATA || process.env.USERPROFILE),
+            fs.existsSync('D:\\Apna_School_OS_Data') ? 'D:\\Apna_School_OS_Data' : (process.env.LOCALAPPDATA || process.env.USERPROFILE),
             'backups'
         );
         if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir, { recursive: true });
 
         const timestampStr = new Date().toISOString().replace(/[:.]/g, '-');
         const batchId = 'MIG-' + Date.now();
-        const primaryDbPath = fs.existsSync('D:\\APNA_RMS_DATA\\apna_records.db')
-            ? 'D:\\APNA_RMS_DATA\\apna_records.db'
-            : path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE, 'APNA_RMS_DATA', 'apna_records.db');
+        const primaryDbPath = fs.existsSync('D:\\Apna_School_OS_Data\\apna_records.db')
+            ? 'D:\\Apna_School_OS_Data\\apna_records.db'
+            : path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE, 'Apna_School_OS_Data', 'apna_records.db');
 
         const backupFilePath = customDb ? 'ISOLATED_TEST_BACKUP' : path.join(backupDir, `pre_migration_${batchId}_${timestampStr}.db`);
         if (!customDb) {

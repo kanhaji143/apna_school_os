@@ -46,8 +46,8 @@ class OperationsService {
 
     static saveStudentDocument(studentId, documentType, fileName, sourceFilePath) {
         const db = getDb();
-        // Destination directory inside D:\APNA_RMS_DATA\drive\<studentId>\
-        const driveBaseDir = fs.existsSync('D:\\') ? 'D:\\APNA_RMS_DATA\\drive' : path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE, 'APNA_RMS_DATA', 'drive');
+        // Destination directory inside D:\Apna_School_OS_Data\drive\<studentId>\
+        const driveBaseDir = fs.existsSync('D:\\') ? 'D:\\Apna_School_OS_Data\\drive' : path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE, 'Apna_School_OS_Data', 'drive');
         const studentDir = path.join(driveBaseDir, String(studentId));
         if (!fs.existsSync(studentDir)) {
             fs.mkdirSync(studentDir, { recursive: true });

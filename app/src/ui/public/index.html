@@ -564,7 +564,7 @@
                             </div>
                             <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <span>💾 Local Offline DB</span>
-                                <span style="background:#f1f5f9; color:#475569; font-size:10px; font-weight:800; padding:2px 7px; border-radius:10px;">D:\APNA_RMS_DATA</span>
+                                <span style="background:#f1f5f9; color:#475569; font-size:10px; font-weight:800; padding:2px 7px; border-radius:10px;">D:\Apna_School_OS_Data</span>
                             </div>
                         </div>
                     </div>
@@ -690,6 +690,9 @@
                         <p style="font-size:12px; color:var(--text-muted);" id="stu-record-count-label">Loading records...</p>
                     </div>
                     <div style="display:flex; gap:8px; align-items:center;">
+                        <button class="btn" onclick="openNewAdmissionModal()" style="display:flex; align-items:center; gap:6px; font-size:12px; padding:7px 14px; background:#0284c7; color:white; font-weight:700; border:none; border-radius:8px; cursor:pointer;">
+                            <span>➕</span> नया छात्र प्रवेश (New Admission)
+                        </button>
                         <button class="btn btn-outline" onclick="exportStudentsToExcel()" style="display:flex; align-items:center; gap:6px; font-size:12px; padding:6px 12px;">
                             <span>📑</span> Export to Excel (.xlsx)
                         </button>
@@ -2283,7 +2286,7 @@
                         </div>
                         <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px; line-height:1.4;">School records reside exclusively on this machine in an ACID-compliant SQLite WAL database with automated Shadow Vault protection.</p>
                         <div style="font-size:11.5px; line-height:1.8; color:var(--text-heading); background:var(--bg-page); padding:10px 12px; border-radius:8px; border:1px solid var(--border);">
-                            <div><strong>Primary DB:</strong> <code id="st-primary-path">D:\APNA_RMS_DATA\apna_records.db</code></div>
+                            <div><strong>Primary DB:</strong> <code id="st-primary-path">D:\Apna_School_OS_Data\apna_records.db</code></div>
                             <div><strong>DB Size:</strong> <span id="st-db-size">2.6 MB</span> | <strong>Enrolled:</strong> <span id="st-student-count">426 Students</span></div>
                             <div><strong>Shadow Vault:</strong> <span style="color:#15803d; font-weight:700;">🟢 Active in %LOCALAPPDATA%</span></div>
                             <div><strong>Server Engine:</strong> Node.js 24 + SQLite WAL (Port 8085)</div>
@@ -4891,6 +4894,177 @@ Bhadar, Amethi (U.P.)`;
                     <td><span style="color:#15803d; font-weight:700;">${s.status || 'Active'}</span></td>
                 </tr>
             `).join('');
+        }
+
+        
+        function openNewAdmissionModal() {
+            const area = document.getElementById('modal-content-area');
+            area.innerHTML = `
+                <form onsubmit="submitNewAdmission(event)" style="padding:4px;">
+                    <div style="background:#f0f9ff; border-left:4px solid #0284c7; padding:10px 14px; border-radius:6px; margin-bottom:14px;">
+                        <div style="font-weight:700; color:#0369a1; font-size:13px;">🎓 नया छात्र प्रवेश फॉर्म (Direct Admission Entry)</div>
+                        <div style="font-size:11.5px; color:#475569;">छात्र का विवरण भरें। यह डेटा सीधे आपके सुरक्षित डेटाबेस (D:\\Apna_School_OS_Data) में दर्ज होगा।</div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">प्रवेश क्रमांक (Adm No) <span style="font-weight:400; color:#64748b;">(खाली छोड़ें तो ऑटो-जनरेट होगा)</span></label>
+                            <input type="text" id="adm-in-no" placeholder="e.g. 101, LAK-001 (वैकल्पिक)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">छात्र/छात्रा का पूरा नाम (Student Name) *</label>
+                            <input type="text" id="adm-in-name" required placeholder="जैसे: आरव शर्मा" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">कक्षा (Class) *</label>
+                            <select id="adm-in-class" required style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                <option value="PG">PG</option>
+                                <option value="LKG">LKG</option>
+                                <option value="UKG">UKG</option>
+                                <option value="Class 1" selected>Class 1</option>
+                                <option value="Class 2">Class 2</option>
+                                <option value="Class 3">Class 3</option>
+                                <option value="Class 4">Class 4</option>
+                                <option value="Class 5">Class 5</option>
+                                <option value="Class 6">Class 6</option>
+                                <option value="Class 7">Class 7</option>
+                                <option value="Class 8">Class 8</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">सेक्शन (Section)</label>
+                            <select id="adm-in-section" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                <option value="A" selected>Section A</option>
+                                <option value="B">Section B</option>
+                                <option value="C">Section C</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">रोल नंबर (Roll No)</label>
+                            <input type="text" id="adm-in-roll" placeholder="e.g. 1" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">पिता का नाम (Father's Name) *</label>
+                            <input type="text" id="adm-in-father" required placeholder="जैसे: राजेश शर्मा" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">माता का नाम (Mother's Name)</label>
+                            <input type="text" id="adm-in-mother" placeholder="जैसे: सुनीता शर्मा" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">अभिभावक का मोबाइल (Mobile) *</label>
+                            <input type="tel" id="adm-in-phone" required pattern="[0-9]{10}" placeholder="10-digit mobile" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">लिंग (Gender)</label>
+                            <select id="adm-in-gender" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                <option value="Male" selected>बालक (Male)</option>
+                                <option value="Female">बालिका (Female)</option>
+                                <option value="Other">अन्य (Other)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">जन्म तिथि (DOB)</label>
+                            <input type="date" id="adm-in-dob" style="width:100%; padding:7px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">वार्षिक कुल फीस (Total Annual Fee ₹)</label>
+                            <input type="number" id="adm-in-fee" value="12000" min="0" step="100" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px; font-weight:700; color:#0369a1;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">गाँव / पता (Address)</label>
+                            <input type="text" id="adm-in-address" placeholder="e.g. भादर, अमेठी" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>
+
+                    <div id="adm-msg-status" style="display:none; font-size:12.5px; padding:8px 12px; border-radius:6px; margin-bottom:12px;"></div>
+
+                    <div style="display:flex; justify-content:flex-end; gap:10px;">
+                        <button type="button" class="btn btn-outline" onclick="closeAppModal()">रद्द करें (Cancel)</button>
+                        <button type="submit" id="adm-btn-submit" class="btn" style="background:#0284c7; color:white; font-weight:700; padding:8px 18px; border-radius:6px; border:none; cursor:pointer;">
+                            💾 प्रवेश सुरक्षित करें (Save Admission)
+                        </button>
+                    </div>
+                </form>
+            `;
+            document.getElementById('modal-heading').innerText = "🎓 नया छात्र प्रवेश (New Student Admission)";
+            document.getElementById('app-modal').classList.add('active');
+        }
+
+        async function submitNewAdmission(event) {
+            event.preventDefault();
+            const btn = document.getElementById('adm-btn-submit');
+            const statusBox = document.getElementById('adm-msg-status');
+            btn.disabled = true;
+            btn.innerText = "⏳ सहेज रहे हैं...";
+
+            const payload = {
+                admission_no: document.getElementById('adm-in-no').value.trim(),
+                student_name: document.getElementById('adm-in-name').value.trim(),
+                class: document.getElementById('adm-in-class').value,
+                section: document.getElementById('adm-in-section').value,
+                roll_no: document.getElementById('adm-in-roll').value.trim(),
+                father_name: document.getElementById('adm-in-father').value.trim(),
+                mother_name: document.getElementById('adm-in-mother').value.trim(),
+                mobile: document.getElementById('adm-in-phone').value.trim(),
+                gender: document.getElementById('adm-in-gender').value,
+                dob: document.getElementById('adm-in-dob').value || null,
+                total_annual_fee: parseFloat(document.getElementById('adm-in-fee').value) || 0,
+                address: document.getElementById('adm-in-address').value.trim()
+            };
+
+            try {
+                const res = await fetch('/api/students', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    statusBox.style.display = 'block';
+                    statusBox.style.background = '#f0fdf4';
+                    statusBox.style.color = '#166534';
+                    statusBox.style.border = '1px solid #bbf7d0';
+                    statusBox.innerHTML = `✅ <strong>सफलतापूर्वक दर्ज!</strong> प्रवेश क्रमांक: <strong>${data.student.admission_no}</strong>, छात्र: <strong>${data.student.student_name}</strong>`;
+                    
+                    const sRes = await fetch('/api/students');
+                    allStudents = await sRes.json();
+                    renderMasterStudents(allStudents);
+                    renderFeesTable(allStudents);
+                    if (typeof loadDashboardStats === 'function') loadDashboardStats();
+
+                    setTimeout(() => {
+                        closeAppModal();
+                    }, 1200);
+                } else {
+                    statusBox.style.display = 'block';
+                    statusBox.style.background = '#fef2f2';
+                    statusBox.style.color = '#991b1b';
+                    statusBox.style.border = '1px solid #fecaca';
+                    statusBox.innerHTML = `⚠️ <strong>त्रुटि:</strong> ${data.error || 'प्रवेश दर्ज करने में विफल।'}`;
+                    btn.disabled = false;
+                    btn.innerText = "💾 प्रवेश सुरक्षित करें (Save Admission)";
+                }
+            } catch (err) {
+                statusBox.style.display = 'block';
+                statusBox.style.background = '#fef2f2';
+                statusBox.style.color = '#991b1b';
+                statusBox.innerHTML = `⚠️ सर्वर से संपर्क नहीं हो सका: ${err.message}`;
+                btn.disabled = false;
+                btn.innerText = "💾 प्रवेश सुरक्षित करें (Save Admission)";
+            }
         }
 
         function openAddTeacherModal() {

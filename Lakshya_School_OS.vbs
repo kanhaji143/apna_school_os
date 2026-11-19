@@ -77,8 +77,10 @@ If Not serverReady Then
         WScript.Sleep 500
         
         ' Read dynamic port if written
-        Dim pf1
-        pf1 = localAppData & "\APNA_RMS_DATA\active_port.txt"
+        Dim pf1, pf2
+        pf1 = localAppData & "\Apna_School_OS_Data\active_port.txt"
+        pf2 = localAppData & "\APNA_RMS_DATA\active_port.txt"
+        If Not fso.FileExists(pf1) And fso.FileExists(pf2) Then pf1 = pf2
         If fso.FileExists(pf1) Then
             On Error Resume Next
             Dim oP: Set oP = fso.OpenTextFile(pf1, 1)

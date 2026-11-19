@@ -6,8 +6,14 @@ const path = require('node:path');
 function resolvePrimaryDir() {
     if (fs.existsSync('D:\\')) {
         try {
-            const candidate = 'D:\\APNA_RMS_DATA';
-            if (!fs.existsSync(candidate)) fs.mkdirSync(candidate, { recursive: true });
+            const candidate = 'D:\\Apna_School_OS_Data';
+            if (!fs.existsSync(candidate)) {
+                if (fs.existsSync('D:\\APNA_RMS_DATA')) {
+                    try { fs.renameSync('D:\\APNA_RMS_DATA', candidate); } catch(e) { fs.mkdirSync(candidate, { recursive: true }); }
+                } else {
+                    fs.mkdirSync(candidate, { recursive: true });
+                }
+            }
             const testFile = path.join(candidate, '.write_test');
             fs.writeFileSync(testFile, '1');
             fs.unlinkSync(testFile);
@@ -16,7 +22,7 @@ function resolvePrimaryDir() {
             console.warn('⚠️ D:\\ drive is not writable or is an optical drive. Safely falling back to %LOCALAPPDATA%');
         }
     }
-    const fallback = path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE || 'C:\\ProgramData', 'APNA_RMS_DATA');
+    const fallback = path.join(process.env.LOCALAPPDATA || process.env.USERPROFILE || 'C:\\ProgramData', 'Apna_School_OS_Data');
     try {
         if (!fs.existsSync(fallback)) fs.mkdirSync(fallback, { recursive: true });
     } catch (e) {}

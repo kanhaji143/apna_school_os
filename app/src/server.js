@@ -227,6 +227,76 @@ const server = http.createServer(async (req, res) => {
             return sendJson(res, 200, FeeService.getStudentsWithFeeStatus(className, search));
         }
 
+        // Direct New Student Admission Entry (No Excel required)
+        if (pathname === '/api/students' && method === 'POST') {
+            const body = await parseBody(req);
+            try {
+                let admNo = String(body.admission_no || '').trim();
+                const studentName = String(body.student_name || '').trim();
+                const className = String(body.class || 'Class 1').trim();
+
+                if (!studentName) {
+                    return sendJson(res, 400, { success: false, error: 'छात्र का नाम (Student Name) अनिवार्य है।' });
+                }
+
+                // Auto-generate admission number if left blank
+                if (!admNo) {
+                    const row = db.prepare('SELECT MAX(id) as max_id FROM students').get();
+                    const nextNum = (row && row.max_id ? row.max_id : 0) + 1;
+                    admNo = 'LAK-' + String(nextNum).padStart(3, '0');
+                }
+
+                // Check duplicate admission_no
+                const existing = db.prepare('SELECT id FROM students WHERE admission_no = ?').get(admNo);
+                if (existing) {
+                    return sendJson(res, 400, { success: false, error: `प्रवेश क्रमांक (Adm No) '${admNo}' पहले से मौजूद है!` });
+                }
+
+                const info = db.prepare(`
+                    INSERT INTO students (
+                        admission_no, roll_no, student_name, father_name, mother_name,
+                        gender, dob, mobile, address, class, section, status
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active')
+                `).run(
+                    admNo,
+                    String(body.roll_no || ''),
+                    studentName,
+                    String(body.father_name || ''),
+                    String(body.mother_name || ''),
+                    String(body.gender || 'Male'),
+                    body.dob || null,
+                    String(body.mobile || ''),
+                    String(body.address || ''),
+                    className,
+                    String(body.section || 'A')
+                );
+
+                const newStudentId = Number(info.lastInsertRowid);
+                const annualFee = parseFloat(body.total_annual_fee) || 0;
+                const monthlyFee = Math.round(annualFee / 12);
+
+                db.prepare(`
+                    INSERT OR REPLACE INTO student_fee_structure (
+                        student_id, session, admission_fee, monthly_fee, expected_fee
+                    ) VALUES (?, '2026-27', 0, ?, ?)
+                `).run(newStudentId, monthlyFee, annualFee);
+
+                syncShadowVault();
+                return sendJson(res, 201, {
+                    success: true,
+                    message: 'छात्र का नया प्रवेश सफलतापूर्वक दर्ज हो गया!',
+                    student: {
+                        id: newStudentId,
+                        admission_no: admNo,
+                        student_name: studentName,
+                        class: className
+                    }
+                });
+            } catch (err) {
+                return sendJson(res, 500, { success: false, error: err.message });
+            }
+        }
+
         // Student Photo Upload / Removal (Optional digital photo attachment)
         if (pathname.startsWith('/api/students/') && pathname.endsWith('/photo') && method === 'POST') {
             const parts = pathname.split('/');
