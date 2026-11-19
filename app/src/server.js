@@ -255,8 +255,8 @@ const server = http.createServer(async (req, res) => {
                 const info = db.prepare(`
                     INSERT INTO students (
                         admission_no, roll_no, student_name, father_name, mother_name,
-                        gender, dob, mobile, address, class, section, status
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active')
+                        gender, dob, mobile, aadhaar_no, pen_no, address, class, section, status
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active')
                 `).run(
                     admNo,
                     String(body.roll_no || ''),
@@ -266,6 +266,8 @@ const server = http.createServer(async (req, res) => {
                     String(body.gender || 'Male'),
                     body.dob || null,
                     String(body.mobile || ''),
+                    String(body.aadhaar_no || '').trim(),
+                    String(body.pen_no || '').trim(),
                     String(body.address || ''),
                     className,
                     String(body.section || 'A')

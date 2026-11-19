@@ -704,7 +704,7 @@
                     <div style="position:relative; flex:1; min-width:260px;">
                         <span style="position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:14px;">🔍</span>
                         <input type="text" id="stu-live-search"
-                            placeholder="नाम, फ़ोन, Adm No या पिता का नाम खोजें..."
+                            placeholder="नाम, फ़ोन, Adm No, आधार या PEN नंबर खोजें..."
                             oninput="filterStudentList()"
                             style="width:100%; padding:8px 12px 8px 34px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; background:var(--bg-page); color:var(--text-heading);">
                     </div>
@@ -4714,6 +4714,8 @@ Bhadar, Amethi (U.P.)`;
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 14px;">
                             <div>Father Name: <strong>${st.father_name || '—'}</strong></div>
                             <div>Mobile: <strong>${st.mobile || '—'}</strong></div>
+                            <div>Aadhaar Card No: <strong>${st.aadhaar_no || '—'}</strong></div>
+                            <div>UDISE+ PEN No: <strong>${st.pen_no || '—'}</strong></div>
                             <div>Transport Bus Route: <strong>${st.route_name || 'Self'}</strong></div>
                             <div>Address: <strong>${st.address || 'Local School Area'}</strong></div>
                             <div>Fee Due Balance: <strong style="color:${due > 0 ? '#dc2626' : '#15803d'};">₹${Number(due).toLocaleString('en-IN')}</strong></div>
@@ -4847,7 +4849,7 @@ Bhadar, Amethi (U.P.)`;
                     const father = (s.father_name || '').toLowerCase();
                     const phone = (s.phone || s.mobile || s.contact || '').toString();
                     const adm = (s.admission_no || '').toLowerCase();
-                    return name.includes(searchVal) || father.includes(searchVal) || phone.includes(searchVal) || adm.includes(searchVal);
+                    return name.includes(searchVal) || father.includes(searchVal) || phone.includes(searchVal) || adm.includes(searchVal) || (s.aadhaar_no || "").includes(searchVal) || (s.pen_no || "").toLowerCase().includes(searchVal);
                 });
             }
 
@@ -4978,6 +4980,17 @@ Bhadar, Amethi (U.P.)`;
                         </div>
                     </div>
 
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">आधार कार्ड नंबर (Aadhaar No) <span style="font-weight:400; color:#64748b;">(12 अंक)</span></label>
+                            <input type="text" id="adm-in-aadhaar" maxlength="14" placeholder="e.g. 1234 5678 9012 (वैकल्पिक)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">PEN नंबर (Permanent Education No - UDISE+) <span style="font-weight:400; color:#64748b;">(11 अंक)</span></label>
+                            <input type="text" id="adm-in-pen" maxlength="15" placeholder="e.g. 20987654321 (UP माध्यमिक/UDISE+)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>
+
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
                         <div>
                             <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">वार्षिक कुल फीस (Total Annual Fee ₹)</label>
@@ -5021,6 +5034,8 @@ Bhadar, Amethi (U.P.)`;
                 mobile: document.getElementById('adm-in-phone').value.trim(),
                 gender: document.getElementById('adm-in-gender').value,
                 dob: document.getElementById('adm-in-dob').value || null,
+                aadhaar_no: document.getElementById('adm-in-aadhaar') ? document.getElementById('adm-in-aadhaar').value.trim() : '',
+                pen_no: document.getElementById('adm-in-pen') ? document.getElementById('adm-in-pen').value.trim() : '',
                 total_annual_fee: parseFloat(document.getElementById('adm-in-fee').value) || 0,
                 address: document.getElementById('adm-in-address').value.trim()
             };
