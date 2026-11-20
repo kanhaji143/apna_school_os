@@ -1050,6 +1050,70 @@ const server = http.createServer(async (req, res) => {
             return sendJson(res, 200, { success: true, backup_file: backupFileName, path: backupTarget });
         }
 
+        // 1.3 Removable Media & Director's Pendrive Backup (Pocket Vault)
+        if (pathname === '/api/settings/backup/drives' && method === 'GET') {
+            const drives = [];
+            const letters = ['E', 'F', 'G', 'H', 'I', 'J', 'K', 'D'];
+            for (const l of letters) {
+                const driveRoot = `${l}:\\`;
+                if (fs.existsSync(driveRoot)) {
+                    drives.push({
+                        letter: driveRoot,
+                        is_usb: l !== 'C' && l !== 'D',
+                        label: l === 'D' ? 'D: Drive (Local Hard Disk)' : `${l}: Drive (Removable USB Media / Pendrive)`
+                    });
+                }
+            }
+            return sendJson(res, 200, { success: true, drives });
+        }
+
+        if (pathname === '/api/settings/backup/usb' && method === 'POST') {
+            const b = await parseBody(req);
+            syncShadowVault();
+
+            let targetFolder = '';
+            if (b.target_folder && fs.existsSync(b.target_folder)) {
+                targetFolder = b.target_folder;
+            } else if (b.drive_letter && fs.existsSync(b.drive_letter)) {
+                targetFolder = path.join(b.drive_letter, 'Apna_School_OS_Director_Vault');
+            } else {
+                const removableLetters = ['E', 'F', 'G', 'H', 'I', 'J', 'K'];
+                for (const l of removableLetters) {
+                    const r = `${l}:\\`;
+                    if (fs.existsSync(r)) {
+                        targetFolder = path.join(r, 'Apna_School_OS_Director_Vault');
+                        break;
+                    }
+                }
+                if (!targetFolder) {
+                    targetFolder = 'D:\\Director_Pocket_Vault_Backups';
+                }
+            }
+
+            if (!fs.existsSync(targetFolder)) {
+                try { fs.mkdirSync(targetFolder, { recursive: true }); } catch (e) {}
+            }
+
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+            const backupFileName = `Apna_School_OS_Director_Vault_${timestamp}.db`;
+            const destPath = path.join(targetFolder, backupFileName);
+
+            fs.copyFileSync(PRIMARY_DB_PATH, destPath);
+            const stats = fs.statSync(destPath);
+            const sizeMb = (stats.size / (1024 * 1024)).toFixed(2);
+
+            db.prepare("INSERT INTO audit_logs (action_type, module, details, performed_by) VALUES ('USB_BACKUP_CREATED', 'Settings', ?, 'Director')").run(`Director Pocket Vault Backup created: ${backupFileName} on ${targetFolder}`);
+
+            return sendJson(res, 200, {
+                success: true,
+                message: `✓ 1-सेकंड डायरेक्टर पेनड्राइव बैकअप सफल! (${backupFileName})`,
+                backup_file: backupFileName,
+                target_path: destPath,
+                size_mb: sizeMb,
+                is_usb: targetFolder.startsWith('E:') || targetFolder.startsWith('F:') || targetFolder.startsWith('G:') || targetFolder.startsWith('H:')
+            });
+        }
+
         if (pathname === '/api/settings/backup/gdrive-sync' && method === 'POST') {
             syncShadowVault();
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
