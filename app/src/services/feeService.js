@@ -4,7 +4,10 @@ class FeeService {
     static getStudentsWithFeeStatus(className = null, search = null) {
         const db = getDb();
         let query = `
-            SELECT s.id, s.admission_no, s.roll_no, s.student_name, s.father_name, s.mobile, s.class, s.section, s.status,
+            SELECT s.id, s.admission_no, s.roll_no, s.student_name, s.father_name, s.mother_name,
+                   s.gender, s.dob, s.mobile, s.alt_mobile, s.aadhaar_no, s.pen_no, s.pen_number,
+                   s.blood_group, s.category, s.parent_occupation, s.previous_school, s.tc_no,
+                   s.address, s.photo_path, s.class, s.section, s.status, s.admission_date,
                    r.route_name, r.transport_fee as r_fee,
                    fs.expected_fee, fs.old_due, fs.monthly_fee,
                    COALESCE((SELECT SUM(ft.net_amount) FROM fee_transactions ft WHERE ft.student_id = s.id AND ft.status = 'Paid'), 0.0) as total_collected

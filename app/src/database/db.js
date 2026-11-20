@@ -229,6 +229,76 @@ function ensureSchemaMigrations(db) {
             if (!studentCols.includes('apaar_id')) db.exec("ALTER TABLE students ADD COLUMN apaar_id TEXT DEFAULT '';");
             if (!studentCols.includes('pen_number')) db.exec("ALTER TABLE students ADD COLUMN pen_number TEXT DEFAULT '';");
             if (!studentCols.includes('route_id')) db.exec("ALTER TABLE students ADD COLUMN route_id INTEGER DEFAULT 0;");
+            if (!studentCols.includes('blood_group')) db.exec("ALTER TABLE students ADD COLUMN blood_group TEXT DEFAULT '';");
+            if (!studentCols.includes('category')) db.exec("ALTER TABLE students ADD COLUMN category TEXT DEFAULT 'General';");
+            if (!studentCols.includes('parent_occupation')) db.exec("ALTER TABLE students ADD COLUMN parent_occupation TEXT DEFAULT '';");
+            if (!studentCols.includes('previous_school')) db.exec("ALTER TABLE students ADD COLUMN previous_school TEXT DEFAULT '';");
+            if (!studentCols.includes('tc_no')) db.exec("ALTER TABLE students ADD COLUMN tc_no TEXT DEFAULT '';");
+
+            // 4. Ensure 'salary_payments' table has full allowance & deduction breakdowns
+            const salCols = db.prepare("PRAGMA table_info(salary_payments)").all().map(c => c.name.toLowerCase());
+            if (!salCols.includes('da_amount')) db.exec("ALTER TABLE salary_payments ADD COLUMN da_amount REAL DEFAULT 0.0;");
+            if (!salCols.includes('hra_amount')) db.exec("ALTER TABLE salary_payments ADD COLUMN hra_amount REAL DEFAULT 0.0;");
+            if (!salCols.includes('conveyance_amount')) db.exec("ALTER TABLE salary_payments ADD COLUMN conveyance_amount REAL DEFAULT 0.0;");
+            if (!salCols.includes('medical_allowance')) db.exec("ALTER TABLE salary_payments ADD COLUMN medical_allowance REAL DEFAULT 0.0;");
+            if (!salCols.includes('incentive_amount')) db.exec("ALTER TABLE salary_payments ADD COLUMN incentive_amount REAL DEFAULT 0.0;");
+            if (!salCols.includes('bonus_amount')) db.exec("ALTER TABLE salary_payments ADD COLUMN bonus_amount REAL DEFAULT 0.0;");
+            if (!salCols.includes('epf_deduction')) db.exec("ALTER TABLE salary_payments ADD COLUMN epf_deduction REAL DEFAULT 0.0;");
+            if (!salCols.includes('esi_deduction')) db.exec("ALTER TABLE salary_payments ADD COLUMN esi_deduction REAL DEFAULT 0.0;");
+            if (!salCols.includes('other_deduction')) db.exec("ALTER TABLE salary_payments ADD COLUMN other_deduction REAL DEFAULT 0.0;");
+            if (!salCols.includes('gross_salary')) db.exec("ALTER TABLE salary_payments ADD COLUMN gross_salary REAL DEFAULT 0.0;");
+            if (!salCols.includes('total_deductions')) db.exec("ALTER TABLE salary_payments ADD COLUMN total_deductions REAL DEFAULT 0.0;");
+
+            // 5. Ensure system_settings table exists and has default form configs
+            db.exec(`
+                CREATE TABLE IF NOT EXISTS system_settings (
+                    key TEXT PRIMARY KEY,
+                    value TEXT NOT NULL,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
+            `);
+
+            const defAdmConfig = JSON.stringify({
+                show_mother_name: true,
+                show_dob: true,
+                show_gender: true,
+                show_alt_mobile: true,
+                show_aadhaar: true,
+                show_pen: true,
+                show_blood_group: true,
+                show_category: true,
+                show_parent_occupation: true,
+                show_previous_school: true,
+                show_address: true,
+                show_section: true,
+                show_roll_no: true,
+                show_route: true,
+                show_fee: true
+            });
+
+            const defSalaryConfig = JSON.stringify({
+                enable_da: false,
+                enable_hra: false,
+                enable_conveyance: true,
+                enable_incentive: true,
+                enable_bonus: true,
+                enable_medical: false,
+                enable_absent_deduction: true,
+                enable_advance_recovery: true,
+                enable_epf: false,
+                enable_esi: false,
+                enable_other_deduction: true
+            });
+
+            const existingAdm = db.prepare("SELECT key FROM system_settings WHERE key = 'admission_form_config'").get();
+            if (!existingAdm) {
+                db.prepare("INSERT INTO system_settings (key, value) VALUES ('admission_form_config', ?)").run(defAdmConfig);
+            }
+
+            const existingSal = db.prepare("SELECT key FROM system_settings WHERE key = 'salary_heads_config'").get();
+            if (!existingSal) {
+                db.prepare("INSERT INTO system_settings (key, value) VALUES ('salary_heads_config', ?)").run(defSalaryConfig);
+            }
         }
     } catch (migErr) {
         console.warn('Schema migration notice:', migErr.message);

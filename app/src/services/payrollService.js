@@ -31,25 +31,73 @@ class PayrollService {
         return row && row.total_advance ? row.total_advance : 0.0;
     }
 
-    static processSalaryPayment({ employeeId, salaryMonth, basicSalary, allowances = 0, advanceDeduction = 0, absentDeduction = 0, paymentMode = 'Cash', preparedBy = 'Admin', remarks = '' }) {
+    static processSalaryPayment({
+        employeeId, employee_id,
+        salaryMonth, salary_month,
+        basicSalary, basic_salary,
+        daAmount = 0, da_amount = 0,
+        hraAmount = 0, hra_amount = 0,
+        conveyanceAmount = 0, conveyance_amount = 0,
+        medicalAllowance = 0, medical_allowance = 0,
+        incentiveAmount = 0, incentive_amount = 0,
+        bonusAmount = 0, bonus_amount = 0,
+        allowances = 0,
+        advanceDeduction = 0, advance_deduction = 0,
+        absentDeduction = 0, absent_deduction = 0,
+        epfDeduction = 0, epf_deduction = 0,
+        esiDeduction = 0, esi_deduction = 0,
+        otherDeduction = 0, other_deduction = 0,
+        paymentMode = 'Cash', payment_mode = 'Cash',
+        preparedBy = 'Admin', prepared_by = 'Admin',
+        remarks = ''
+    }) {
+        const targetEmpId = employeeId || employee_id;
+        const targetMonth = salaryMonth || salary_month;
+        const base = parseFloat(basicSalary || basic_salary) || 0;
+        const da = parseFloat(daAmount || da_amount) || 0;
+        const hra = parseFloat(hraAmount || hra_amount) || 0;
+        const conv = parseFloat(conveyanceAmount || conveyance_amount) || 0;
+        const med = parseFloat(medicalAllowance || medical_allowance) || 0;
+        const inc = parseFloat(incentiveAmount || incentive_amount) || 0;
+        const bon = parseFloat(bonusAmount || bonus_amount) || 0;
+        const advDed = parseFloat(advanceDeduction || advance_deduction) || 0;
+        const absDed = parseFloat(absentDeduction || absent_deduction) || 0;
+        const epfDed = parseFloat(epfDeduction || epf_deduction) || 0;
+        const esiDed = parseFloat(esiDeduction || esi_deduction) || 0;
+        const othDed = parseFloat(otherDeduction || other_deduction) || 0;
+        const payMode = paymentMode || payment_mode || 'Cash';
+        const prepBy = preparedBy || prepared_by || 'Admin';
+
         const db = getDb();
-        const emp = this.getEmployeeById(employeeId);
+        const emp = this.getEmployeeById(targetEmpId);
         if (!emp) throw new Error('Employee not found');
 
-        const netPaid = (basicSalary + allowances) - (advanceDeduction + absentDeduction);
-        const voucherNo = `SAL-${salaryMonth.replace(/\s+/g, '-').toUpperCase()}-${String(emp.id).padStart(3, '0')}-${Date.now().toString().slice(-4)}`;
+        const computedAllowances = da + hra + conv + med + inc + bon;
+        const finalAllowances = computedAllowances > 0 ? computedAllowances : (parseFloat(allowances) || 0);
+        const grossSalary = base + finalAllowances;
+        const totalDeductions = advDed + absDed + epfDed + esiDed + othDed;
+
+        const netPaid = Math.max(0, grossSalary - totalDeductions);
+        const voucherNo = `SAL-${String(targetMonth).replace(/\s+/g, '-').toUpperCase()}-${String(emp.id).padStart(3, '0')}-${Date.now().toString().slice(-4)}`;
 
         // Insert salary payment
         const stmt = db.prepare(`
             INSERT INTO salary_payments (
                 voucher_no, employee_id, salary_month, basic_salary, allowances,
-                advance_deduction, absent_deduction, net_paid, payment_mode, transaction_status, prepared_by, remarks
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Paid', ?, ?)
+                advance_deduction, absent_deduction, net_paid, payment_mode, transaction_status, prepared_by, remarks,
+                da_amount, hra_amount, conveyance_amount, medical_allowance, incentive_amount, bonus_amount,
+                epf_deduction, esi_deduction, other_deduction, gross_salary, total_deductions
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Paid', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `);
-        stmt.run(voucherNo, employeeId, salaryMonth, basicSalary, allowances, advanceDeduction, absentDeduction, netPaid, paymentMode, preparedBy, remarks);
+        stmt.run(
+            voucherNo, targetEmpId, targetMonth, base, finalAllowances,
+            advDed, absDed, netPaid, payMode, prepBy, remarks,
+            da, hra, conv, med, inc, bon,
+            epfDed, esiDed, othDed, grossSalary, totalDeductions
+        );
 
         // If advance deduction occurred, mark pending advances as settled
-        if (advanceDeduction > 0) {
+        if (advDed > 0) {
             db.prepare(`
                 UPDATE salary_advances
                 SET status = 'settled', settled_voucher_no = ?
@@ -89,11 +137,20 @@ class PayrollService {
                 `कर्मचारी: ${payment.employee_name} (${payment.designation})\n` +
                 `वेतन माह: ${payment.salary_month}\n` +
                 `वाउचर नं: ${payment.voucher_no}\n` +
-                `मूल वेतन (Basic): ₹${payment.basic_salary.toLocaleString('en-IN')}\n` +
-                (payment.allowances > 0 ? `भत्ता (Allowances): ₹${payment.allowances.toLocaleString('en-IN')}\n` : '') +
-                (payment.advance_deduction > 0 ? `अग्रिम कटौती (Advance): -₹${payment.advance_deduction.toLocaleString('en-IN')}\n` : '') +
-                (payment.absent_deduction > 0 ? `अनुपस्थिति कटौती: -₹${payment.absent_deduction.toLocaleString('en-IN')}\n` : '') +
-                `*शुद्ध देय राशि (Net Paid): ₹${payment.net_paid.toLocaleString('en-IN')}*\n` +
+                `मूल वेतन (Basic): ₹${Number(payment.basic_salary).toLocaleString('en-IN')}\n` +
+                (payment.da_amount > 0 ? `महंगाई भत्ता (DA): ₹${Number(payment.da_amount).toLocaleString('en-IN')}\n` : '') +
+                (payment.hra_amount > 0 ? `मकान किराया (HRA): ₹${Number(payment.hra_amount).toLocaleString('en-IN')}\n` : '') +
+                (payment.conveyance_amount > 0 ? `यातायात भत्ता (Conveyance): ₹${Number(payment.conveyance_amount).toLocaleString('en-IN')}\n` : '') +
+                (payment.incentive_amount > 0 ? `इंसेंटिव (Incentive): ₹${Number(payment.incentive_amount).toLocaleString('en-IN')}\n` : '') +
+                (payment.bonus_amount > 0 ? `बोनस (Bonus): ₹${Number(payment.bonus_amount).toLocaleString('en-IN')}\n` : '') +
+                (payment.medical_allowance > 0 ? `चिकित्सा भत्ता (Medical): ₹${Number(payment.medical_allowance).toLocaleString('en-IN')}\n` : '') +
+                (payment.advance_deduction > 0 ? `अग्रिम कटौती (Advance): -₹${Number(payment.advance_deduction).toLocaleString('en-IN')}\n` : '') +
+                (payment.absent_deduction > 0 ? `अनुपस्थिति कटौती (LOP): -₹${Number(payment.absent_deduction).toLocaleString('en-IN')}\n` : '') +
+                (payment.epf_deduction > 0 ? `EPF कटौती (12%): -₹${Number(payment.epf_deduction).toLocaleString('en-IN')}\n` : '') +
+                (payment.esi_deduction > 0 ? `ESI कटौती: -₹${Number(payment.esi_deduction).toLocaleString('en-IN')}\n` : '') +
+                (payment.other_deduction > 0 ? `अन्य कटौती: -₹${Number(payment.other_deduction).toLocaleString('en-IN')}\n` : '') +
+                `*कुल देय वेतन (Gross): ₹${Number(payment.gross_salary || (payment.basic_salary + payment.allowances)).toLocaleString('en-IN')}*\n` +
+                `*शुद्ध इन-हैंड राशि (Net In-Hand): ₹${Number(payment.net_paid).toLocaleString('en-IN')}*\n` +
                 `शब्दों में: ${this.numberToWords(payment.net_paid)}\n` +
                 `भुगतान मोड: ${payment.payment_mode}\n` +
                 `धन्यवाद!`

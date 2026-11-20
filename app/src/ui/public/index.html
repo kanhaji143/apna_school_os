@@ -2363,6 +2363,184 @@
 
                 </div>
 
+                
+                    <!-- Card 6: Student Admission Form Fields Toggles -->
+                    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:20px; grid-column:span 2;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span style="font-size:24px;">🎓</span>
+                                <div>
+                                    <h3 style="font-size:16px; font-weight:800; color:var(--text-heading); margin:0;">छात्र प्रवेश फॉर्म फ़ील्ड्स नियंत्रण (Admission Form Field Toggles)</h3>
+                                    <p style="font-size:12px; color:var(--text-muted); margin:0;">स्कूल की जरूरत अनुसार प्रवेश फॉर्म में आवश्यक फ़ील्ड्स चालू या बंद रखें।</p>
+                                </div>
+                            </div>
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <button type="button" class="btn btn-outline" style="font-size:11px; padding:5px 10px;" onclick="applyAdmissionPreset('play')">🧸 प्ले / नर्सरी</button>
+                                <button type="button" class="btn btn-outline" style="font-size:11px; padding:5px 10px;" onclick="applyAdmissionPreset('primary')">🏫 मानक प्राइमरी K-8</button>
+                                <button type="button" class="btn btn-outline" style="font-size:11px; padding:5px 10px; background:#e0f2fe; color:#0369a1; border-color:#38bdf8;" onclick="applyAdmissionPreset('cbse')">🏛️ जिंदल मॉडल / CBSE पूर्ण</button>
+                            </div>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:12px; background:var(--bg-page); padding:16px; border-radius:10px; border:1px solid var(--border); margin-bottom:14px;">
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-mother" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>माता का नाम (Mother's Name)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-dob" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>जन्म तिथि (Date of Birth)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-gender" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>लिंग (Gender)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-alt-mobile" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>वैकल्पिक मोबाइल (Alt Phone)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-aadhaar" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>आधार नंबर (Aadhaar Card)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-pen" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>PEN नंबर (UDISE+ / UPMSP)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-blood" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>ब्लड ग्रुप (Blood Group - OP Jindal/CBSE)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-category" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>सामाजिक श्रेणी (Category: Gen/OBC/SC/ST)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-parent-occ" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>अभिभावक व्यवसाय (Parent Occupation)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-prev-school" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>पूर्व स्कूल एवं TC नं (Prev School & TC)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-address" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>गाँव / पता (Permanent Address)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-section" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>सेक्शन (Section A/B/C)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-roll" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>रोल नंबर (Roll Number)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-route" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>स्कूल बस रूट (Transport Route)</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                <input type="checkbox" id="cfg-adm-fee" style="accent-color:#0284c7; width:16px; height:16px;">
+                                <span>वार्षिक फीस निर्धारण (Annual Expected Fee)</span>
+                            </label>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                            <span style="font-size:11.5px; color:#64748b;">* छात्र का नाम, कक्षा, पिता का नाम और मोबाइल नंबर प्राथमिक पहचान के रूप में अनिवार्य रहते हैं।</span>
+                            <button type="button" class="btn" style="background:#0284c7; color:white; font-weight:700; padding:8px 20px; font-size:12.5px;" onclick="saveAdmissionFormConfig()">
+                                💾 प्रवेश फॉर्म सेटिंग्स सहेजें (Save Settings)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 7: Staff Salary Heads & Allowances Toggles -->
+                    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:20px; grid-column:span 2;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span style="font-size:24px;">💼</span>
+                                <div>
+                                    <h3 style="font-size:16px; font-weight:800; color:var(--text-heading); margin:0;">स्टाफ़ सैलरी हेड्स एवं भत्ते अनुकूलन (Salary Heads & Allowances)</h3>
+                                    <p style="font-size:12px; color:var(--text-muted); margin:0;">शिक्षक एवं स्टाफ़ वेतन पर्ची में देय भत्ते और कटौतियां अपनी पॉलिसी के अनुसार चालू या बंद रखें।</p>
+                                </div>
+                            </div>
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <button type="button" class="btn btn-outline" style="font-size:11px; padding:5px 10px;" onclick="applySalaryPreset('simple')">🪙 सरल फिक्स्ड वेतन</button>
+                                <button type="button" class="btn btn-outline" style="font-size:11px; padding:5px 10px;" onclick="applySalaryPreset('standard')">🏢 मानक स्कूल मॉडल</button>
+                                <button type="button" class="btn btn-outline" style="font-size:11px; padding:5px 10px; background:#f0fdf4; color:#15803d; border-color:#86efac;" onclick="applySalaryPreset('cbse')">🎓 CBSE 5.3 / पूर्ण कॉर्पोरेट</button>
+                            </div>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:16px; margin-bottom:14px;">
+                            <!-- Allowances Column -->
+                            <div style="background:var(--bg-page); padding:16px; border-radius:10px; border:1px solid #bfdbfe;">
+                                <div style="font-weight:700; color:#0369a1; font-size:13px; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                                    <span>➕</span> वेतन भत्ते (Earnings & Allowances)
+                                </div>
+                                <div style="display:flex; flex-direction:column; gap:10px;">
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-da" style="accent-color:#0284c7; width:16px; height:16px;">
+                                        <span>महंगाई भत्ता (Dearness Allowance - DA)</span>
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-hra" style="accent-color:#0284c7; width:16px; height:16px;">
+                                        <span>मकान किराया भत्ता (House Rent Allowance - HRA)</span>
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-conv" style="accent-color:#0284c7; width:16px; height:16px;">
+                                        <span>यातायात / पेट्रोल भत्ता (Conveyance Allowance)</span>
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-inc" style="accent-color:#0284c7; width:16px; height:16px;">
+                                        <span>प्रदर्शन / इंसेंटिव (Performance Incentive)</span>
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-bon" style="accent-color:#0284c7; width:16px; height:16px;">
+                                        <span>विशेष / त्यौहार बोनस (Festival / Annual Bonus)</span>
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-med" style="accent-color:#0284c7; width:16px; height:16px;">
+                                        <span>चिकित्सा भत्ता (Medical Allowance)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Deductions Column -->
+                            <div style="background:var(--bg-page); padding:16px; border-radius:10px; border:1px solid #fecaca;">
+                                <div style="font-weight:700; color:#b91c1c; font-size:13px; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                                    <span>➖</span> वेतन कटौतियां (Salary Deductions)
+                                </div>
+                                <div style="display:flex; flex-direction:column; gap:10px;">
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-abs" style="accent-color:#dc2626; width:16px; height:16px;">
+                                        <span>अनुपस्थिति कटौती (Loss of Pay / Absent Days)</span>
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-adv" style="accent-color:#dc2626; width:16px; height:16px;">
+                                        <span>अग्रिम वेतन वसूली (Advance Salary Recovery)</span>
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-epf" style="accent-color:#dc2626; width:16px; height:16px;">
+                                        <span>कर्मचारी भविष्य निधि (EPF 12% Deduction)</span>
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-esi" style="accent-color:#dc2626; width:16px; height:16px;">
+                                        <span>कर्मचारी राज्य बीमा (ESI Health Contribution)</span>
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+                                        <input type="checkbox" id="cfg-sal-oth" style="accent-color:#dc2626; width:16px; height:16px;">
+                                        <span>अन्य कटौती (Uniform, Canteen, Welfare etc.)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                            <span style="font-size:11.5px; color:#64748b;">* मूल वेतन (Basic Salary) हमेशा प्राथमिक आधार रहेगा।</span>
+                            <button type="button" class="btn" style="background:#0284c7; color:white; font-weight:700; padding:8px 20px; font-size:12.5px;" onclick="saveSalaryHeadsConfig()">
+                                💾 वेतन हेड्स सेटिंग्स सहेजें (Save Settings)
+                            </button>
+                        </div>
+                    </div>
+
                 <!-- Recent Audit Log Table -->
                 <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:20px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -3060,6 +3238,7 @@
             applyRoleBasedNavigation(user);
 
             updateDynamicGreeting();
+            loadFormConfigs();
         }
 
         function applyRoleBasedNavigation(user) {
@@ -4899,27 +5078,298 @@ Bhadar, Amethi (U.P.)`;
         }
 
         
+        
+        // ==========================================
+        // DYNAMIC FORM & SALARY CONFIGURATIONS
+        // ==========================================
+        let currentAdmissionFormConfig = {
+            show_mother_name: true,
+            show_dob: true,
+            show_gender: true,
+            show_alt_mobile: true,
+            show_aadhaar: true,
+            show_pen: true,
+            show_blood_group: true,
+            show_category: true,
+            show_parent_occupation: true,
+            show_previous_school: true,
+            show_address: true,
+            show_section: true,
+            show_roll_no: true,
+            show_route: true,
+            show_fee: true
+        };
+
+        let currentSalaryHeadsConfig = {
+            enable_da: false,
+            enable_hra: false,
+            enable_conveyance: true,
+            enable_incentive: true,
+            enable_bonus: true,
+            enable_medical: false,
+            enable_absent_deduction: true,
+            enable_advance_recovery: true,
+            enable_epf: false,
+            enable_esi: false,
+            enable_other_deduction: true
+        };
+
+        async function loadFormConfigs() {
+            try {
+                const res = await fetch('/api/settings/form-configs');
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data.success) {
+                    if (data.admission_form_config) currentAdmissionFormConfig = { ...currentAdmissionFormConfig, ...data.admission_form_config };
+                    if (data.salary_heads_config) currentSalaryHeadsConfig = { ...currentSalaryHeadsConfig, ...data.salary_heads_config };
+                    syncFormConfigCheckboxes();
+                }
+            } catch (err) {
+                console.warn('Form configs load failed:', err);
+            }
+        }
+
+        function syncFormConfigCheckboxes() {
+            const setCheck = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.checked = !!val;
+            };
+            // Admission Form Checkboxes
+            setCheck('cfg-adm-mother', currentAdmissionFormConfig.show_mother_name);
+            setCheck('cfg-adm-dob', currentAdmissionFormConfig.show_dob);
+            setCheck('cfg-adm-gender', currentAdmissionFormConfig.show_gender);
+            setCheck('cfg-adm-alt-mobile', currentAdmissionFormConfig.show_alt_mobile);
+            setCheck('cfg-adm-aadhaar', currentAdmissionFormConfig.show_aadhaar);
+            setCheck('cfg-adm-pen', currentAdmissionFormConfig.show_pen);
+            setCheck('cfg-adm-blood', currentAdmissionFormConfig.show_blood_group);
+            setCheck('cfg-adm-category', currentAdmissionFormConfig.show_category);
+            setCheck('cfg-adm-parent-occ', currentAdmissionFormConfig.show_parent_occupation);
+            setCheck('cfg-adm-prev-school', currentAdmissionFormConfig.show_previous_school);
+            setCheck('cfg-adm-address', currentAdmissionFormConfig.show_address);
+            setCheck('cfg-adm-section', currentAdmissionFormConfig.show_section);
+            setCheck('cfg-adm-roll', currentAdmissionFormConfig.show_roll_no);
+            setCheck('cfg-adm-route', currentAdmissionFormConfig.show_route);
+            setCheck('cfg-adm-fee', currentAdmissionFormConfig.show_fee);
+
+            // Salary Heads Checkboxes
+            setCheck('cfg-sal-da', currentSalaryHeadsConfig.enable_da);
+            setCheck('cfg-sal-hra', currentSalaryHeadsConfig.enable_hra);
+            setCheck('cfg-sal-conv', currentSalaryHeadsConfig.enable_conveyance);
+            setCheck('cfg-sal-inc', currentSalaryHeadsConfig.enable_incentive);
+            setCheck('cfg-sal-bon', currentSalaryHeadsConfig.enable_bonus);
+            setCheck('cfg-sal-med', currentSalaryHeadsConfig.enable_medical);
+            setCheck('cfg-sal-abs', currentSalaryHeadsConfig.enable_absent_deduction);
+            setCheck('cfg-sal-adv', currentSalaryHeadsConfig.enable_advance_recovery);
+            setCheck('cfg-sal-epf', currentSalaryHeadsConfig.enable_epf);
+            setCheck('cfg-sal-esi', currentSalaryHeadsConfig.enable_esi);
+            setCheck('cfg-sal-oth', currentSalaryHeadsConfig.enable_other_deduction);
+        }
+
+        function applyAdmissionPreset(preset) {
+            if (preset === 'play') {
+                currentAdmissionFormConfig = {
+                    show_mother_name: true,
+                    show_dob: true,
+                    show_gender: true,
+                    show_alt_mobile: false,
+                    show_aadhaar: false,
+                    show_pen: false,
+                    show_blood_group: false,
+                    show_category: false,
+                    show_parent_occupation: false,
+                    show_previous_school: false,
+                    show_address: true,
+                    show_section: false,
+                    show_roll_no: false,
+                    show_route: true,
+                    show_fee: true
+                };
+            } else if (preset === 'primary') {
+                currentAdmissionFormConfig = {
+                    show_mother_name: true,
+                    show_dob: true,
+                    show_gender: true,
+                    show_alt_mobile: true,
+                    show_aadhaar: true,
+                    show_pen: true,
+                    show_blood_group: false,
+                    show_category: true,
+                    show_parent_occupation: false,
+                    show_previous_school: false,
+                    show_address: true,
+                    show_section: true,
+                    show_roll_no: true,
+                    show_route: true,
+                    show_fee: true
+                };
+            } else if (preset === 'cbse') {
+                currentAdmissionFormConfig = {
+                    show_mother_name: true,
+                    show_dob: true,
+                    show_gender: true,
+                    show_alt_mobile: true,
+                    show_aadhaar: true,
+                    show_pen: true,
+                    show_blood_group: true,
+                    show_category: true,
+                    show_parent_occupation: true,
+                    show_previous_school: true,
+                    show_address: true,
+                    show_section: true,
+                    show_roll_no: true,
+                    show_route: true,
+                    show_fee: true
+                };
+            }
+            syncFormConfigCheckboxes();
+        }
+
+        function applySalaryPreset(preset) {
+            if (preset === 'simple') {
+                currentSalaryHeadsConfig = {
+                    enable_da: false,
+                    enable_hra: false,
+                    enable_conveyance: false,
+                    enable_incentive: false,
+                    enable_bonus: false,
+                    enable_medical: false,
+                    enable_absent_deduction: true,
+                    enable_advance_recovery: true,
+                    enable_epf: false,
+                    enable_esi: false,
+                    enable_other_deduction: false
+                };
+            } else if (preset === 'standard') {
+                currentSalaryHeadsConfig = {
+                    enable_da: false,
+                    enable_hra: false,
+                    enable_conveyance: true,
+                    enable_incentive: true,
+                    enable_bonus: true,
+                    enable_medical: false,
+                    enable_absent_deduction: true,
+                    enable_advance_recovery: true,
+                    enable_epf: false,
+                    enable_esi: false,
+                    enable_other_deduction: true
+                };
+            } else if (preset === 'cbse') {
+                currentSalaryHeadsConfig = {
+                    enable_da: true,
+                    enable_hra: true,
+                    enable_conveyance: true,
+                    enable_incentive: true,
+                    enable_bonus: true,
+                    enable_medical: true,
+                    enable_absent_deduction: true,
+                    enable_advance_recovery: true,
+                    enable_epf: true,
+                    enable_esi: true,
+                    enable_other_deduction: true
+                };
+            }
+            syncFormConfigCheckboxes();
+        }
+
+        async function saveAdmissionFormConfig() {
+            currentAdmissionFormConfig = {
+                show_mother_name: document.getElementById('cfg-adm-mother').checked,
+                show_dob: document.getElementById('cfg-adm-dob').checked,
+                show_gender: document.getElementById('cfg-adm-gender').checked,
+                show_alt_mobile: document.getElementById('cfg-adm-alt-mobile').checked,
+                show_aadhaar: document.getElementById('cfg-adm-aadhaar').checked,
+                show_pen: document.getElementById('cfg-adm-pen').checked,
+                show_blood_group: document.getElementById('cfg-adm-blood').checked,
+                show_category: document.getElementById('cfg-adm-category').checked,
+                show_parent_occupation: document.getElementById('cfg-adm-parent-occ').checked,
+                show_previous_school: document.getElementById('cfg-adm-prev-school').checked,
+                show_address: document.getElementById('cfg-adm-address').checked,
+                show_section: document.getElementById('cfg-adm-section').checked,
+                show_roll_no: document.getElementById('cfg-adm-roll').checked,
+                show_route: document.getElementById('cfg-adm-route').checked,
+                show_fee: document.getElementById('cfg-adm-fee').checked
+            };
+            try {
+                const res = await fetch('/api/settings/form-configs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ admission_form_config: currentAdmissionFormConfig })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('✓ छात्र प्रवेश फॉर्म की फ़ील्ड सेटिंग्स सफलतापूर्वक सुरक्षित कर दी गई हैं!');
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        async function saveSalaryHeadsConfig() {
+            currentSalaryHeadsConfig = {
+                enable_da: document.getElementById('cfg-sal-da').checked,
+                enable_hra: document.getElementById('cfg-sal-hra').checked,
+                enable_conveyance: document.getElementById('cfg-sal-conv').checked,
+                enable_incentive: document.getElementById('cfg-sal-inc').checked,
+                enable_bonus: document.getElementById('cfg-sal-bon').checked,
+                enable_medical: document.getElementById('cfg-sal-med').checked,
+                enable_absent_deduction: document.getElementById('cfg-sal-abs').checked,
+                enable_advance_recovery: document.getElementById('cfg-sal-adv').checked,
+                enable_epf: document.getElementById('cfg-sal-epf').checked,
+                enable_esi: document.getElementById('cfg-sal-esi').checked,
+                enable_other_deduction: document.getElementById('cfg-sal-oth').checked
+            };
+            try {
+                const res = await fetch('/api/settings/form-configs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ salary_heads_config: currentSalaryHeadsConfig })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('✓ स्टाफ़ सैलरी हेड्स एवं भत्ते सेटिंग्स सफलतापूर्वक सुरक्षित कर दी गई हैं!');
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+
         function openNewAdmissionModal() {
+            const cfg = currentAdmissionFormConfig || {};
+            const today = new Date().toISOString().slice(0, 10);
+            const routeOptions = (allRoutes && allRoutes.length > 0)
+                ? allRoutes.map(r => `<option value="${r.id}">${r.route_name} (₹${r.transport_fee}/माह)</option>`).join('')
+                : '<option value="0">पैदल / निजी साधन (No Bus)</option>';
+
             const area = document.getElementById('modal-content-area');
             area.innerHTML = `
-                <form onsubmit="submitNewAdmission(event)" style="padding:4px;">
-                    <div style="background:#f0f9ff; border-left:4px solid #0284c7; padding:10px 14px; border-radius:6px; margin-bottom:14px;">
-                        <div style="font-weight:700; color:#0369a1; font-size:13px;">🎓 नया छात्र प्रवेश फॉर्म (Direct Admission Entry)</div>
-                        <div style="font-size:11.5px; color:#475569;">छात्र का विवरण भरें। यह डेटा सीधे आपके सुरक्षित डेटाबेस (D:\\Apna_School_OS_Data) में दर्ज होगा।</div>
+                <form onsubmit="submitNewAdmission(event)" style="padding:4px; max-height:80vh; overflow-y:auto;">
+                    <div style="background:#f0f9ff; border-left:4px solid #0284c7; padding:10px 14px; border-radius:6px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div style="font-weight:700; color:#0369a1; font-size:13px;">🎓 नया छात्र प्रवेश फॉर्म (Direct Admission Entry)</div>
+                            <div style="font-size:11.5px; color:#475569;">छात्र का विवरण भरें। यह डेटा सीधे आपके सुरक्षित डेटाबेस (D:\\Apna_School_OS_Data) में दर्ज होगा।</div>
+                        </div>
+                        <span style="font-size:11px; background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:4px; font-weight:700;">सक्रिय अनुकूलित फॉर्म</span>
                     </div>
 
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <!-- Row 1: Core Identifiers -->
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
                         <div>
-                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">प्रवेश क्रमांक (Adm No) <span style="font-weight:400; color:#64748b;">(खाली छोड़ें तो ऑटो-जनरेट होगा)</span></label>
-                            <input type="text" id="adm-in-no" placeholder="e.g. 101, LAK-001 (वैकल्पिक)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">प्रवेश क्रमांक (Adm No) <span style="font-weight:400; color:#64748b;">(खाली छोड़ें तो ऑटो)</span></label>
+                            <input type="text" id="adm-in-no" placeholder="उदा. LAK-001 (वैकल्पिक)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
                         </div>
                         <div>
-                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">छात्र/छात्रा का पूरा नाम (Student Name) *</label>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">प्रवेश तिथि (Admission Date)</label>
+                            <input type="date" id="adm-in-date" value="${today}" style="width:100%; padding:7px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">छात्र/छात्रा का पूरा नाम *</label>
                             <input type="text" id="adm-in-name" required placeholder="जैसे: आरव शर्मा" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
                         </div>
                     </div>
 
-                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <!-- Row 2: Class, Section, Roll No -->
+                    <div style="display:grid; grid-template-columns:1fr ${cfg.show_section ? '1fr' : ''} ${cfg.show_roll_no ? '1fr' : ''}; gap:12px; margin-bottom:12px;">
                         <div>
                             <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">कक्षा (Class) *</label>
                             <select id="adm-in-class" required style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
@@ -4934,8 +5384,11 @@ Bhadar, Amethi (U.P.)`;
                                 <option value="Class 6">Class 6</option>
                                 <option value="Class 7">Class 7</option>
                                 <option value="Class 8">Class 8</option>
+                                <option value="Class 9">Class 9</option>
+                                <option value="Class 10">Class 10</option>
                             </select>
                         </div>
+                        ${cfg.show_section ? `
                         <div>
                             <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">सेक्शन (Section)</label>
                             <select id="adm-in-section" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
@@ -4943,29 +5396,39 @@ Bhadar, Amethi (U.P.)`;
                                 <option value="B">Section B</option>
                                 <option value="C">Section C</option>
                             </select>
-                        </div>
+                        </div>` : ''}
+                        ${cfg.show_roll_no ? `
                         <div>
                             <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">रोल नंबर (Roll No)</label>
-                            <input type="text" id="adm-in-roll" placeholder="e.g. 1" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
-                        </div>
+                            <input type="text" id="adm-in-roll" placeholder="उदा. 1" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>` : ''}
                     </div>
 
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <!-- Row 3: Parents -->
+                    <div style="display:grid; grid-template-columns:1fr ${cfg.show_mother_name ? '1fr' : ''}; gap:12px; margin-bottom:12px;">
                         <div>
                             <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">पिता का नाम (Father's Name) *</label>
                             <input type="text" id="adm-in-father" required placeholder="जैसे: राजेश शर्मा" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
                         </div>
+                        ${cfg.show_mother_name ? `
                         <div>
                             <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">माता का नाम (Mother's Name)</label>
                             <input type="text" id="adm-in-mother" placeholder="जैसे: सुनीता शर्मा" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
-                        </div>
+                        </div>` : ''}
                     </div>
 
-                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <!-- Row 4: Phones, Gender, DOB -->
+                    <div style="display:grid; grid-template-columns:1fr ${cfg.show_alt_mobile ? '1fr' : ''} ${cfg.show_gender ? '1fr' : ''} ${cfg.show_dob ? '1fr' : ''}; gap:12px; margin-bottom:12px;">
                         <div>
-                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">अभिभावक का मोबाइल (Mobile) *</label>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">अभिभावक मोबाइल *</label>
                             <input type="tel" id="adm-in-phone" required pattern="[0-9]{10}" placeholder="10-digit mobile" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
                         </div>
+                        ${cfg.show_alt_mobile ? `
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">वैकल्पिक मोबाइल</label>
+                            <input type="tel" id="adm-in-alt-mobile" pattern="[0-9]{10}" placeholder="दूसरा मोबाइल नं." style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>` : ''}
+                        ${cfg.show_gender ? `
                         <div>
                             <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">लिंग (Gender)</label>
                             <select id="adm-in-gender" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
@@ -4973,42 +5436,110 @@ Bhadar, Amethi (U.P.)`;
                                 <option value="Female">बालिका (Female)</option>
                                 <option value="Other">अन्य (Other)</option>
                             </select>
-                        </div>
+                        </div>` : ''}
+                        ${cfg.show_dob ? `
                         <div>
                             <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">जन्म तिथि (DOB)</label>
                             <input type="date" id="adm-in-dob" style="width:100%; padding:7px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
-                        </div>
+                        </div>` : ''}
                     </div>
 
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <!-- Row 5: Aadhaar, PEN Number -->
+                    ${(cfg.show_aadhaar || cfg.show_pen) ? `
+                    <div style="display:grid; grid-template-columns:${cfg.show_aadhaar && cfg.show_pen ? '1fr 1fr' : '1fr'}; gap:12px; margin-bottom:12px;">
+                        ${cfg.show_aadhaar ? `
                         <div>
-                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">आधार कार्ड नंबर (Aadhaar No) <span style="font-weight:400; color:#64748b;">(12 अंक)</span></label>
-                            <input type="text" id="adm-in-aadhaar" maxlength="14" placeholder="e.g. 1234 5678 9012 (वैकल्पिक)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
-                        </div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">आधार नंबर (Aadhaar No) <span style="font-weight:400; color:#64748b;">(12 अंक)</span></label>
+                            <input type="text" id="adm-in-aadhaar" maxlength="14" placeholder="उदा. 1234 5678 9012 (वैकल्पिक)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>` : ''}
+                        ${cfg.show_pen ? `
                         <div>
-                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">PEN नंबर (Permanent Education No - UDISE+) <span style="font-weight:400; color:#64748b;">(11 अंक)</span></label>
-                            <input type="text" id="adm-in-pen" maxlength="15" placeholder="e.g. 20987654321 (UP माध्यमिक/UDISE+)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
-                        </div>
-                    </div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">PEN नंबर (UDISE+ / UPMSP) <span style="font-weight:400; color:#64748b;">(11 अंक)</span></label>
+                            <input type="text" id="adm-in-pen" maxlength="15" placeholder="उदा. 20987654321 (UP माध्यमिक/UDISE+)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>` : ''}
+                    </div>` : ''}
 
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+                    <!-- Row 6: Elite OP Jindal Fields (Blood Group, Category, Parent Occupation) -->
+                    ${(cfg.show_blood_group || cfg.show_category || cfg.show_parent_occupation) ? `
+                    <div style="display:grid; grid-template-columns:${[cfg.show_blood_group, cfg.show_category, cfg.show_parent_occupation].filter(Boolean).map(()=>'1fr').join(' ')}; gap:12px; margin-bottom:12px;">
+                        ${cfg.show_blood_group ? `
                         <div>
-                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">वार्षिक कुल फीस (Total Annual Fee ₹)</label>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">ब्लड ग्रुप (Blood Group)</label>
+                            <select id="adm-in-blood" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                <option value="">चुनें (वैकल्पिक)</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+                        </div>` : ''}
+                        ${cfg.show_category ? `
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">सामाजिक श्रेणी (Category)</label>
+                            <select id="adm-in-category" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                <option value="General" selected>General</option>
+                                <option value="OBC">OBC</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                                <option value="EWS">EWS</option>
+                            </select>
+                        </div>` : ''}
+                        ${cfg.show_parent_occupation ? `
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">अभिभावक व्यवसाय (Occupation)</label>
+                            <input type="text" id="adm-in-parent-occ" placeholder="उदा. Business, Service, Farmer" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>` : ''}
+                    </div>` : ''}
+
+                    <!-- Row 7: Previous School & TC -->
+                    ${cfg.show_previous_school ? `
+                    <div style="display:grid; grid-template-columns:2fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">पूर्व विद्यालय का नाम (Previous School)</label>
+                            <input type="text" id="adm-in-prev-school" placeholder="उदा. सरस्वती शिशु मंदिर" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">TC नंबर (Transfer Certificate No)</label>
+                            <input type="text" id="adm-in-tc-no" placeholder="उदा. TC-2026/89" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>` : ''}
+
+                    <!-- Row 8: Transport Route, Fee, Address -->
+                    <div style="display:grid; grid-template-columns:${[cfg.show_route, cfg.show_fee, cfg.show_address].filter(Boolean).map(()=>'1fr').join(' ') || '1fr'}; gap:12px; margin-bottom:16px;">
+                        ${cfg.show_route ? `
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">स्कूल बस रूट (Bus Route)</label>
+                            <select id="adm-in-route" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                <option value="0">पैदल / निजी साधन (No Bus)</option>
+                                ${routeOptions}
+                            </select>
+                        </div>` : ''}
+                        ${cfg.show_fee ? `
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">वार्षिक फीस (Annual Fee ₹)</label>
                             <input type="number" id="adm-in-fee" value="12000" min="0" step="100" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px; font-weight:700; color:#0369a1;">
-                        </div>
+                        </div>` : ''}
+                        ${cfg.show_address ? `
                         <div>
                             <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">गाँव / पता (Address)</label>
-                            <input type="text" id="adm-in-address" placeholder="e.g. भादर, अमेठी" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
-                        </div>
+                            <input type="text" id="adm-in-address" placeholder="उदा. भादर, अमेठी" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>` : ''}
                     </div>
 
                     <div id="adm-msg-status" style="display:none; font-size:12.5px; padding:8px 12px; border-radius:6px; margin-bottom:12px;"></div>
 
-                    <div style="display:flex; justify-content:flex-end; gap:10px;">
-                        <button type="button" class="btn btn-outline" onclick="closeAppModal()">रद्द करें (Cancel)</button>
-                        <button type="submit" id="adm-btn-submit" class="btn" style="background:#0284c7; color:white; font-weight:700; padding:8px 18px; border-radius:6px; border:none; cursor:pointer;">
-                            💾 प्रवेश सुरक्षित करें (Save Admission)
-                        </button>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:11.5px; color:#64748b;">(सेटिंग्स से आवश्यकतानुसार फ़ील्ड्स अनुकूलित कर सकते हैं)</span>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-outline" onclick="closeAppModal()">रद्द करें (Cancel)</button>
+                            <button type="submit" id="adm-btn-submit" class="btn" style="background:#0284c7; color:white; font-weight:700; padding:8px 18px; border-radius:6px; border:none; cursor:pointer;">
+                                💾 प्रवेश सुरक्षित करें (Save Admission)
+                            </button>
+                        </div>
                     </div>
                 </form>
             `;
@@ -5024,20 +5555,28 @@ Bhadar, Amethi (U.P.)`;
             btn.innerText = "⏳ सहेज रहे हैं...";
 
             const payload = {
-                admission_no: document.getElementById('adm-in-no').value.trim(),
-                student_name: document.getElementById('adm-in-name').value.trim(),
-                class: document.getElementById('adm-in-class').value,
-                section: document.getElementById('adm-in-section').value,
-                roll_no: document.getElementById('adm-in-roll').value.trim(),
-                father_name: document.getElementById('adm-in-father').value.trim(),
-                mother_name: document.getElementById('adm-in-mother').value.trim(),
-                mobile: document.getElementById('adm-in-phone').value.trim(),
-                gender: document.getElementById('adm-in-gender').value,
-                dob: document.getElementById('adm-in-dob').value || null,
+                admission_no: document.getElementById('adm-in-no') ? document.getElementById('adm-in-no').value.trim() : '',
+                admission_date: document.getElementById('adm-in-date') ? document.getElementById('adm-in-date').value : '',
+                student_name: document.getElementById('adm-in-name') ? document.getElementById('adm-in-name').value.trim() : '',
+                class: document.getElementById('adm-in-class') ? document.getElementById('adm-in-class').value : 'Class 1',
+                section: document.getElementById('adm-in-section') ? document.getElementById('adm-in-section').value : 'A',
+                roll_no: document.getElementById('adm-in-roll') ? document.getElementById('adm-in-roll').value.trim() : '',
+                father_name: document.getElementById('adm-in-father') ? document.getElementById('adm-in-father').value.trim() : '',
+                mother_name: document.getElementById('adm-in-mother') ? document.getElementById('adm-in-mother').value.trim() : '',
+                mobile: document.getElementById('adm-in-phone') ? document.getElementById('adm-in-phone').value.trim() : '',
+                alt_mobile: document.getElementById('adm-in-alt-mobile') ? document.getElementById('adm-in-alt-mobile').value.trim() : '',
+                gender: document.getElementById('adm-in-gender') ? document.getElementById('adm-in-gender').value : 'Male',
+                dob: document.getElementById('adm-in-dob') ? document.getElementById('adm-in-dob').value || null : null,
                 aadhaar_no: document.getElementById('adm-in-aadhaar') ? document.getElementById('adm-in-aadhaar').value.trim() : '',
                 pen_no: document.getElementById('adm-in-pen') ? document.getElementById('adm-in-pen').value.trim() : '',
-                total_annual_fee: parseFloat(document.getElementById('adm-in-fee').value) || 0,
-                address: document.getElementById('adm-in-address').value.trim()
+                blood_group: document.getElementById('adm-in-blood') ? document.getElementById('adm-in-blood').value : '',
+                category: document.getElementById('adm-in-category') ? document.getElementById('adm-in-category').value : 'General',
+                parent_occupation: document.getElementById('adm-in-parent-occ') ? document.getElementById('adm-in-parent-occ').value.trim() : '',
+                previous_school: document.getElementById('adm-in-prev-school') ? document.getElementById('adm-in-prev-school').value.trim() : '',
+                tc_no: document.getElementById('adm-in-tc-no') ? document.getElementById('adm-in-tc-no').value.trim() : '',
+                route_id: document.getElementById('adm-in-route') ? parseInt(document.getElementById('adm-in-route').value) || 0 : 0,
+                total_annual_fee: document.getElementById('adm-in-fee') ? parseFloat(document.getElementById('adm-in-fee').value) || 0 : 0,
+                address: document.getElementById('adm-in-address') ? document.getElementById('adm-in-address').value.trim() : ''
             };
 
             try {
@@ -5049,38 +5588,41 @@ Bhadar, Amethi (U.P.)`;
                 const data = await res.json();
                 if (res.ok && data.success) {
                     statusBox.style.display = 'block';
-                    statusBox.style.background = '#f0fdf4';
-                    statusBox.style.color = '#166534';
-                    statusBox.style.border = '1px solid #bbf7d0';
-                    statusBox.innerHTML = `✅ <strong>सफलतापूर्वक दर्ज!</strong> प्रवेश क्रमांक: <strong>${data.student.admission_no}</strong>, छात्र: <strong>${data.student.student_name}</strong>`;
+                    statusBox.style.background = '#dcfce7';
+                    statusBox.style.color = '#15803d';
+                    statusBox.style.border = '1px solid #86efac';
+                    statusBox.innerHTML = `<strong>✓ बधाई!</strong> ${data.message} (प्रवेश क्रमांक: <strong>${data.student.admission_no}</strong>)`;
                     
+                    // Reload students table
                     const sRes = await fetch('/api/students');
                     allStudents = await sRes.json();
                     renderMasterStudents(allStudents);
                     renderFeesTable(allStudents);
-                    if (typeof loadDashboardStats === 'function') loadDashboardStats();
+                    loadSettingsOverview();
 
                     setTimeout(() => {
                         closeAppModal();
-                    }, 1200);
+                    }, 1400);
                 } else {
-                    statusBox.style.display = 'block';
-                    statusBox.style.background = '#fef2f2';
-                    statusBox.style.color = '#991b1b';
-                    statusBox.style.border = '1px solid #fecaca';
-                    statusBox.innerHTML = `⚠️ <strong>त्रुटि:</strong> ${data.error || 'प्रवेश दर्ज करने में विफल।'}`;
                     btn.disabled = false;
                     btn.innerText = "💾 प्रवेश सुरक्षित करें (Save Admission)";
+                    statusBox.style.display = 'block';
+                    statusBox.style.background = '#fee2e2';
+                    statusBox.style.color = '#b91c1c';
+                    statusBox.style.border = '1px solid #fca5a5';
+                    statusBox.innerHTML = `<strong>त्रुटि:</strong> ${data.error || 'प्रवेश दर्ज करने में विफल।'}`;
                 }
             } catch (err) {
-                statusBox.style.display = 'block';
-                statusBox.style.background = '#fef2f2';
-                statusBox.style.color = '#991b1b';
-                statusBox.innerHTML = `⚠️ सर्वर से संपर्क नहीं हो सका: ${err.message}`;
                 btn.disabled = false;
                 btn.innerText = "💾 प्रवेश सुरक्षित करें (Save Admission)";
+                statusBox.style.display = 'block';
+                statusBox.style.background = '#fee2e2';
+                statusBox.style.color = '#b91c1c';
+                statusBox.style.border = '1px solid #fca5a5';
+                statusBox.innerHTML = `<strong>सर्वर त्रुटि:</strong> ${err.message}`;
             }
         }
+
 
         function openAddTeacherModal() {
             const area = document.getElementById('modal-content-area');
@@ -5805,16 +6347,24 @@ Bhadar, Amethi (U.P.)`;
             `).join('');
         }
 
+        
         function openSalaryProcessModal(empId) {
             const emp = allEmployees.find(e => e.id === empId);
             if (!emp) return;
 
+            const cfg = currentSalaryHeadsConfig || {};
+            const basic = emp.monthly_salary || 0;
+            const pendingAdvance = emp.pending_advance || 0;
+
             const area = document.getElementById('modal-content-area');
             area.innerHTML = `
-                <div style="padding:10px 4px;">
-                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; margin-bottom:14px; font-size:12.5px;">
-                        <div><strong>Employee:</strong> ${emp.employee_name} (${emp.designation}) | <strong>Code:</strong> ${emp.employee_id}</div>
-                        <div><strong>Department:</strong> ${emp.department || 'Teaching'} | <strong>Standard Monthly Pay:</strong> ₹${emp.monthly_salary.toLocaleString('en-IN')}</div>
+                <div style="padding:10px 4px; max-height:82vh; overflow-y:auto;">
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; margin-bottom:14px; font-size:12.5px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div><strong>Employee:</strong> ${emp.employee_name} (${emp.designation}) | <strong>Code:</strong> ${emp.employee_id}</div>
+                            <div><strong>Department:</strong> ${emp.department || 'Teaching'} | <strong>Standard Monthly Pay:</strong> ₹${basic.toLocaleString('en-IN')}</div>
+                        </div>
+                        <span style="font-size:11px; background:#dcfce7; color:#15803d; padding:4px 8px; border-radius:4px; font-weight:700;">सक्रिय वेतन संरचना</span>
                     </div>
 
                     <form onsubmit="submitCustomSalaryPayment(event, ${emp.id})">
@@ -5833,68 +6383,162 @@ Bhadar, Amethi (U.P.)`;
                             </div>
                             <div>
                                 <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Basic Salary (मूल वेतन ₹):</label>
-                                <input type="number" id="sal-basic" value="${emp.monthly_salary}" required style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-weight:700;" oninput="recalcSalaryNet()">
+                                <input type="number" id="sal-basic" value="${basic}" required style="width:100%; padding:8px; border:1.5px solid #0284c7; border-radius:6px; font-weight:700; color:#0369a1;" oninput="recalcSalaryNet()">
                             </div>
                         </div>
 
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
-                            <div>
-                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Special Allowances (भत्ते ₹):</label>
-                                <input type="number" id="sal-allowance" value="1500" min="0" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;" oninput="recalcSalaryNet()">
+                        <!-- 2-Column Section: Active Earnings & Active Deductions -->
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+                            <!-- Column 1: Earnings -->
+                            <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:12px;">
+                                <div style="font-size:12px; font-weight:800; color:#0369a1; margin-bottom:8px;">➕ स्वीकृत भत्ते (Active Allowances)</div>
+                                <div style="display:flex; flex-direction:column; gap:8px;">
+                                    ${cfg.enable_da ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">महंगाई भत्ता (DA ₹):</label>
+                                        <input type="number" id="sal-da" value="0" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${cfg.enable_hra ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">मकान किराया (HRA ₹):</label>
+                                        <input type="number" id="sal-hra" value="0" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${cfg.enable_conveyance ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">यातायात भत्ता (Conveyance ₹):</label>
+                                        <input type="number" id="sal-conv" value="1000" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${cfg.enable_incentive ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">इंसेंटिव (Incentive ₹):</label>
+                                        <input type="number" id="sal-inc" value="500" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${cfg.enable_bonus ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">त्यौहार बोनस (Bonus ₹):</label>
+                                        <input type="number" id="sal-bon" value="0" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${cfg.enable_medical ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">चिकित्सा भत्ता (Medical ₹):</label>
+                                        <input type="number" id="sal-med" value="0" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${(!cfg.enable_da && !cfg.enable_hra && !cfg.enable_conveyance && !cfg.enable_incentive && !cfg.enable_bonus && !cfg.enable_medical) ? `
+                                    <div style="font-size:11px; color:#64748b; font-style:italic;">कोई विशेष भत्ता सक्रिय नहीं है (फ़िक्स्ड मूल वेतन)।</div>` : ''}
+                                </div>
                             </div>
-                            <div>
-                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Advance Recovery (अग्रिम कटौती ₹):</label>
-                                <input type="number" id="sal-advance" value="0" min="0" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;" oninput="recalcSalaryNet()">
+
+                            <!-- Column 2: Deductions -->
+                            <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:12px;">
+                                <div style="font-size:12px; font-weight:800; color:#b91c1c; margin-bottom:8px;">➖ वेतन कटौतियां (Active Deductions)</div>
+                                <div style="display:flex; flex-direction:column; gap:8px;">
+                                    ${cfg.enable_absent_deduction ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">अनुपस्थिति कटौती (LOP ₹):</label>
+                                        <input type="number" id="sal-absent" value="0" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${cfg.enable_advance_recovery ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">अग्रिम वसूली (Advance ₹):</label>
+                                        <input type="number" id="sal-advance" value="${pendingAdvance}" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${cfg.enable_epf ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">EPF (12% ₹):</label>
+                                        <input type="number" id="sal-epf" value="${Math.round(basic * 0.12)}" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${cfg.enable_esi ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">ESI स्वास्थ्य (0.75% ₹):</label>
+                                        <input type="number" id="sal-esi" value="${Math.round(basic * 0.0075)}" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${cfg.enable_other_deduction ? `
+                                    <div>
+                                        <label style="font-size:11.5px; font-weight:600; display:block; margin-bottom:2px;">अन्य कटौती (Uniform/Misc ₹):</label>
+                                        <input type="number" id="sal-oth" value="0" min="0" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;" oninput="recalcSalaryNet()">
+                                    </div>` : ''}
+                                    ${(!cfg.enable_absent_deduction && !cfg.enable_advance_recovery && !cfg.enable_epf && !cfg.enable_esi && !cfg.enable_other_deduction) ? `
+                                    <div style="font-size:11px; color:#64748b; font-style:italic;">कोई कटौती सक्रिय नहीं है।</div>` : ''}
+                                </div>
                             </div>
                         </div>
 
+                        <!-- Mode & Remarks -->
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
                             <div>
-                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Absent Deduction (अनुपस्थिति कटौती ₹):</label>
-                                <input type="number" id="sal-absent" value="0" min="0" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;" oninput="recalcSalaryNet()">
-                            </div>
-                            <div>
-                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Payment Mode:</label>
-                                <select id="sal-mode" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
+                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">भुगतान मोड (Payment Mode):</label>
+                                <select id="sal-mode" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
                                     <option value="Bank_Transfer">Bank Transfer (बैंक खाता)</option>
-                                    <option value="Cash">Cash (नकद)</option>
+                                    <option value="Cash" selected>Cash (नकद)</option>
                                     <option value="UPI">UPI / GPay / PhonePe</option>
                                     <option value="Cheque">Cheque</option>
                                 </select>
                             </div>
+                            <div>
+                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">टिप्पणी (Remarks):</label>
+                                <input type="text" id="sal-remarks" placeholder="वैकल्पिक टिप्पणी..." style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                            </div>
                         </div>
 
-                        <div style="background:#f1f5f9; padding:12px; border-radius:8px; margin-bottom:16px; border:1px solid #cbd5e1; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="background:#f1f5f9; padding:14px; border-radius:8px; margin-bottom:16px; border:1px solid #cbd5e1; display:flex; justify-content:space-between; align-items:center;">
                             <div>
-                                <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">NET SALARY PAYABLE (शुद्ध देय वेतन)</div>
-                                <div style="font-size:22px; font-weight:800; color:#15803d;" id="sal-net-display">₹${(emp.monthly_salary + 1500).toLocaleString('en-IN')}</div>
+                                <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">NET IN-HAND SALARY (शुद्ध देय वेतन)</div>
+                                <div style="font-size:24px; font-weight:800; color:#15803d;" id="sal-net-display">₹${basic.toLocaleString('en-IN')}</div>
                             </div>
-                            <button type="submit" class="btn btn-purple" style="padding:10px 18px; font-size:13px;">✅ Confirm & Print Official Payslip</button>
+                            <button type="submit" class="btn btn-purple" style="padding:10px 20px; font-size:13px; font-weight:700;">
+                                ✅ वेतन स्वीकृत करें एवं पर्ची प्रिंट करें
+                            </button>
                         </div>
                     </form>
                 </div>
             `;
-            document.getElementById('modal-heading').innerText = `Process Monthly Salary — ${emp.employee_name}`;
+            document.getElementById('modal-heading').innerText = `मासिक वेतन भुगतान — ${emp.employee_name}`;
             document.getElementById('app-modal').classList.add('active');
+            recalcSalaryNet();
         }
 
         function recalcSalaryNet() {
-            const basic = parseFloat(document.getElementById('sal-basic').value) || 0;
-            const allw = parseFloat(document.getElementById('sal-allowance').value) || 0;
-            const adv = parseFloat(document.getElementById('sal-advance').value) || 0;
-            const abs = parseFloat(document.getElementById('sal-absent').value) || 0;
-            const net = Math.max(0, (basic + allw) - (adv + abs));
-            document.getElementById('sal-net-display').innerText = `₹${net.toLocaleString('en-IN')}`;
+            const basic = parseFloat(document.getElementById('sal-basic')?.value) || 0;
+            const da = parseFloat(document.getElementById('sal-da')?.value) || 0;
+            const hra = parseFloat(document.getElementById('sal-hra')?.value) || 0;
+            const conv = parseFloat(document.getElementById('sal-conv')?.value) || 0;
+            const inc = parseFloat(document.getElementById('sal-inc')?.value) || 0;
+            const bon = parseFloat(document.getElementById('sal-bon')?.value) || 0;
+            const med = parseFloat(document.getElementById('sal-med')?.value) || 0;
+
+            const abs = parseFloat(document.getElementById('sal-absent')?.value) || 0;
+            const adv = parseFloat(document.getElementById('sal-advance')?.value) || 0;
+            const epf = parseFloat(document.getElementById('sal-epf')?.value) || 0;
+            const esi = parseFloat(document.getElementById('sal-esi')?.value) || 0;
+            const oth = parseFloat(document.getElementById('sal-oth')?.value) || 0;
+
+            const gross = basic + da + hra + conv + inc + bon + med;
+            const deductions = abs + adv + epf + esi + oth;
+            const net = Math.max(0, gross - deductions);
+
+            const displayEl = document.getElementById('sal-net-display');
+            if (displayEl) displayEl.innerText = `₹${net.toLocaleString('en-IN')}`;
         }
 
         async function submitCustomSalaryPayment(event, empId) {
             event.preventDefault();
             const month = document.getElementById('sal-month').value;
-            const basic = parseFloat(document.getElementById('sal-basic').value);
-            const allw = parseFloat(document.getElementById('sal-allowance').value);
-            const adv = parseFloat(document.getElementById('sal-advance').value);
-            const abs = parseFloat(document.getElementById('sal-absent').value);
-            const mode = document.getElementById('sal-mode').value;
+            const basic = parseFloat(document.getElementById('sal-basic')?.value) || 0;
+            const da = parseFloat(document.getElementById('sal-da')?.value) || 0;
+            const hra = parseFloat(document.getElementById('sal-hra')?.value) || 0;
+            const conv = parseFloat(document.getElementById('sal-conv')?.value) || 0;
+            const inc = parseFloat(document.getElementById('sal-inc')?.value) || 0;
+            const bon = parseFloat(document.getElementById('sal-bon')?.value) || 0;
+            const med = parseFloat(document.getElementById('sal-med')?.value) || 0;
+
+            const abs = parseFloat(document.getElementById('sal-absent')?.value) || 0;
+            const adv = parseFloat(document.getElementById('sal-advance')?.value) || 0;
+            const epf = parseFloat(document.getElementById('sal-epf')?.value) || 0;
+            const esi = parseFloat(document.getElementById('sal-esi')?.value) || 0;
+            const oth = parseFloat(document.getElementById('sal-oth')?.value) || 0;
+
+            const mode = document.getElementById('sal-mode')?.value || 'Cash';
+            const remarks = document.getElementById('sal-remarks')?.value || '';
 
             const res = await fetch('/api/payroll/pay', {
                 method: 'POST',
@@ -5903,10 +6547,19 @@ Bhadar, Amethi (U.P.)`;
                     employeeId: empId,
                     salaryMonth: month,
                     basicSalary: basic,
-                    allowances: allw,
-                    advanceDeduction: adv,
+                    daAmount: da,
+                    hraAmount: hra,
+                    conveyanceAmount: conv,
+                    incentiveAmount: inc,
+                    bonusAmount: bon,
+                    medicalAllowance: med,
                     absentDeduction: abs,
-                    paymentMode: mode
+                    advanceDeduction: adv,
+                    epfDeduction: epf,
+                    esiDeduction: esi,
+                    otherDeduction: oth,
+                    paymentMode: mode,
+                    remarks: remarks
                 })
             });
 
@@ -5920,13 +6573,35 @@ Bhadar, Amethi (U.P.)`;
             const inst = slip.institution;
             const words = slip.net_in_words;
 
+            const earningsItems = [];
+            earningsItems.push({ label: 'मूल वेतन (Basic Salary)', amount: p.basic_salary });
+            if (p.da_amount > 0) earningsItems.push({ label: 'महंगाई भत्ता (DA)', amount: p.da_amount });
+            if (p.hra_amount > 0) earningsItems.push({ label: 'मकान किराया भत्ता (HRA)', amount: p.hra_amount });
+            if (p.conveyance_amount > 0) earningsItems.push({ label: 'यातायात भत्ता (Conveyance)', amount: p.conveyance_amount });
+            if (p.incentive_amount > 0) earningsItems.push({ label: 'प्रदर्शन इंसेंटिव (Incentive)', amount: p.incentive_amount });
+            if (p.bonus_amount > 0) earningsItems.push({ label: 'विशेष / त्यौहार बोनस (Bonus)', amount: p.bonus_amount });
+            if (p.medical_allowance > 0) earningsItems.push({ label: 'चिकित्सा भत्ता (Medical)', amount: p.medical_allowance });
+            if (earningsItems.length === 1 && p.allowances > 0) {
+                earningsItems.push({ label: 'विशेष भत्ते (Allowances)', amount: p.allowances });
+            }
+
+            const deductionItems = [];
+            if (p.absent_deduction > 0) deductionItems.push({ label: 'अनुपस्थिति कटौती (Loss of Pay)', amount: p.absent_deduction });
+            if (p.advance_deduction > 0) deductionItems.push({ label: 'अग्रिम वसूली (Advance Recovery)', amount: p.advance_deduction });
+            if (p.epf_deduction > 0) deductionItems.push({ label: 'भविष्य निधि (EPF 12%)', amount: p.epf_deduction });
+            if (p.esi_deduction > 0) deductionItems.push({ label: 'कर्मचारी राज्य बीमा (ESI)', amount: p.esi_deduction });
+            if (p.other_deduction > 0) deductionItems.push({ label: 'अन्य कटौती (Other Deductions)', amount: p.other_deduction });
+
+            const grossEarn = earningsItems.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
+            const totalDed = deductionItems.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
+
             const area = document.getElementById('modal-content-area');
             area.innerHTML = `
-                <div class="print-sheet" style="border:2px solid #0f172a; padding:24px;">
+                <div class="print-sheet" style="border:2px solid #0f172a; padding:24px; max-height:82vh; overflow-y:auto;">
                     <div style="text-align:center; border-bottom:2px solid #0f172a; padding-bottom:10px;">
-                        <h2 style="font-size:20px; font-weight:800; color:#0284c7;">${inst.school_name.toUpperCase()}</h2>
-                        <p style="font-size:12px; color:#64748b;">${inst.address} | Phone: ${inst.phone}</p>
-                        <h3 style="font-size:13px; margin-top:6px; color:#0f172a; background:#e2e8f0; display:inline-block; padding:2px 14px; border-radius:4px;">
+                        <h2 style="font-size:20px; font-weight:800; color:#0284c7; margin:0;">${inst.school_name.toUpperCase()}</h2>
+                        <p style="font-size:12px; color:#64748b; margin:4px 0;">${inst.address} | Phone: ${inst.phone}</p>
+                        <h3 style="font-size:13px; margin-top:6px; color:#0f172a; background:#e2e8f0; display:inline-block; padding:3px 16px; border-radius:4px; font-weight:800;">
                             OFFICIAL SALARY VOUCHER (मासिक वेतन पर्ची) — ${p.salary_month}
                         </h3>
                     </div>
@@ -5935,7 +6610,7 @@ Bhadar, Amethi (U.P.)`;
                         <div><strong>Employee Code:</strong> ${p.code}</div>
                         <div><strong>Voucher No:</strong> ${p.voucher_no}</div>
                         <div><strong>Employee Name:</strong> ${p.employee_name}</div>
-                        <div><strong>Payment Date:</strong> ${p.payment_date}</div>
+                        <div><strong>Payment Date:</strong> ${p.payment_date || new Date().toISOString().slice(0, 10)}</div>
                         <div><strong>Designation:</strong> ${p.designation} (${p.department || 'Staff'})</div>
                         <div><strong>Payment Mode:</strong> ${p.payment_mode}</div>
                     </div>
@@ -5943,40 +6618,36 @@ Bhadar, Amethi (U.P.)`;
                     <table style="width:100%; border-collapse:collapse; margin:14px 0; font-size:12px;">
                         <thead>
                             <tr style="background:#e2e8f0;">
-                                <th style="border:1px solid #cbd5e1; padding:6px; text-align:left; width:50%;">Earnings (वेतन एवं भत्ते)</th>
+                                <th style="border:1px solid #cbd5e1; padding:6px; text-align:left; width:50%;">Earnings (वेतन एवं स्वीकृत भत्ते)</th>
                                 <th style="border:1px solid #cbd5e1; padding:6px; text-align:left; width:50%;">Deductions (कटौतियां)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td style="border:1px solid #cbd5e1; padding:8px; vertical-align:top;">
-                                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                                        <span>Basic Salary (मूल वेतन):</span>
-                                        <strong>₹${p.basic_salary.toLocaleString('en-IN')}</strong>
-                                    </div>
-                                    <div style="display:flex; justify-content:space-between;">
-                                        <span>Allowances (विशेष भत्ते):</span>
-                                        <strong>₹${p.allowances.toLocaleString('en-IN')}</strong>
-                                    </div>
+                                    ${earningsItems.map(item => `
+                                        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                            <span>${item.label}:</span>
+                                            <strong>₹${Number(item.amount).toLocaleString('en-IN')}</strong>
+                                        </div>
+                                    `).join('')}
                                 </td>
                                 <td style="border:1px solid #cbd5e1; padding:8px; vertical-align:top;">
-                                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                                        <span>Advance Recovery:</span>
-                                        <strong style="color:#ea580c;">-₹${p.advance_deduction.toLocaleString('en-IN')}</strong>
-                                    </div>
-                                    <div style="display:flex; justify-content:space-between;">
-                                        <span>Absent Deduction:</span>
-                                        <strong style="color:#dc2626;">-₹${p.absent_deduction.toLocaleString('en-IN')}</strong>
-                                    </div>
+                                    ${deductionItems.length > 0 ? deductionItems.map(item => `
+                                        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                            <span>${item.label}:</span>
+                                            <strong style="color:#dc2626;">-₹${Number(item.amount).toLocaleString('en-IN')}</strong>
+                                        </div>
+                                    `).join('') : '<div style="color:#64748b; font-style:italic;">कोई कटौती नहीं (Nil)</div>'}
                                 </td>
                             </tr>
                             <tr style="background:#f1f5f9; font-weight:700;">
-                                <td style="border:1px solid #cbd5e1; padding:8px; text-align:right;">GROSS EARNINGS: ₹${(p.basic_salary + p.allowances).toLocaleString('en-IN')}</td>
-                                <td style="border:1px solid #cbd5e1; padding:8px; text-align:right;">TOTAL DEDUCTIONS: ₹${(p.advance_deduction + p.absent_deduction).toLocaleString('en-IN')}</td>
+                                <td style="border:1px solid #cbd5e1; padding:8px; text-align:right;">GROSS EARNINGS: ₹${grossEarn.toLocaleString('en-IN')}</td>
+                                <td style="border:1px solid #cbd5e1; padding:8px; text-align:right;">TOTAL DEDUCTIONS: ₹${totalDed.toLocaleString('en-IN')}</td>
                             </tr>
                             <tr style="background:#e0f2fe; font-size:14px; font-weight:800;">
                                 <td colspan="2" style="border:1px solid #0284c7; padding:10px; text-align:right; color:#0369a1;">
-                                    NET SALARY DISBURSED: ₹${p.net_paid.toLocaleString('en-IN')}
+                                    NET SALARY DISBURSED (शुद्ध भुगतान): ₹${p.net_paid.toLocaleString('en-IN')}
                                 </td>
                             </tr>
                         </tbody>
@@ -5998,9 +6669,10 @@ Bhadar, Amethi (U.P.)`;
                     </div>
                 </div>
             `;
-            document.getElementById('modal-heading').innerText = `Official Payslip — ${p.employee_name}`;
+            document.getElementById('modal-heading').innerText = `वेतन वाउचर — ${p.employee_name}`;
             document.getElementById('app-modal').classList.add('active');
         }
+
 
         function getAuthHeaders() {
             return {
@@ -9149,6 +9821,7 @@ Bhadar, Amethi (U.P.)`;
                 if (stuCountEl) stuCountEl.innerText = `${data.active_students} Students`;
 
                 loadSettingsAuditLogs();
+                loadFormConfigs();
             } catch (err) {
                 console.error('Error loading settings:', err);
             }

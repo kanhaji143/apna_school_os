@@ -184,6 +184,80 @@ const server = http.createServer(async (req, res) => {
             return sendJson(res, 200, { success: true, branding });
         }
 
+        // 1.2 Dynamic Form Configurations (Admission Fields & Salary Heads)
+        if (pathname === '/api/settings/form-configs' && method === 'GET') {
+            const admRow = db.prepare("SELECT value FROM system_settings WHERE key = 'admission_form_config'").get();
+            const salRow = db.prepare("SELECT value FROM system_settings WHERE key = 'salary_heads_config'").get();
+
+            let admission_form_config = {
+                show_mother_name: true,
+                show_dob: true,
+                show_gender: true,
+                show_alt_mobile: true,
+                show_aadhaar: true,
+                show_pen: true,
+                show_blood_group: true,
+                show_category: true,
+                show_parent_occupation: true,
+                show_previous_school: true,
+                show_address: true,
+                show_section: true,
+                show_roll_no: true,
+                show_route: true,
+                show_fee: true
+            };
+            let salary_heads_config = {
+                enable_da: false,
+                enable_hra: false,
+                enable_conveyance: true,
+                enable_incentive: true,
+                enable_bonus: true,
+                enable_medical: false,
+                enable_absent_deduction: true,
+                enable_advance_recovery: true,
+                enable_epf: false,
+                enable_esi: false,
+                enable_other_deduction: true
+            };
+
+            if (admRow) {
+                try { admission_form_config = { ...admission_form_config, ...JSON.parse(admRow.value) }; } catch (e) {}
+            }
+            if (salRow) {
+                try { salary_heads_config = { ...salary_heads_config, ...JSON.parse(salRow.value) }; } catch (e) {}
+            }
+
+            return sendJson(res, 200, {
+                success: true,
+                admission_form_config,
+                salary_heads_config
+            });
+        }
+
+        if (pathname === '/api/settings/form-configs' && method === 'POST') {
+            const body = await parseBody(req);
+            if (body.admission_form_config) {
+                db.prepare(`
+                    INSERT INTO system_settings (key, value, updated_at)
+                    VALUES ('admission_form_config', ?, CURRENT_TIMESTAMP)
+                    ON CONFLICT(key) DO UPDATE SET
+                        value = excluded.value,
+                        updated_at = CURRENT_TIMESTAMP
+                `).run(JSON.stringify(body.admission_form_config));
+            }
+            if (body.salary_heads_config) {
+                db.prepare(`
+                    INSERT INTO system_settings (key, value, updated_at)
+                    VALUES ('salary_heads_config', ?, CURRENT_TIMESTAMP)
+                    ON CONFLICT(key) DO UPDATE SET
+                        value = excluded.value,
+                        updated_at = CURRENT_TIMESTAMP
+                `).run(JSON.stringify(body.salary_heads_config));
+            }
+            syncShadowVault();
+            return sendJson(res, 200, { success: true, message: 'कॉन्फ़िगरेशन सफलतापूर्वक सहेज ली गई है!' });
+        }
+
         // 2. Profile
         if (pathname === '/api/profile' && method === 'GET') {
             return sendJson(res, 200, AuthService.getInstitutionProfile());
@@ -252,11 +326,15 @@ const server = http.createServer(async (req, res) => {
                     return sendJson(res, 400, { success: false, error: `प्रवेश क्रमांक (Adm No) '${admNo}' पहले से मौजूद है!` });
                 }
 
+                const penVal = String(body.pen_no || body.pen_number || '').trim();
+                const routeIdVal = (parseInt(body.route_id) > 0) ? parseInt(body.route_id) : null;
                 const info = db.prepare(`
                     INSERT INTO students (
                         admission_no, roll_no, student_name, father_name, mother_name,
-                        gender, dob, mobile, aadhaar_no, pen_no, address, class, section, status
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active')
+                        gender, dob, mobile, alt_mobile, aadhaar_no, pen_no, pen_number,
+                        address, class, section, status, route_id, admission_date,
+                        blood_group, category, parent_occupation, previous_school, tc_no
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active', ?, ?, ?, ?, ?, ?, ?)
                 `).run(
                     admNo,
                     String(body.roll_no || ''),
@@ -266,11 +344,20 @@ const server = http.createServer(async (req, res) => {
                     String(body.gender || 'Male'),
                     body.dob || null,
                     String(body.mobile || ''),
+                    String(body.alt_mobile || ''),
                     String(body.aadhaar_no || '').trim(),
-                    String(body.pen_no || '').trim(),
+                    penVal,
+                    penVal,
                     String(body.address || ''),
                     className,
-                    String(body.section || 'A')
+                    String(body.section || 'A'),
+                    routeIdVal,
+                    body.admission_date || new Date().toISOString().slice(0, 10),
+                    String(body.blood_group || ''),
+                    String(body.category || 'General'),
+                    String(body.parent_occupation || ''),
+                    String(body.previous_school || ''),
+                    String(body.tc_no || '')
                 );
 
                 const newStudentId = Number(info.lastInsertRowid);
