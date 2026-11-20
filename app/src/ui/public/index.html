@@ -245,7 +245,7 @@
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.65); z-index: 10000; align-items: center; justify-content: center; padding: 20px;
+            background: rgba(0,0,0,0.65); z-index: 1000005; align-items: center; justify-content: center; padding: 20px;
         }
         .modal.active { display: flex; }
         .modal-content {
@@ -3092,7 +3092,7 @@
     </div>
 
     <!-- MODAL: License Key Activation Dialog -->
-    <div id="modal-license-activation" style="display:none; position:fixed; inset:0; z-index:99998; background:rgba(0,0,0,0.65); backdrop-filter:blur(4px); align-items:center; justify-content:center;">
+    <div id="modal-license-activation" style="display:none; position:fixed; inset:0; z-index:1000005; background:rgba(0,0,0,0.65); backdrop-filter:blur(4px); align-items:center; justify-content:center;">
         <div style="background:var(--bg-card); border-radius:14px; width:92%; max-width:520px; box-shadow:0 20px 40px rgba(0,0,0,0.35); border:1px solid var(--border); overflow:hidden;">
             <div style="background:linear-gradient(135deg, #0f172a, #1e293b); color:white; padding:18px 22px; display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:10px;">
@@ -3137,7 +3137,7 @@
     </div>
 
     <!-- FULLSCREEN EXPIRED TRIAL LOCKOUT OVERLAY (Non-dismissible) -->
-    <div id="license-lock-overlay" style="display:none; position:fixed; inset:0; z-index:999998; background:rgba(7, 15, 30, 0.94); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:20px; font-family:'Plus Jakarta Sans', sans-serif;">
+    <div id="license-lock-overlay" style="display:none; position:fixed; inset:0; z-index:1000010; background:rgba(7, 15, 30, 0.94); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:20px; font-family:'Plus Jakarta Sans', sans-serif;">
         <div style="background:var(--bg-card); border-radius:18px; width:100%; max-width:580px; box-shadow:0 25px 60px rgba(0,0,0,0.6); border:2px solid #ef4444; overflow:hidden;">
             
             <div style="background:linear-gradient(135deg, #7f1d1d, #991b1b); color:white; padding:24px 28px; text-align:center;">
@@ -3557,6 +3557,9 @@
         }
 
         function openMasterKeyModal() {
+            document.getElementById('modal-heading').innerText = '🔑 मास्टर की द्वारा पासवर्ड रीसेट (Master Key Recovery)';
+            const footer = document.querySelector('#app-modal .modal-footer');
+            if (footer) footer.style.display = 'none';
             const area = document.getElementById('modal-content-area');
             area.innerHTML = `
                 <div style="padding:10px 14px;">
@@ -3644,6 +3647,8 @@
                 modal.classList.remove('active');
                 const modalContent = modal.querySelector('.modal-content');
                 if (modalContent) modalContent.classList.remove('modal-wide');
+                const footer = modal.querySelector('.modal-footer');
+                if (footer) footer.style.display = 'flex';
             }
         }
         function closeModal() {
@@ -3746,6 +3751,9 @@
         }
 
         function openSchoolRegistrationModal() {
+            document.getElementById('modal-heading').innerText = '🏫 नया स्कूल रजिस्ट्रेशन (School Onboarding Setup)';
+            const footer = document.querySelector('#app-modal .modal-footer');
+            if (footer) footer.style.display = 'none';
             const area = document.getElementById('modal-content-area');
             area.innerHTML = `
                 <div style="padding:10px 16px;">
@@ -3825,6 +3833,7 @@
                     body: JSON.stringify({
                         school_name: schName,
                         phone: phone,
+                        admin_password: password,
                         board_type: board,
                         current_session: session,
                         address: address

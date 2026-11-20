@@ -430,10 +430,20 @@ const server = http.createServer(async (req, res) => {
             const isSuper = isSuperAdminRequest(req);
             const currentProfile = AuthService.getInstitutionProfile() || {};
             
-            // Security Lock: Only Super Admin can change school_name
+            // Allow changing school_name if Super Admin OR during registration / onboarding
             let finalSchoolName = currentProfile.school_name || 'Lakshya School';
-            if (isSuper && body.school_name && body.school_name.trim()) {
+            if ((isSuper || body.admin_password) && body.school_name && body.school_name.trim()) {
                 finalSchoolName = body.school_name.trim();
+            }
+
+            // Update admin credentials if password provided during onboarding
+            if (body.admin_password && body.admin_password.trim()) {
+                const newHash = crypto.createHash('sha256').update(body.admin_password.trim()).digest('hex');
+                db.prepare(`
+                    UPDATE users 
+                    SET password_hash = ?, phone = COALESCE(?, phone)
+                    WHERE LOWER(username) = 'admin'
+                `).run(newHash, body.phone || null);
             }
 
             const updatedProfile = {
