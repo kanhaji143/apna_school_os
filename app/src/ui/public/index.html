@@ -691,7 +691,10 @@
                     </div>
                     <div style="display:flex; gap:8px; align-items:center;">
                         <button class="btn" onclick="openNewAdmissionModal()" style="display:flex; align-items:center; gap:6px; font-size:12px; padding:7px 14px; background:#0284c7; color:white; font-weight:700; border:none; border-radius:8px; cursor:pointer;">
-                            <span>➕</span> नया छात्र प्रवेश (New Admission)
+                            <span>➕</span> नया छात्र प्रवेश (Direct Admission)
+                        </button>
+                        <button class="btn" onclick="openPrintableAdmissionFormModal()" style="display:flex; align-items:center; gap:6px; font-size:12px; padding:7px 14px; background:#15803d; color:white; font-weight:700; border:none; border-radius:8px; cursor:pointer;" title="घर से भरवाने हेतु खाली प्रवेश आवेदन पत्र का प्रिंट निकालें">
+                            <span>🖨️</span> खाली प्रवेश फॉर्म प्रिंट (Blank Form A4)
                         </button>
                         <button class="btn btn-outline" onclick="exportStudentsToExcel()" style="display:flex; align-items:center; gap:6px; font-size:12px; padding:6px 12px;">
                             <span>📑</span> Export to Excel (.xlsx)
@@ -2446,9 +2449,14 @@
 
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                             <span style="font-size:11.5px; color:#64748b;">* छात्र का नाम, कक्षा, पिता का नाम और मोबाइल नंबर प्राथमिक पहचान के रूप में अनिवार्य रहते हैं।</span>
-                            <button type="button" class="btn" style="background:#0284c7; color:white; font-weight:700; padding:8px 20px; font-size:12.5px;" onclick="saveAdmissionFormConfig()">
-                                💾 प्रवेश फॉर्म सेटिंग्स सहेजें (Save Settings)
-                            </button>
+                            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                                <button type="button" class="btn" style="background:#15803d; color:white; font-weight:700; padding:8px 18px; font-size:12.5px; display:inline-flex; align-items:center; gap:6px;" onclick="openPrintableAdmissionFormModal()">
+                                    🖨️ खाली प्रवेश फॉर्म प्रिंट निकालें (Print Blank Form A4)
+                                </button>
+                                <button type="button" class="btn" style="background:#0284c7; color:white; font-weight:700; padding:8px 20px; font-size:12.5px;" onclick="saveAdmissionFormConfig()">
+                                    💾 प्रवेश फॉर्म सेटिंग्स सहेजें (Save Settings)
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -5080,6 +5088,342 @@ Bhadar, Amethi (U.P.)`;
         
         
         // ==========================================
+        
+        // ==========================================================
+        // PHYSICAL PRINTABLE BLANK ADMISSION FORM (A4 OP JINDAL / CBSE)
+        // ==========================================================
+        function openPrintableAdmissionFormModal() {
+            const prof = schoolProfile || {};
+            const cfg = currentAdmissionFormConfig || {};
+            const logoSrc = prof.logo_path || '/logo.png';
+            const session = prof.current_session || '2026-27';
+
+            const area = document.getElementById('modal-content-area');
+            area.innerHTML = `
+                <div style="padding:4px;">
+                    <!-- Print Top Action Toolbar -->
+                    <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; padding:10px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:20px;">🖨️</span>
+                            <div>
+                                <strong style="font-size:13px; color:#0f172a;">ऑफ़लाइन खाली छात्र प्रवेश फॉर्म प्रिव्यू (A4 Printable Blank Form)</strong>
+                                <div style="font-size:11.5px; color:#64748b;">यह फॉर्म आपकी चुनी हुई सेटिंग्स के अनुसार तैयार हुआ है। इसे प्रिंट करके अभिभावकों को भरने के लिए दें।</div>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <button type="button" class="btn btn-outline" onclick="closeAppModal()">बंद करें (Close)</button>
+                            <button type="button" class="btn" style="background:#15803d; color:white; font-weight:700; padding:8px 18px; font-size:13px; display:flex; align-items:center; gap:6px;" onclick="printAdmissionFormSheet()">
+                                🖨️ अभी प्रिंट निकालें / PDF सेव करें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live A4 Printable Sheet Container -->
+                    <div id="printable-admission-sheet" style="background:#ffffff; color:#000000; border:2px solid #334155; padding:22px 26px; border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,0.08); font-family:'Segoe UI', Arial, sans-serif; max-height:75vh; overflow-y:auto;">
+                        
+                        <!-- Header: Logo, School Name, Details, Photo Box -->
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0f172a; padding-bottom:12px; margin-bottom:12px; gap:12px;">
+                            <div style="width:85px; min-width:85px; text-align:center;">
+                                <img src="${logoSrc}" alt="Logo" style="max-height:78px; max-width:85px; object-fit:contain; display:block; margin:0 auto;" onerror="this.style.display='none'">
+                            </div>
+
+                            <div style="flex:1; text-align:center; padding:0 8px;">
+                                <div style="font-size:22px; font-weight:900; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; line-height:1.2;">
+                                    ${prof.school_name || 'LAKSHYA PUBLIC SCHOOL'}
+                                </div>
+                                ${prof.tag_line ? `<div style="font-size:11.5px; font-style:italic; color:#334155; margin-top:2px;">"${prof.tag_line}"</div>` : ''}
+                                <div style="font-size:11px; font-weight:600; color:#1e293b; margin-top:3px;">
+                                    ${prof.affiliation_no ? `Affiliation No: <strong>${prof.affiliation_no}</strong> | ` : ''}
+                                    ${prof.udise_code ? `UDISE Code: <strong>${prof.udise_code}</strong> | ` : ''}
+                                    Board: <strong>${prof.board_type || 'CBSE / State Board'}</strong>
+                                </div>
+                                <div style="font-size:10.5px; color:#334155; margin-top:2px; line-height:1.3;">
+                                    ${prof.address || 'Vill & Post: Bhadar, District: Amethi, Uttar Pradesh'}
+                                    ${prof.phone ? ` | Helpline: <strong>${prof.phone}</strong>` : ''}
+                                    ${prof.email ? ` | Email: ${prof.email}` : ''}
+                                </div>
+                                <div style="margin-top:6px;">
+                                    <span style="display:inline-block; background:#0f172a; color:#ffffff; font-size:12px; font-weight:800; padding:3px 18px; border-radius:4px; letter-spacing:0.5px; text-transform:uppercase;">
+                                        STUDENT ADMISSION APPLICATION FORM (प्रवेश आवेदन पत्र) — सत्र ${session}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div style="width:115px; min-width:115px;">
+                                <div style="width:115px; height:135px; border:1.8px dashed #334155; border-radius:4px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:6px; background:#f8fafc; font-size:9.5px; color:#475569; font-weight:600; line-height:1.3;">
+                                    <span style="font-size:18px; margin-bottom:4px;">📷</span>
+                                    <span>हालिया पासपोर्ट साइज फोटो यहाँ चिपकाएँ</span>
+                                    <span style="font-size:8.5px; color:#64748b; margin-top:2px;">(Affix Recent Color Photo)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 1: FOR OFFICE USE ONLY -->
+                        <div style="border:1.5px solid #0f172a; border-radius:4px; padding:6px 10px; margin-bottom:12px; background:#f8fafc; font-size:11px;">
+                            <div style="font-weight:800; color:#0f172a; text-transform:uppercase; font-size:10px; letter-spacing:0.5px; margin-bottom:4px;">
+                                [ FOR OFFICE USE ONLY / केवल कार्यालय उपयोग हेतु ]
+                            </div>
+                            <div style="display:grid; grid-template-columns:1.5fr 1.2fr 1.2fr 0.8fr 0.8fr 1.5fr; gap:8px;">
+                                <div>Adm No: <span style="display:inline-block; border-bottom:1px solid #000; width:65%; min-height:14px;"></span></div>
+                                <div>Adm Date: <span style="display:inline-block; border-bottom:1px solid #000; width:50%; min-height:14px;"></span></div>
+                                <div>Class Admitted: <span style="display:inline-block; border-bottom:1px solid #000; width:45%; min-height:14px;"></span></div>
+                                <div>Sec: <span style="display:inline-block; border-bottom:1px solid #000; width:40%; min-height:14px;"></span></div>
+                                <div>Roll: <span style="display:inline-block; border-bottom:1px solid #000; width:40%; min-height:14px;"></span></div>
+                                <div>Receipt No: <span style="display:inline-block; border-bottom:1px solid #000; width:55%; min-height:14px;"></span></div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 2: STUDENT DETAILS -->
+                        <div style="margin-bottom:10px;">
+                            <div style="background:#e2e8f0; font-weight:800; font-size:11px; padding:3px 8px; border-radius:3px; margin-bottom:8px; text-transform:uppercase; color:#0f172a; border-left:3px solid #0284c7;">
+                                1. छात्र/छात्रा का व्यक्तिगत विवरण (Student's Personal Details)
+                            </div>
+
+                            <!-- Name in Block Letters -->
+                            <div style="display:flex; align-items:flex-end; margin-bottom:8px; font-size:11.5px;">
+                                <span style="font-weight:700; width:220px;">छात्र का पूरा नाम (Student Name in English):</span>
+                                <div style="flex:1; display:flex; gap:3px;">
+                                    ${Array(24).fill(0).map(() => `<span style="display:inline-block; width:17px; height:20px; border:1px solid #334155; text-align:center; font-size:11px;"></span>`).join('')}
+                                </div>
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:${cfg.show_dob ? '1.4fr' : ''} ${cfg.show_gender ? '1fr' : ''} ${cfg.show_blood_group ? '1fr' : ''}; gap:10px; margin-bottom:8px; font-size:11.5px;">
+                                ${cfg.show_dob ? `
+                                <div>
+                                    <span style="font-weight:700;">जन्म तिथि (Date of Birth):</span>
+                                    <span style="margin-left:4px;">
+                                        <span style="display:inline-block; border:1px solid #334155; padding:1px 4px;">D D</span> / 
+                                        <span style="display:inline-block; border:1px solid #334155; padding:1px 4px;">M M</span> / 
+                                        <span style="display:inline-block; border:1px solid #334155; padding:1px 6px;">Y Y Y Y</span>
+                                    </span>
+                                </div>` : ''}
+
+                                ${cfg.show_gender ? `
+                                <div>
+                                    <span style="font-weight:700;">लिंग (Gender):</span>
+                                    <span style="margin-left:4px;">[  ] बालक (M) &nbsp; [  ] बालिका (F)</span>
+                                </div>` : ''}
+
+                                ${cfg.show_blood_group ? `
+                                <div>
+                                    <span style="font-weight:700;">ब्लड ग्रुप (Blood Group):</span>
+                                    <span style="display:inline-block; border-bottom:1px dotted #000; width:70px;">&nbsp;</span>
+                                </div>` : ''}
+                            </div>
+
+                            ${(cfg.show_category || cfg.show_aadhaar || cfg.show_pen) ? `
+                            <div style="display:grid; grid-template-columns:${cfg.show_category ? '1.2fr' : ''} ${cfg.show_aadhaar ? '1.4fr' : ''} ${cfg.show_pen ? '1.4fr' : ''}; gap:10px; margin-bottom:8px; font-size:11.5px;">
+                                ${cfg.show_category ? `
+                                <div>
+                                    <span style="font-weight:700;">सामाजिक श्रेणी (Category):</span>
+                                    <div style="font-size:10.5px; margin-top:2px;">
+                                        [ ] Gen &nbsp; [ ] OBC &nbsp; [ ] SC &nbsp; [ ] ST &nbsp; [ ] EWS
+                                    </div>
+                                </div>` : ''}
+
+                                ${cfg.show_aadhaar ? `
+                                <div>
+                                    <span style="font-weight:700;">आधार कार्ड संख्या (Aadhaar No):</span>
+                                    <div style="display:flex; gap:2px; margin-top:2px;">
+                                        ${Array(4).fill(0).map(()=>`<span style="display:inline-block; width:15px; height:18px; border:1px solid #334155;"></span>`).join('')} - 
+                                        ${Array(4).fill(0).map(()=>`<span style="display:inline-block; width:15px; height:18px; border:1px solid #334155;"></span>`).join('')} - 
+                                        ${Array(4).fill(0).map(()=>`<span style="display:inline-block; width:15px; height:18px; border:1px solid #334155;"></span>`).join('')}
+                                    </div>
+                                </div>` : ''}
+
+                                ${cfg.show_pen ? `
+                                <div>
+                                    <span style="font-weight:700;">PEN No (UDISE+ / UPMSP):</span>
+                                    <div style="display:flex; gap:2px; margin-top:2px;">
+                                        ${Array(11).fill(0).map(()=>`<span style="display:inline-block; width:14px; height:18px; border:1px solid #334155;"></span>`).join('')}
+                                    </div>
+                                </div>` : ''}
+                            </div>` : ''}
+                        </div>
+
+                        <!-- SECTION 3: PARENT & CONTACT DETAILS -->
+                        <div style="margin-bottom:10px;">
+                            <div style="background:#e2e8f0; font-weight:800; font-size:11px; padding:3px 8px; border-radius:3px; margin-bottom:8px; text-transform:uppercase; color:#0f172a; border-left:3px solid #0284c7;">
+                                2. माता-पिता एवं अभिभावक का विवरण (Parents & Contact Details)
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1fr ${cfg.show_mother_name ? '1fr' : ''}; gap:12px; margin-bottom:8px; font-size:11.5px;">
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:150px;">पिता का नाम (Father's Name):</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:16px;"></span>
+                                </div>
+                                ${cfg.show_mother_name ? `
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:150px;">माता का नाम (Mother's Name):</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:16px;"></span>
+                                </div>` : ''}
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:${cfg.show_parent_occupation ? '1.2fr' : ''} 1fr ${cfg.show_alt_mobile ? '1fr' : ''}; gap:12px; margin-bottom:8px; font-size:11.5px;">
+                                ${cfg.show_parent_occupation ? `
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:140px;">अभिभावक व्यवसाय:</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:16px;"></span>
+                                </div>` : ''}
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:120px;">मोबाइल (Mobile):</span>
+                                    <div style="display:flex; gap:2px;">
+                                        ${Array(10).fill(0).map(()=>`<span style="display:inline-block; width:14px; height:18px; border:1px solid #334155;"></span>`).join('')}
+                                    </div>
+                                </div>
+                                ${cfg.show_alt_mobile ? `
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:120px;">दूसरा मोबाइल:</span>
+                                    <div style="display:flex; gap:2px;">
+                                        ${Array(10).fill(0).map(()=>`<span style="display:inline-block; width:14px; height:18px; border:1px solid #334155;"></span>`).join('')}
+                                    </div>
+                                </div>` : ''}
+                            </div>
+
+                            ${cfg.show_address ? `
+                            <div style="display:flex; align-items:flex-end; margin-bottom:8px; font-size:11.5px;">
+                                <span style="font-weight:700; width:190px;">स्थाई पता (Permanent Address):</span>
+                                <span style="flex:1; border-bottom:1px dotted #000; min-height:16px;"></span>
+                            </div>
+                            <div style="display:flex; align-items:flex-end; margin-bottom:8px; font-size:11.5px;">
+                                <span style="width:190px;">ग्राम/मोहल्ला, पोस्ट, थाना, जिला, पिन:</span>
+                                <span style="flex:1; border-bottom:1px dotted #000; min-height:16px;"></span>
+                            </div>` : ''}
+                        </div>
+
+                        <!-- SECTION 4: PREVIOUS SCHOOL & TRANSPORT -->
+                        <div style="margin-bottom:10px;">
+                            <div style="background:#e2e8f0; font-weight:800; font-size:11px; padding:3px 8px; border-radius:3px; margin-bottom:8px; text-transform:uppercase; color:#0f172a; border-left:3px solid #0284c7;">
+                                3. शैक्षणिक पृष्ठभूमि एवं स्कूल वाहन (Academic & Transport)
+                            </div>
+
+                            <!-- Class sought -->
+                            <div style="margin-bottom:8px; font-size:11px;">
+                                <span style="font-weight:700;">प्रवेश हेतु इच्छित कक्षा (Class to which admission sought):</span>
+                                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:3px; font-size:10.5px;">
+                                    <span>[ ] PG</span> <span>[ ] LKG</span> <span>[ ] UKG</span>
+                                    <span>[ ] 1st</span> <span>[ ] 2nd</span> <span>[ ] 3rd</span> <span>[ ] 4th</span>
+                                    <span>[ ] 5th</span> <span>[ ] 6th</span> <span>[ ] 7th</span> <span>[ ] 8th</span>
+                                    <span>[ ] 9th</span> <span>[ ] 10th</span>
+                                </div>
+                            </div>
+
+                            ${cfg.show_previous_school ? `
+                            <div style="display:grid; grid-template-columns:2fr 1fr; gap:12px; margin-bottom:8px; font-size:11.5px;">
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:180px;">पूर्व विद्यालय (Previous School):</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:16px;"></span>
+                                </div>
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:110px;">TC नं. व दिनांक:</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:16px;"></span>
+                                </div>
+                            </div>` : ''}
+
+                            ${cfg.show_route ? `
+                            <div style="display:flex; align-items:center; gap:14px; margin-bottom:8px; font-size:11.5px;">
+                                <span style="font-weight:700;">क्या स्कूल बस/वाहन सुविधा चाहिए? (Transport Required):</span>
+                                <span>[  ] हाँ (Yes) &nbsp;&nbsp;&nbsp; [  ] नहीं (No)</span>
+                                <span style="margin-left:14px; font-weight:700;">इच्छित बस स्टॉप/रूट:</span>
+                                <span style="flex:1; border-bottom:1px dotted #000; min-height:16px;"></span>
+                            </div>` : ''}
+                        </div>
+
+                        <!-- SECTION 5: DECLARATION & SIGNATURES -->
+                        <div style="border:1.2px solid #64748b; border-radius:4px; padding:10px 12px; margin-top:10px; background:#fafafa;">
+                            <div style="font-size:10px; font-weight:800; color:#0f172a; text-transform:uppercase; margin-bottom:4px;">
+                                अभिभावक घोषणा पत्र (Declaration by Parent / Guardian)
+                            </div>
+                            <p style="font-size:10px; color:#334155; line-height:1.4; margin:0 0 16px 0;">
+                                मैं एतद्द्वारा प्रमाणित करता/करती हूँ कि इस प्रवेश आवेदन पत्र में मेरे द्वारा दी गई समस्त जानकारी पूर्णतः सत्य, सही व निष्पक्ष है। मैंने विद्यालय के सभी नियम, अनुशासन व फीस संरचना को भली-भांति समझ लिया है एवं मैं उनका पूर्ण निष्ठा से पालन करने का वचन देता/देती हूँ।
+                            </p>
+
+                            <div style="display:flex; justify-content:space-between; align-items:flex-end; font-size:11px; margin-top:20px;">
+                                <div>
+                                    दिनांक (Date): <strong>____/____/2026</strong><br>
+                                    स्थान (Place): <strong>____________________</strong>
+                                </div>
+                                <div style="text-align:center;">
+                                    <div style="border-top:1.2px solid #000; width:140px; padding-top:3px; font-weight:700;">
+                                        माता के हस्ताक्षर / अंगूठा
+                                    </div>
+                                    <span style="font-size:9.5px; color:#64748b;">(Mother's Signature)</span>
+                                </div>
+                                <div style="text-align:center;">
+                                    <div style="border-top:1.2px solid #000; width:150px; padding-top:3px; font-weight:700;">
+                                        पिता/अभिभावक के हस्ताक्षर
+                                    </div>
+                                    <span style="font-size:9.5px; color:#64748b;">(Father's Signature)</span>
+                                </div>
+                                <div style="text-align:center;">
+                                    <div style="border-top:1.2px solid #000; width:150px; padding-top:3px; font-weight:700;">
+                                        प्रधानाचार्य मोहर व हस्ताक्षर
+                                    </div>
+                                    <span style="font-size:9.5px; color:#64748b;">(Principal / Authorized Seal)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-heading').innerText = "🖨️ छात्र प्रवेश फॉर्म प्रिंट प्रिव्यू (A4 Admission Application Form)";
+            document.getElementById('app-modal').classList.add('active');
+        }
+
+        function printAdmissionFormSheet() {
+            const printContent = document.getElementById('printable-admission-sheet').innerHTML;
+            const prof = schoolProfile || {};
+            const printWin = window.open('', '_blank', 'width=880,height=920');
+            printWin.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <title>Admission Application Form — ${prof.school_name || 'School'}</title>
+                    <style>
+                        @page {
+                            size: A4 portrait;
+                            margin: 10mm 12mm 10mm 12mm;
+                        }
+                        body {
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            color: #000000;
+                            background: #ffffff;
+                            -webkit-print-color-adjust: exact;
+                            print-color-adjust: exact;
+                        }
+                        * {
+                            box-sizing: border-box;
+                        }
+                        @media print {
+                            body {
+                                width: 100%;
+                            }
+                            #printable-admission-sheet {
+                                border: none !important;
+                                box-shadow: none !important;
+                                padding: 0 !important;
+                                max-height: none !important;
+                                overflow: visible !important;
+                            }
+                        }
+                    </style>
+                </head>
+                <body onload="window.print(); setTimeout(() => { window.close(); }, 800);">
+                    <div style="padding:4px;">
+                        ${printContent}
+                    </div>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+        }
+
+
         // DYNAMIC FORM & SALARY CONFIGURATIONS
         // ==========================================
         let currentAdmissionFormConfig = {
@@ -5349,7 +5693,12 @@ Bhadar, Amethi (U.P.)`;
                             <div style="font-weight:700; color:#0369a1; font-size:13px;">🎓 नया छात्र प्रवेश फॉर्म (Direct Admission Entry)</div>
                             <div style="font-size:11.5px; color:#475569;">छात्र का विवरण भरें। यह डेटा सीधे आपके सुरक्षित डेटाबेस (D:\\Apna_School_OS_Data) में दर्ज होगा।</div>
                         </div>
-                        <span style="font-size:11px; background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:4px; font-weight:700;">सक्रिय अनुकूलित फॉर्म</span>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button type="button" class="btn btn-outline" style="font-size:11px; padding:3px 10px; background:#ffffff; color:#15803d; border-color:#86efac; font-weight:700; cursor:pointer;" onclick="openPrintableAdmissionFormModal()" title="खाली फॉर्म का A4 प्रिंट निकालें">
+                                🖨️ खाली फॉर्म प्रिंट करें (Print Blank A4)
+                            </button>
+                            <span style="font-size:11px; background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:4px; font-weight:700;">सक्रिय अनुकूलित फॉर्म</span>
+                        </div>
                     </div>
 
                     <!-- Row 1: Core Identifiers -->
