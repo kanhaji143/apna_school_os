@@ -34,15 +34,15 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "d:\School_Lakshya\bin\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "d:\School_Lakshya\app\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "d:\School_Lakshya\app_icon.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "d:\School_Lakshya\Launch_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\Lakshya_School_OS.vbs"; DestDir: "{app}"; Flags: ignoreversion
-Source: "d:\School_Lakshya\Stop_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "d:\School_Lakshya\Backup_Database.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "d:\School_Lakshya\STAFF_TRAINING_MANUAL.pdf"; DestDir: "{app}"; Flags: ignoreversion
-Source: "d:\School_Lakshya\USER_OPERATING_MANUAL.pdf"; DestDir: "{app}"; Flags: ignoreversion
-Source: "d:\School_Lakshya\CLIENT_INSTALLATION_&_TROUBLESHOOTING_GUIDE.pdf"; DestDir: "{app}"; Flags: ignoreversion
-Source: "d:\School_Lakshya\CAMPUS_MULTI_STATION_DEPLOYMENT_GUIDE_EN.pdf"; DestDir: "{app}"; Flags: ignoreversion
-Source: "d:\School_Lakshya\OFFLINE_WIFI_CAMPUS_NETWORKING_GUIDE.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\_ARCHIVED_UNRELATED_FILES\Launch_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\_ARCHIVED_UNRELATED_FILES\Stop_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\_ARCHIVED_UNRELATED_FILES\Backup_Database.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\STAFF_TRAINING_MANUAL.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\USER_OPERATING_MANUAL.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\CLIENT_INSTALLATION_&_TROUBLESHOOTING_GUIDE.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\CAMPUS_MULTI_STATION_DEPLOYMENT_GUIDE_EN.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\OFFLINE_WIFI_CAMPUS_NETWORKING_GUIDE.pdf"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\Apna School OS"; Filename: "{app}\Lakshya_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"
