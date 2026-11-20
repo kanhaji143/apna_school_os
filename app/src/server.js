@@ -2,6 +2,7 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const url = require('node:url');
+const crypto = require('node:crypto');
 
 const AuthService = require('./services/authService');
 const ExamService = require('./services/examService');
@@ -63,6 +64,39 @@ const server = http.createServer(async (req, res) => {
 
     try {
         const db = getDb();
+
+        function checkLicenseLock(db) {
+            try {
+                const licRow = db.prepare("SELECT value FROM system_settings WHERE key = 'license_expiry_date'").get();
+                if (!licRow) return false;
+                const expiryDate = new Date(licRow.value + 'T23:59:59');
+                const now = new Date();
+                const lastKnownRow = db.prepare("SELECT value FROM system_settings WHERE key = 'last_known_date'").get();
+                const todayStr = now.toISOString().split('T')[0];
+                if (lastKnownRow && todayStr < lastKnownRow.value) {
+                    return true; // Clock tampered backwards
+                }
+                return now.getTime() > expiryDate.getTime();
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Write-protection guard when 30-day VIP trial or annual license has expired
+        if (['POST', 'PUT', 'DELETE'].includes(method)) {
+            const isExempt = pathname.startsWith('/api/auth/') ||
+                             pathname === '/api/license/activate' ||
+                             pathname.startsWith('/api/settings/backup') ||
+                             pathname.startsWith('/api/operations/backup') ||
+                             pathname.startsWith('/api/super-admin/');
+            if (!isExempt && checkLicenseLock(db)) {
+                return sendJson(res, 403, {
+                    success: false,
+                    license_expired: true,
+                    error: '🔒 30-दिवसीय निःशुल्क VIP ट्रायल अथवा वार्षिक लाइसेंस की अवधि समाप्त हो चुकी है। आपका डेटा 100% सुरक्षित है। सॉफ़्टवेयर को सक्रिय करने के लिए कृपया वेंडर हेल्पलाइन 8504985149 से लाइसेंस की प्राप्त कर सक्रिय करें।'
+                });
+            }
+        }
 
         // Health & Readiness Check for Desktop App Window Launcher
         if (pathname === '/api/health') {
@@ -256,6 +290,135 @@ const server = http.createServer(async (req, res) => {
             }
             syncShadowVault();
             return sendJson(res, 200, { success: true, message: 'कॉन्फ़िगरेशन सफलतापूर्वक सहेज ली गई है!' });
+        }
+
+        // 1.3 Offline Licensing & 30-Day VIP Trial Remote Control Engine
+        if (pathname === '/api/license/status' && method === 'GET') {
+            const getVal = (k) => {
+                const r = db.prepare("SELECT value FROM system_settings WHERE key = ?").get(k);
+                return r ? r.value : '';
+            };
+
+            const installation_id = (getVal('installation_id') || 'ASH-8542').trim();
+            const license_status = getVal('license_status') || 'TRIAL';
+            const trial_start_date = getVal('trial_start_date') || new Date().toISOString().split('T')[0];
+            const license_expiry_date = getVal('license_expiry_date') || new Date().toISOString().split('T')[0];
+            const last_known_date = getVal('last_known_date') || trial_start_date;
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            let clock_tampered = false;
+
+            if (last_known_date && todayStr < last_known_date) {
+                clock_tampered = true;
+            } else if (todayStr > last_known_date) {
+                db.prepare("INSERT INTO system_settings (key, value, updated_at) VALUES ('last_known_date', ?, CURRENT_TIMESTAMP) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP").run(todayStr);
+            }
+
+            const expiryDate = new Date(license_expiry_date + 'T23:59:59');
+            const now = new Date();
+            const diffMs = expiryDate.getTime() - now.getTime();
+            const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+            const is_expired = (daysLeft <= 0) || clock_tampered;
+
+            return sendJson(res, 200, {
+                success: true,
+                installation_id,
+                license_status,
+                trial_start_date,
+                expiry_date: license_expiry_date,
+                days_left: daysLeft > 0 ? daysLeft : 0,
+                is_expired,
+                clock_tampered,
+                helpline: '8504985149 / 8303324088',
+                vendor_name: 'Hanu Ganeshan (Apna Software Hub)'
+            });
+        }
+
+        if (pathname === '/api/license/activate' && method === 'POST') {
+            const body = await parseBody(req);
+            const rawKey = (body.license_key || '').toString().trim().toUpperCase();
+            if (!rawKey) {
+                return sendJson(res, 400, { success: false, error: 'कृपया एक मान्य लाइसेंस की दर्ज करें।' });
+            }
+
+            const installIdRow = db.prepare("SELECT value FROM system_settings WHERE key = 'installation_id'").get();
+            const installation_id = (installIdRow ? installIdRow.value : 'ASH-8542').trim().toUpperCase();
+
+            // Master Keys bypass (Vendor Emergency / Lifetime Key)
+            const masterKeys = ['APNA8504985149', 'MASTER@2026', '8303324088'];
+            const cleanKeyNoDash = rawKey.replace(/[^A-Z0-9]/g, '');
+
+            let isValid = false;
+            let validityDays = 365;
+            let activationType = '1 वर्ष (वार्षिक लाइसेंस)';
+
+            if (masterKeys.includes(cleanKeyNoDash) || masterKeys.includes(rawKey)) {
+                isValid = true;
+                validityDays = 3650; // 10 years Lifetime
+                activationType = 'आजीवन मास्टर लाइसेंस (Lifetime Unlock)';
+            } else {
+                // Test algorithmic verification across standard intervals
+                const standardDays = [365, 730, 1095, 1825, 3650, 30, 60, 90, 180];
+                for (const days of standardDays) {
+                    const salt = 'APNA_SOFTWARE_HUB_8504985149';
+                    const rawStr = `${installation_id}_${days}_${salt}`;
+                    const hash = crypto.createHash('sha256').update(rawStr).digest('hex').toUpperCase();
+                    const expectedFormatted = `ASH-${hash.substring(0, 4)}-${hash.substring(4, 8)}-${hash.substring(8, 12)}`;
+                    const expectedClean = expectedFormatted.replace(/[^A-Z0-9]/g, '');
+
+                    if (rawKey === expectedFormatted || cleanKeyNoDash === expectedClean) {
+                        isValid = true;
+                        validityDays = days;
+                        activationType = days >= 1825 ? 'आजीवन लाइसेंस' : `${days} दिन वैध`;
+                        break;
+                    }
+                }
+            }
+
+            if (!isValid) {
+                return sendJson(res, 400, {
+                    success: false,
+                    error: `अमान्य लाइसेंस की (Invalid Key)! इस कंप्यूटर की Installation ID (${installation_id}) हेतु सही की दर्ज करें अथवा हेल्पलाइन 8504985149 पर संपर्क करें।`
+                });
+            }
+
+            // Calculate new expiry date from today (or extend if currently valid)
+            const now = new Date();
+            const currentExpiryRow = db.prepare("SELECT value FROM system_settings WHERE key = 'license_expiry_date'").get();
+            let baseDate = now;
+            if (currentExpiryRow && currentExpiryRow.value) {
+                const curExp = new Date(currentExpiryRow.value + 'T23:59:59');
+                if (curExp.getTime() > now.getTime()) {
+                    baseDate = curExp; // extend remaining time
+                }
+            }
+
+            const newExpiryDateObj = new Date(baseDate.getTime() + (validityDays * 24 * 60 * 60 * 1000));
+            const newExpiryStr = newExpiryDateObj.toISOString().split('T')[0];
+
+            db.prepare(`
+                INSERT INTO system_settings (key, value, updated_at) VALUES ('license_status', 'ACTIVATED', CURRENT_TIMESTAMP)
+                ON CONFLICT(key) DO UPDATE SET value = 'ACTIVATED', updated_at = CURRENT_TIMESTAMP
+            `).run();
+
+            db.prepare(`
+                INSERT INTO system_settings (key, value, updated_at) VALUES ('license_expiry_date', ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP
+            `).run(newExpiryStr);
+
+            db.prepare(`
+                INSERT INTO system_settings (key, value, updated_at) VALUES ('license_key', ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP
+            `).run(rawKey);
+
+            syncShadowVault();
+
+            return sendJson(res, 200, {
+                success: true,
+                message: `🎉 बधाई! सॉफ़्टवेयर सफलतापूर्वक सक्रिय (Activated) हो गया है! नई वैधता: ${newExpiryStr} (${activationType})`,
+                expiry_date: newExpiryStr,
+                license_status: 'ACTIVATED'
+            });
         }
 
         // 2. Profile

@@ -404,6 +404,11 @@
 
             <div class="top-nav-right">
                 <span id="demo-mode-badge" class="pill-badge" style="background:#15803d; color:white; font-weight:700; display:none; padding:4px 10px; font-size:11.5px; border-radius:20px;">🎮 लाइव डेमो मोड (Live Demo)</span>
+                <!-- Universal 30-Day VIP Trial & License Status Badge -->
+                <div id="license-status-badge" class="pill-badge" onclick="openLicenseActivationModal()" style="cursor:pointer; font-weight:700; font-size:12px; padding:4px 12px; border-radius:20px; transition:all 0.2s; display:flex; align-items:center; gap:5px; background:linear-gradient(135deg, #fef3c7, #fde68a); color:#92400e; border:1px solid #f59e0b;" title="लाइसेंस स्थिति देखने या सक्रिय करने हेतु क्लिक करें">
+                    <span id="license-badge-icon">⭐</span>
+                    <span id="license-badge-text">30-दिन VIP ट्रायल (लोडिंग...)</span>
+                </div>
                 <div class="pill-badge offline"><span>🟢</span> 100% Offline Active</div>
                 <button class="theme-toggle-btn" onclick="toggleTheme()">
                     <span id="theme-icon">☀️</span> <span id="theme-text">Light</span>
@@ -2560,6 +2565,53 @@
                         </div>
                     </div>
 
+                    <!-- Card 8: Universal 30-Day VIP Trial & Master License Remote Control Hub -->
+                    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:20px; grid-column:span 2;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span style="font-size:24px;">🔑</span>
+                                <div>
+                                    <h3 style="font-size:16px; font-weight:800; color:var(--text-heading); margin:0;">सॉफ़्टवेयर लाइसेंस एवं मास्टर एक्टिवेशन (Software License & Activation Hub)</h3>
+                                    <p style="font-size:12px; color:var(--text-muted); margin:0;">30-दिवसीय VIP मुफ़्त ट्रायल, कंप्यूटर इंस्टॉलेशन आईडी एवं वार्षिक लाइसेंस प्रबंधन।</p>
+                                </div>
+                            </div>
+                            <button type="button" class="btn" style="background:linear-gradient(135deg, #0284c7, #0369a1); color:white; font-size:12px; padding:7px 16px; font-weight:700; border-radius:6px; cursor:pointer;" onclick="openLicenseActivationModal()">
+                                🔑 लाइसेंस सक्रिय / रिन्यू करें
+                            </button>
+                        </div>
+
+                        <div id="card-license-banner" style="background:#fef3c7; border:1px solid #fde68a; border-radius:10px; padding:14px 18px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <span id="card-license-icon" style="font-size:18px;">⭐</span>
+                                    <span id="card-license-title" style="font-size:15px; font-weight:800; color:#92400e;">30-दिवसीय VIP मुफ़्त ट्रायल सक्रिय</span>
+                                </div>
+                                <div id="card-license-subtitle" style="font-size:12px; color:#b45309; margin-top:3px;">
+                                    वैधता: <strong id="card-license-expiry">--</strong> | शेष दिन: <strong id="card-license-days-left">--</strong>
+                                </div>
+                            </div>
+                            <div style="text-align:right;">
+                                <span style="font-size:11px; color:#b45309; font-weight:700; display:block;">डेटा सुरक्षा स्थिति:</span>
+                                <span style="font-size:12px; color:#15803d; font-weight:800;">🔒 100% सुरक्षित एवं लॉक-प्रूफ</span>
+                            </div>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+                            <div style="background:var(--bg-page); padding:12px 14px; border-radius:8px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <div style="font-size:11px; color:var(--text-muted); font-weight:600;">कंप्यूटर इंस्टॉलेशन आईडी (Unique Machine ID):</div>
+                                    <div id="card-installation-id" style="font-size:16px; font-weight:800; color:#0284c7; font-family:monospace; margin-top:2px;">ASH-....</div>
+                                </div>
+                                <button type="button" class="btn btn-outline" style="font-size:11px; padding:4px 8px; cursor:pointer;" onclick="copyInstallationId()">📋 कॉपी करें</button>
+                            </div>
+                            <div style="background:var(--bg-page); padding:12px 14px; border-radius:8px; border:1px solid var(--border);">
+                                <div style="font-size:11px; color:var(--text-muted); font-weight:600;">अधिकृत वेंडर एवं हेल्पलाइन (Authorized Vendor):</div>
+                                <div style="font-size:13px; font-weight:700; color:var(--text-heading); margin-top:2px;">Hanu Ganeshan | Apna Software Hub</div>
+                                <div style="font-size:11.5px; color:#0284c7; font-weight:700; margin-top:1px;">📞 8504985149 / 8303324088</div>
+                            </div>
+                        </div>
+                    </div>
+
                 <!-- Recent Audit Log Table -->
                 <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:20px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -3039,6 +3091,106 @@
         </div>
     </div>
 
+    <!-- MODAL: License Key Activation Dialog -->
+    <div id="modal-license-activation" style="display:none; position:fixed; inset:0; z-index:99998; background:rgba(0,0,0,0.65); backdrop-filter:blur(4px); align-items:center; justify-content:center;">
+        <div style="background:var(--bg-card); border-radius:14px; width:92%; max-width:520px; box-shadow:0 20px 40px rgba(0,0,0,0.35); border:1px solid var(--border); overflow:hidden;">
+            <div style="background:linear-gradient(135deg, #0f172a, #1e293b); color:white; padding:18px 22px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:22px;">🔑</span>
+                    <div>
+                        <h3 style="margin:0; font-size:16px; font-weight:800;">सॉफ़्टवेयर लाइसेंस एक्टिवेशन</h3>
+                        <p style="margin:0; font-size:11.5px; color:#94a3b8;">Apna School OS — Enterprise Digital Security</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeLicenseActivationModal()" style="background:none; border:none; color:#94a3b8; font-size:20px; cursor:pointer; line-height:1;">✕</button>
+            </div>
+            <div style="padding:22px;">
+                <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">इस कंप्यूटर की Installation ID:</div>
+                        <div id="modal-lic-install-id" style="font-size:18px; font-weight:900; color:#0284c7; font-family:monospace; margin-top:2px;">ASH-....</div>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="font-size:11px; padding:5px 10px; cursor:pointer;" onclick="copyInstallationId()">📋 कॉपी करें</button>
+                </div>
+
+                <div style="font-size:12px; color:var(--text-muted); line-height:1.5; margin-bottom:14px;">
+                    💡 <strong>लाइसेंस की प्राप्त करने का नियम:</strong> अपनी उपरोक्त Installation ID वेंडर (Hanu Ganeshan) को <strong>WhatsApp / कॉल: 8504985149</strong> पर भेजें। आपको तुरंत डिजिटल की उपलब्ध करा दी जाएगी।
+                </div>
+
+                <form onsubmit="handleLicenseSubmit(event)">
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block; font-size:12px; font-weight:800; color:var(--text-heading); margin-bottom:6px;">
+                            लाइसेंस की (Annual / Master License Key) दर्ज करें:
+                        </label>
+                        <input type="text" id="modal-lic-key-input" placeholder="e.g. ASH-XXXX-XXXX-XXXX या Master Key" style="width:100%; box-sizing:border-box; padding:10px 14px; border:2px solid #0284c7; border-radius:8px; font-size:14px; font-weight:700; font-family:monospace; text-transform:uppercase; letter-spacing:1px; background:var(--bg-page); color:var(--text-heading); outline:none;" required>
+                    </div>
+
+                    <div id="modal-lic-feedback" style="display:none; font-size:12px; font-weight:700; padding:10px 12px; border-radius:6px; margin-bottom:14px;"></div>
+
+                    <div style="display:flex; justify-content:flex-end; gap:10px;">
+                        <button type="button" class="btn btn-outline" onclick="closeLicenseActivationModal()" style="font-size:12px; padding:8px 16px; cursor:pointer;">रद्द करें</button>
+                        <button type="submit" id="btn-submit-lic" class="btn" style="background:#15803d; color:white; font-size:12px; font-weight:800; padding:8px 20px; cursor:pointer;">🔑 सॉफ़्टवेयर सक्रिय करें</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN EXPIRED TRIAL LOCKOUT OVERLAY (Non-dismissible) -->
+    <div id="license-lock-overlay" style="display:none; position:fixed; inset:0; z-index:999998; background:rgba(7, 15, 30, 0.94); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:20px; font-family:'Plus Jakarta Sans', sans-serif;">
+        <div style="background:var(--bg-card); border-radius:18px; width:100%; max-width:580px; box-shadow:0 25px 60px rgba(0,0,0,0.6); border:2px solid #ef4444; overflow:hidden;">
+            
+            <div style="background:linear-gradient(135deg, #7f1d1d, #991b1b); color:white; padding:24px 28px; text-align:center;">
+                <div style="font-size:42px; margin-bottom:8px;">🔒</div>
+                <h2 style="margin:0; font-size:22px; font-weight:900; letter-spacing:-0.5px;">30-दिवसीय निःशुल्क VIP ट्रायल समाप्त हो चुका है</h2>
+                <p style="margin:4px 0 0 0; font-size:13px; color:#fecaca;">Trial Period Expired — Annual License Activation Required</p>
+            </div>
+
+            <div style="padding:28px;">
+                <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:12px 16px; margin-bottom:18px; display:flex; align-items:center; gap:12px;">
+                    <span style="font-size:24px;">🛡️</span>
+                    <div style="font-size:12.5px; color:#991b1b; line-height:1.4;">
+                        <strong>डेटा 100% पूर्णतः सुरक्षित है:</strong> आपका कोई भी रिकॉर्ड (विद्यार्थी, फ़ीस, सैलरी) डिलीट नहीं हुआ है। सॉफ़्टवेयर का पुनः निर्बाध उपयोग करने हेतु कृपया वार्षिक लाइसेंस की दर्ज करें।
+                    </div>
+                </div>
+
+                <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">इस कंप्यूटर की Machine Installation ID:</div>
+                        <div id="lock-lic-install-id" style="font-size:20px; font-weight:900; color:#0284c7; font-family:monospace; margin-top:2px;">ASH-....</div>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="font-size:11.5px; padding:6px 12px; font-weight:700; cursor:pointer;" onclick="copyInstallationId()">📋 आईडी कॉपी करें</button>
+                </div>
+
+                <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:12px 16px; margin-bottom:18px; font-size:12.5px; color:#1e40af; line-height:1.5;">
+                    📞 <strong>अधिकृत वेंडर संपर्क:</strong><br>
+                    <strong>Hanu Ganeshan | Apna Software Hub</strong><br>
+                    हेल्पलाइन: <span style="font-size:14px; font-weight:900; color:#0369a1;">8504985149 / 8303324088</span>
+                </div>
+
+                <form onsubmit="handleLockScreenSubmit(event)">
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block; font-size:12.5px; font-weight:800; color:var(--text-heading); margin-bottom:6px;">
+                            मास्टर लाइसेंस की (License Key) दर्ज करें:
+                        </label>
+                        <input type="text" id="lock-lic-key-input" placeholder="e.g. ASH-XXXX-XXXX-XXXX या Master Key" style="width:100%; box-sizing:border-box; padding:12px 16px; border:2px solid #ef4444; border-radius:8px; font-size:15px; font-weight:800; font-family:monospace; text-transform:uppercase; letter-spacing:1px; background:var(--bg-page); color:var(--text-heading); outline:none;" required>
+                    </div>
+
+                    <div id="lock-lic-feedback" style="display:none; font-size:12.5px; font-weight:700; padding:10px 14px; border-radius:6px; margin-bottom:16px;"></div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <button type="submit" id="btn-lock-submit-lic" class="btn" style="background:#15803d; color:white; font-size:14px; font-weight:900; padding:12px 20px; border-radius:8px; justify-content:center; box-shadow:0 4px 12px rgba(21,128,61,0.3); cursor:pointer;">
+                            🔑 सॉफ़्टवेयर तुरंत अनलॉक / सक्रिय करें
+                        </button>
+                        <button type="button" class="btn" style="background:#0f766e; color:white; font-size:12px; font-weight:700; padding:9px 16px; border-radius:8px; justify-content:center; cursor:pointer;" onclick="triggerDirectorUSBBackup()">
+                            💾 आपातकालीन पेनड्राइव बैकअप लें (Pocket Vault Backup)
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- APNA SCHOOL OS PROFESSIONAL SPLIT LOGIN OVERLAY (Exact match of Bharat AI Reference Image) -->
     <div id="login-overlay" style="position:fixed; inset:0; z-index:999999; display:flex; width:100vw; height:100vh; overflow:hidden; font-family:'Plus Jakarta Sans', sans-serif;">
         
@@ -3257,6 +3409,8 @@
             applyRoleBasedNavigation(user);
 
             updateDynamicGreeting();
+            checkLicenseStatus();
+            setInterval(checkLicenseStatus, 10 * 60 * 1000);
             loadFormConfigs();
         }
 
@@ -4729,7 +4883,10 @@ Bhadar, Amethi (U.P.)`;
                 <body>
                     ${content}
                     <script>window.onload = function() { window.print(); }<\/script>
-                </body>
+                
+    
+
+</body>
                 </html>
             `);
             win.document.close();
@@ -11148,6 +11305,7 @@ Bhadar, Amethi (U.P.)`;
         // ==========================================
         async function loadSettingsOverview() {
             try {
+                checkLicenseStatus();
                 const res = await fetch('/api/settings/overview');
                 const data = await res.json();
 
@@ -12396,6 +12554,273 @@ Bhadar, Amethi (U.P.)`;
             } catch (err) {
                 alert('Seed error: ' + err.message);
                 if (statusEl) statusEl.innerText = '';
+            }
+        }
+
+        
+        // ==========================================
+        // UNIVERSAL 30-DAY VIP TRIAL & LICENSING ENGINE
+        // ==========================================
+        let currentLicenseInfo = {
+            installation_id: '',
+            license_status: 'TRIAL',
+            days_left: 30,
+            expiry_date: '',
+            is_expired: false
+        };
+
+        async function checkLicenseStatus() {
+            try {
+                const res = await fetch('/api/license/status');
+                const data = await res.json();
+                if (data.success) {
+                    currentLicenseInfo = data;
+                    updateLicenseUI(data);
+                }
+            } catch (err) {
+                console.warn('License status check failed:', err);
+            }
+        }
+
+        function updateLicenseUI(data) {
+            // Update Top Nav Badge
+            const badge = document.getElementById('license-status-badge');
+            const badgeIcon = document.getElementById('license-badge-icon');
+            const badgeText = document.getElementById('license-badge-text');
+
+            // Card Elements
+            const cardIcon = document.getElementById('card-license-icon');
+            const cardTitle = document.getElementById('card-license-title');
+            const cardSubtitle = document.getElementById('card-license-subtitle');
+            const cardExpiry = document.getElementById('card-license-expiry');
+            const cardDaysLeft = document.getElementById('card-license-days-left');
+            const cardInstallId = document.getElementById('card-installation-id');
+            const cardBanner = document.getElementById('card-license-banner');
+
+            // Modals Elements
+            const modalInstallId = document.getElementById('modal-lic-install-id');
+            const lockInstallId = document.getElementById('lock-lic-install-id');
+            const lockOverlay = document.getElementById('license-lock-overlay');
+
+            if (cardInstallId) cardInstallId.innerText = data.installation_id;
+            if (modalInstallId) modalInstallId.innerText = data.installation_id;
+            if (lockInstallId) lockInstallId.innerText = data.installation_id;
+
+            if (data.is_expired) {
+                // EXPIRED STATE
+                if (badge) {
+                    badge.style.background = '#fee2e2';
+                    badge.style.color = '#991b1b';
+                    badge.style.borderColor = '#ef4444';
+                    badge.style.animation = 'pulse 1.5s infinite';
+                }
+                if (badgeIcon) badgeIcon.innerText = '🔒';
+                if (badgeText) badgeText.innerText = 'ट्रायल समाप्त (अनलॉक करें)';
+
+                if (cardBanner) {
+                    cardBanner.style.background = '#fef2f2';
+                    cardBanner.style.borderColor = '#fecaca';
+                }
+                if (cardIcon) cardIcon.innerText = '🔒';
+                if (cardTitle) {
+                    cardTitle.innerText = 'लाइसेंस अवधि समाप्त हो गई है (Renewal Required)';
+                    cardTitle.style.color = '#991b1b';
+                }
+                if (cardSubtitle) {
+                    cardSubtitle.innerHTML = `वैधता: <strong style="color:#ef4444;">${data.expiry_date}</strong> (अवधि समाप्त) | वेंडर से की प्राप्त करें`;
+                    cardSubtitle.style.color = '#991b1b';
+                }
+
+                // Show Lock Overlay
+                if (lockOverlay) lockOverlay.style.display = 'flex';
+            } else if (data.license_status === 'ACTIVATED') {
+                // ACTIVATED STATE
+                if (badge) {
+                    badge.style.background = 'linear-gradient(135deg, #ecfdf5, #d1fae5)';
+                    badge.style.color = '#065f46';
+                    badge.style.borderColor = '#10b981';
+                    badge.style.animation = 'none';
+                }
+                if (badgeIcon) badgeIcon.innerText = '🟢';
+                if (badgeText) badgeText.innerText = `सक्रिय लाइसेंस (${data.days_left} दिन)`;
+
+                if (cardBanner) {
+                    cardBanner.style.background = '#ecfdf5';
+                    cardBanner.style.borderColor = '#a7f3d0';
+                }
+                if (cardIcon) cardIcon.innerText = '🟢';
+                if (cardTitle) {
+                    cardTitle.innerText = 'अधिकृत वार्षिक लाइसेंस सक्रिय (Official Active License)';
+                    cardTitle.style.color = '#065f46';
+                }
+                if (cardSubtitle) {
+                    cardSubtitle.innerHTML = `वैधता: <strong style="color:#047857;">${data.expiry_date}</strong> | शेष दिन: <strong style="color:#047857;">${data.days_left} दिन</strong>`;
+                    cardSubtitle.style.color = '#047857';
+                }
+
+                // Hide Lock Overlay
+                if (lockOverlay) lockOverlay.style.display = 'none';
+            } else {
+                // TRIAL STATE
+                if (badge) {
+                    badge.style.background = 'linear-gradient(135deg, #fef3c7, #fde68a)';
+                    badge.style.color = '#92400e';
+                    badge.style.borderColor = '#f59e0b';
+                    badge.style.animation = 'none';
+                }
+                if (badgeIcon) badgeIcon.innerText = '⭐';
+                if (badgeText) badgeText.innerText = `30-दिन VIP ट्रायल (${data.days_left} दिन शेष)`;
+
+                if (cardBanner) {
+                    cardBanner.style.background = '#fef3c7';
+                    cardBanner.style.borderColor = '#fde68a';
+                }
+                if (cardIcon) cardIcon.innerText = '⭐';
+                if (cardTitle) {
+                    cardTitle.innerText = '30-दिवसीय VIP मुफ़्त ट्रायल सक्रिय (VIP Free Trial)';
+                    cardTitle.style.color = '#92400e';
+                }
+                if (cardSubtitle) {
+                    cardSubtitle.innerHTML = `वैधता: <strong>${data.expiry_date}</strong> | शेष दिन: <strong>${data.days_left} दिन</strong>`;
+                    cardSubtitle.style.color = '#b45309';
+                }
+
+                // Hide Lock Overlay
+                if (lockOverlay) lockOverlay.style.display = 'none';
+            }
+        }
+
+        function openLicenseActivationModal() {
+            const modal = document.getElementById('modal-license-activation');
+            const inp = document.getElementById('modal-lic-key-input');
+            const fb = document.getElementById('modal-lic-feedback');
+            const instEl = document.getElementById('modal-lic-install-id');
+
+            if (instEl && currentLicenseInfo.installation_id) {
+                instEl.innerText = currentLicenseInfo.installation_id;
+            }
+            if (inp) inp.value = '';
+            if (fb) {
+                fb.style.display = 'none';
+                fb.innerText = '';
+            }
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeLicenseActivationModal() {
+            const modal = document.getElementById('modal-license-activation');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function copyInstallationId() {
+            const id = currentLicenseInfo.installation_id || 'ASH-8542';
+            navigator.clipboard.writeText(id).then(() => {
+                alert(`📋 Installation ID (${id}) क्लिपबोर्ड पर कॉपी हो गई है! इसे वेंडर को WhatsApp करें।`);
+            }).catch(() => {
+                prompt('इस Installation ID को कॉपी करें:', id);
+            });
+        }
+
+        async function handleLicenseSubmit(e) {
+            e.preventDefault();
+            const inp = document.getElementById('modal-lic-key-input');
+            const fb = document.getElementById('modal-lic-feedback');
+            const btn = document.getElementById('btn-submit-lic');
+            const key = (inp ? inp.value : '').trim();
+
+            if (!key) return;
+            if (btn) btn.disabled = true;
+            if (fb) {
+                fb.style.display = 'block';
+                fb.style.background = '#f1f5f9';
+                fb.style.color = '#475569';
+                fb.innerText = '⏳ लाइसेंस की सत्यापित की जा रही है...';
+            }
+
+            try {
+                const res = await fetch('/api/license/activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ license_key: key })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    if (fb) {
+                        fb.style.background = '#dcfce7';
+                        fb.style.color = '#15803d';
+                        fb.innerText = data.message;
+                    }
+                    setTimeout(() => {
+                        closeLicenseActivationModal();
+                        checkLicenseStatus();
+                        alert(data.message);
+                    }, 800);
+                } else {
+                    if (fb) {
+                        fb.style.background = '#fee2e2';
+                        fb.style.color = '#b91c1c';
+                        fb.innerText = data.error || 'अमान्य लाइसेंस की!';
+                    }
+                }
+            } catch (err) {
+                if (fb) {
+                    fb.style.background = '#fee2e2';
+                    fb.style.color = '#b91c1c';
+                    fb.innerText = 'सत्यापन त्रुटि: ' + err.message;
+                }
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        async function handleLockScreenSubmit(e) {
+            e.preventDefault();
+            const inp = document.getElementById('lock-lic-key-input');
+            const fb = document.getElementById('lock-lic-feedback');
+            const btn = document.getElementById('btn-lock-submit-lic');
+            const key = (inp ? inp.value : '').trim();
+
+            if (!key) return;
+            if (btn) btn.disabled = true;
+            if (fb) {
+                fb.style.display = 'block';
+                fb.style.background = '#f1f5f9';
+                fb.style.color = '#475569';
+                fb.innerText = '⏳ मास्टर की सत्यापित की जा रही है...';
+            }
+
+            try {
+                const res = await fetch('/api/license/activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ license_key: key })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    if (fb) {
+                        fb.style.background = '#dcfce7';
+                        fb.style.color = '#15803d';
+                        fb.innerText = data.message;
+                    }
+                    setTimeout(() => {
+                        checkLicenseStatus();
+                        alert('🎉 ' + data.message);
+                    }, 800);
+                } else {
+                    if (fb) {
+                        fb.style.background = '#fee2e2';
+                        fb.style.color = '#b91c1c';
+                        fb.innerText = data.error || 'अमान्य लाइसेंस की!';
+                    }
+                }
+            } catch (err) {
+                if (fb) {
+                    fb.style.background = '#fee2e2';
+                    fb.style.color = '#b91c1c';
+                    fb.innerText = 'सत्यापन त्रुटि: ' + err.message;
+                }
+            } finally {
+                if (btn) btn.disabled = false;
             }
         }
 

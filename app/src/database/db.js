@@ -316,6 +316,29 @@ function ensureSchemaMigrations(db) {
             if (!empCols.includes('bank_name')) db.exec("ALTER TABLE employees ADD COLUMN bank_name TEXT DEFAULT '';");
             if (!empCols.includes('photo_path')) db.exec("ALTER TABLE employees ADD COLUMN photo_path TEXT DEFAULT '';");
             if (!empCols.includes('phone')) db.exec("ALTER TABLE employees ADD COLUMN phone TEXT DEFAULT '';");
+
+            // 7. Ensure Licensing & 30-Day VIP Trial records exist in system_settings
+            const installIdRow = db.prepare("SELECT value FROM system_settings WHERE key = 'installation_id'").get();
+            if (!installIdRow) {
+                const randCode = Math.floor(1000 + Math.random() * 9000);
+                const installId = 'ASH-' + randCode;
+                db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('installation_id', ?)").run(installId);
+            }
+
+            const licStatusRow = db.prepare("SELECT value FROM system_settings WHERE key = 'license_status'").get();
+            if (!licStatusRow) {
+                const now = new Date();
+                const trialStartDate = now.toISOString().split('T')[0];
+                const expiryDateObj = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000));
+                const expiryDate = expiryDateObj.toISOString().split('T')[0];
+
+                db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('license_status', 'TRIAL')").run();
+                db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('trial_start_date', ?)").run(trialStartDate);
+                db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('trial_days', '30')").run();
+                db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('license_expiry_date', ?)").run(expiryDate);
+                db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('license_key', '')").run();
+                db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('last_known_date', ?)").run(trialStartDate);
+            }
         }
     } catch (migErr) {
         console.warn('Schema migration notice:', migErr.message);
