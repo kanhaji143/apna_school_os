@@ -299,6 +299,23 @@ function ensureSchemaMigrations(db) {
             if (!existingSal) {
                 db.prepare("INSERT INTO system_settings (key, value) VALUES ('salary_heads_config', ?)").run(defSalaryConfig);
             }
+
+            // 6. Ensure 'employees' table has full profile, KYC, photo, and ID card fields
+            const empCols = db.prepare("PRAGMA table_info(employees)").all().map(c => c.name.toLowerCase());
+            if (!empCols.includes('mother_name')) db.exec("ALTER TABLE employees ADD COLUMN mother_name TEXT DEFAULT '';");
+            if (!empCols.includes('gender')) db.exec("ALTER TABLE employees ADD COLUMN gender TEXT DEFAULT 'Male';");
+            if (!empCols.includes('dob')) db.exec("ALTER TABLE employees ADD COLUMN dob DATE;");
+            if (!empCols.includes('blood_group')) db.exec("ALTER TABLE employees ADD COLUMN blood_group TEXT DEFAULT '';");
+            if (!empCols.includes('aadhaar_no')) db.exec("ALTER TABLE employees ADD COLUMN aadhaar_no TEXT DEFAULT '';");
+            if (!empCols.includes('pan_no')) db.exec("ALTER TABLE employees ADD COLUMN pan_no TEXT DEFAULT '';");
+            if (!empCols.includes('qualification')) db.exec("ALTER TABLE employees ADD COLUMN qualification TEXT DEFAULT '';");
+            if (!empCols.includes('experience_years')) db.exec("ALTER TABLE employees ADD COLUMN experience_years TEXT DEFAULT '';");
+            if (!empCols.includes('email')) db.exec("ALTER TABLE employees ADD COLUMN email TEXT DEFAULT '';");
+            if (!empCols.includes('alt_mobile')) db.exec("ALTER TABLE employees ADD COLUMN alt_mobile TEXT DEFAULT '';");
+            if (!empCols.includes('address')) db.exec("ALTER TABLE employees ADD COLUMN address TEXT DEFAULT '';");
+            if (!empCols.includes('bank_name')) db.exec("ALTER TABLE employees ADD COLUMN bank_name TEXT DEFAULT '';");
+            if (!empCols.includes('photo_path')) db.exec("ALTER TABLE employees ADD COLUMN photo_path TEXT DEFAULT '';");
+            if (!empCols.includes('phone')) db.exec("ALTER TABLE employees ADD COLUMN phone TEXT DEFAULT '';");
         }
     } catch (migErr) {
         console.warn('Schema migration notice:', migErr.message);

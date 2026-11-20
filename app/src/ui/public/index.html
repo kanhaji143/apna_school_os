@@ -1847,10 +1847,18 @@
 
             <!-- 13. SALARY SLIPS (PAYSLIPS) -->
             <div id="pane-payroll" class="tab-pane">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
                     <div>
-                        <h2 style="font-size:20px; font-weight:800;">Staff Monthly Payroll & Official Payslips</h2>
-                        <p style="font-size:12px; color:var(--text-muted);">Basic Salary, allowances, advance deduction calculation & net pay in words</p>
+                        <h2 style="font-size:20px; font-weight:800; color:var(--text-heading); margin-bottom:2px;">Staff Directory, Payroll & Official ID Cards</h2>
+                        <p style="font-size:12px; color:var(--text-muted);">शिक्षक व कर्मचारी मासिक वेतन, भत्ते, डिजिटल प्रोफाइल एवं आधिकारिक पहचान पत्र (Staff ID Card)</p>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                        <button class="btn" onclick="openNewEmployeeModal()" style="display:flex; align-items:center; gap:6px; font-size:12px; padding:7px 14px; background:#0284c7; color:white; font-weight:700; border:none; border-radius:8px; cursor:pointer;" title="नया शिक्षक या स्टाफ़ डिजिटल रूप से जोड़ें">
+                            <span>➕</span> नया स्टाफ़ / शिक्षक जोड़ें (Add Staff)
+                        </button>
+                        <button class="btn" onclick="openPrintableStaffFormModal()" style="display:flex; align-items:center; gap:6px; font-size:12px; padding:7px 14px; background:#15803d; color:white; font-weight:700; border:none; border-radius:8px; cursor:pointer;" title="घर से भरवाने हेतु 1 पेज A4 खाली कर्मचारी जॉइनिंग फॉर्म प्रिंट करें">
+                            <span>🖨️</span> खाली जॉइनिंग फॉर्म प्रिंट (Blank Staff Form A4)
+                        </button>
                     </div>
                 </div>
                 <div class="table-card">
@@ -5424,6 +5432,951 @@ Bhadar, Amethi (U.P.)`;
         }
 
 
+        
+        // ==========================================================
+        // 1-PAGE A4 PRINTABLE BLANK STAFF / TEACHER JOINING FORM
+        // ==========================================================
+        function openPrintableStaffFormModal() {
+            const prof = schoolProfile || {};
+            const logoSrc = prof.logo_path || '/logo.png';
+            const session = prof.current_session || '2026-27';
+
+            const area = document.getElementById('modal-content-area');
+            area.innerHTML = `
+                <div style="padding:4px;">
+                    <!-- Print Top Action Toolbar -->
+                    <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; padding:10px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:20px;">🖨️</span>
+                            <div>
+                                <strong style="font-size:13px; color:#0f172a;">ऑफ़लाइन खाली शिक्षक / कर्मचारी जॉइनिंग फॉर्म (1-Page A4 Printable Blank Form)</strong>
+                                <div style="font-size:11.5px; color:#64748b;">यह फॉर्म 1 पेज A4 पर प्रिंट होकर तैयार होगा। नए शिक्षक या कर्मचारी इसे भरकर जमा करेंगे।</div>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <button type="button" class="btn btn-outline" onclick="closeAppModal()">बंद करें (Close)</button>
+                            <button type="button" class="btn" style="background:#15803d; color:white; font-weight:700; padding:8px 18px; font-size:13px; display:flex; align-items:center; gap:6px;" onclick="printStaffJoiningFormSheet()">
+                                🖨️ अभी 1-Page A4 प्रिंट निकालें / PDF सेव करें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live 1-Page A4 Printable Sheet Container -->
+                    <div id="printable-staff-joining-sheet" style="background:#ffffff; color:#000000; border:2px solid #334155; padding:16px 22px; border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,0.08); font-family:'Segoe UI', Arial, sans-serif; max-height:78vh; overflow-y:auto; line-height:1.25;">
+                        
+                        <!-- Header: Logo, School Details, Photo Box -->
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0f172a; padding-bottom:8px; margin-bottom:8px; gap:10px;">
+                            <div style="width:75px; min-width:75px; text-align:center;">
+                                <img src="${logoSrc}" alt="Logo" style="max-height:68px; max-width:75px; object-fit:contain; display:block; margin:0 auto;" onerror="this.style.display='none'">
+                            </div>
+
+                            <div style="flex:1; text-align:center; padding:0 6px;">
+                                <div style="font-size:19px; font-weight:900; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; line-height:1.15;">
+                                    ${prof.school_name || 'LAKSHYA PUBLIC SCHOOL'}
+                                </div>
+                                ${prof.tag_line ? `<div style="font-size:10.5px; font-style:italic; color:#334155;">"${prof.tag_line}"</div>` : ''}
+                                <div style="font-size:10px; font-weight:600; color:#1e293b; margin-top:2px;">
+                                    ${prof.affiliation_no ? `Affiliation: <strong>${prof.affiliation_no}</strong> | ` : ''}
+                                    ${prof.udise_code ? `UDISE: <strong>${prof.udise_code}</strong> | ` : ''}
+                                    Board: <strong>${prof.board_type || 'CBSE / State Board'}</strong>
+                                </div>
+                                <div style="font-size:9.5px; color:#334155; margin-top:1px;">
+                                    ${prof.address || 'Vill & Post: Bhadar, District: Amethi, Uttar Pradesh'}
+                                    ${prof.phone ? ` | Helpline: <strong>${prof.phone}</strong>` : ''}
+                                </div>
+                                <div style="margin-top:4px;">
+                                    <span style="display:inline-block; background:#0f172a; color:#ffffff; font-size:11px; font-weight:800; padding:2px 14px; border-radius:3px; letter-spacing:0.5px; text-transform:uppercase;">
+                                        STAFF / TEACHER EMPLOYMENT APPLICATION & JOINING FORM — सत्र ${session}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div style="width:105px; min-width:105px;">
+                                <div style="width:105px; height:120px; border:1.5px dashed #334155; border-radius:3px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:4px; background:#f8fafc; font-size:8px; color:#475569; font-weight:600; line-height:1.2;">
+                                    <span style="font-size:16px; margin-bottom:2px;">📷</span>
+                                    <span>हालिया रंगीन पासपोर्ट साइज फोटो यहाँ चिपकाएँ</span>
+                                    <span style="font-size:7px; color:#64748b; margin-top:2px;">(Cross Sign Across Photo)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- OFFICE USE ONLY -->
+                        <div style="border:1.2px solid #0f172a; border-radius:3px; padding:4px 8px; margin-bottom:8px; background:#f8fafc; font-size:10px;">
+                            <div style="font-weight:800; color:#0f172a; text-transform:uppercase; font-size:9px; letter-spacing:0.5px; margin-bottom:2px;">
+                                [ FOR OFFICE USE ONLY / केवल कार्यालय उपयोग हेतु ]
+                            </div>
+                            <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1fr 1.2fr 1.2fr; gap:6px;">
+                                <div>Emp Code: <span style="display:inline-block; border-bottom:1px solid #000; width:55%; min-height:12px;"></span></div>
+                                <div>Joining Date: <span style="display:inline-block; border-bottom:1px solid #000; width:45%; min-height:12px;"></span></div>
+                                <div>Department: <span style="display:inline-block; border-bottom:1px solid #000; width:45%; min-height:12px;"></span></div>
+                                <div>Designation: <span style="display:inline-block; border-bottom:1px solid #000; width:45%; min-height:12px;"></span></div>
+                                <div>Basic Salary: ₹<span style="display:inline-block; border-bottom:1px solid #000; width:45%; min-height:12px;"></span></div>
+                                <div>Approved By: <span style="display:inline-block; border-bottom:1px solid #000; width:45%; min-height:12px;"></span></div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 1: PERSONAL DETAILS -->
+                        <div style="margin-bottom:7px;">
+                            <div style="background:#e2e8f0; font-weight:800; font-size:10px; padding:2px 6px; border-radius:2px; margin-bottom:5px; text-transform:uppercase; color:#0f172a; border-left:3px solid #0284c7;">
+                                1. व्यक्तिगत एवं पारिवारिक विवरण (Candidate's Personal Details)
+                            </div>
+
+                            <!-- Name in Block Letters -->
+                            <div style="display:flex; align-items:flex-end; margin-bottom:5px; font-size:10.5px;">
+                                <span style="font-weight:700; width:220px;">पूरा नाम (Full Name in English Block Letters):</span>
+                                <div style="flex:1; display:flex; gap:2px;">
+                                    ${Array(24).fill(0).map(() => `<span style="display:inline-block; width:16px; height:17px; border:1px solid #334155; text-align:center;"></span>`).join('')}
+                                </div>
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:5px; font-size:10.5px;">
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:155px;">पिता / पति का नाम (Father/Spouse):</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                                </div>
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:140px;">माता का नाम (Mother's Name):</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                                </div>
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1.3fr 1fr 1fr 1fr; gap:8px; margin-bottom:5px; font-size:10.5px;">
+                                <div>
+                                    <span style="font-weight:700;">जन्म तिथि (DOB):</span>
+                                    <span style="margin-left:3px;">
+                                        <span style="display:inline-block; border:1px solid #334155; padding:0 3px;">DD</span> / 
+                                        <span style="display:inline-block; border:1px solid #334155; padding:0 3px;">MM</span> / 
+                                        <span style="display:inline-block; border:1px solid #334155; padding:0 4px;">YYYY</span>
+                                    </span>
+                                </div>
+                                <div>
+                                    <span style="font-weight:700;">लिंग (Gender):</span>
+                                    <span>[ ] M &nbsp; [ ] F</span>
+                                </div>
+                                <div>
+                                    <span style="font-weight:700;">रक्त समूह (Blood Group):</span>
+                                    <span style="display:inline-block; border-bottom:1px dotted #000; width:45px;"></span>
+                                </div>
+                                <div>
+                                    <span style="font-weight:700;">वैवाहिक स्थिति:</span>
+                                    <span>[ ] विवाहित &nbsp; [ ] अविवाहित</span>
+                                </div>
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:5px; font-size:10.5px;">
+                                <div>
+                                    <span style="font-weight:700;">आधार कार्ड संख्या (Aadhaar No):</span>
+                                    <div style="display:flex; gap:2px; margin-top:2px;">
+                                        ${Array(4).fill(0).map(()=>`<span style="display:inline-block; width:14px; height:16px; border:1px solid #334155;"></span>`).join('')} - 
+                                        ${Array(4).fill(0).map(()=>`<span style="display:inline-block; width:14px; height:16px; border:1px solid #334155;"></span>`).join('')} - 
+                                        ${Array(4).fill(0).map(()=>`<span style="display:inline-block; width:14px; height:16px; border:1px solid #334155;"></span>`).join('')}
+                                    </div>
+                                </div>
+                                <div>
+                                    <span style="font-weight:700;">पैन कार्ड संख्या (PAN Card No):</span>
+                                    <div style="display:flex; gap:2px; margin-top:2px;">
+                                        ${Array(10).fill(0).map(()=>`<span style="display:inline-block; width:14px; height:16px; border:1px solid #334155;"></span>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 2: CONTACT & ADDRESS -->
+                        <div style="margin-bottom:7px;">
+                            <div style="background:#e2e8f0; font-weight:800; font-size:10px; padding:2px 6px; border-radius:2px; margin-bottom:5px; text-transform:uppercase; color:#0f172a; border-left:3px solid #0284c7;">
+                                2. संपर्क एवं स्थाई पता (Contact & Address Details)
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1.2fr 1.2fr 1.6fr; gap:8px; margin-bottom:5px; font-size:10.5px;">
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:80px;">मोबाइल नं:</span>
+                                    <div style="display:flex; gap:2px;">
+                                        ${Array(10).fill(0).map(()=>`<span style="display:inline-block; width:13px; height:16px; border:1px solid #334155;"></span>`).join('')}
+                                    </div>
+                                </div>
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:95px;">दूसरा मोबाइल:</span>
+                                    <div style="display:flex; gap:2px;">
+                                        ${Array(10).fill(0).map(()=>`<span style="display:inline-block; width:13px; height:16px; border:1px solid #334155;"></span>`).join('')}
+                                    </div>
+                                </div>
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:65px;">ईमेल ID:</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                                </div>
+                            </div>
+
+                            <div style="display:flex; align-items:flex-end; margin-bottom:4px; font-size:10.5px;">
+                                <span style="font-weight:700; width:160px;">स्थाई पता (Permanent Address):</span>
+                                <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                            </div>
+                            <div style="display:flex; align-items:flex-end; margin-bottom:4px; font-size:10.5px;">
+                                <span style="font-weight:700; width:160px;">वर्तमान पता (Local Address):</span>
+                                <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 3: QUALIFICATIONS & EXPERIENCE -->
+                        <div style="margin-bottom:7px;">
+                            <div style="background:#e2e8f0; font-weight:800; font-size:10px; padding:2px 6px; border-radius:2px; margin-bottom:5px; text-transform:uppercase; color:#0f172a; border-left:3px solid #0284c7;">
+                                3. शैक्षणिक योग्यता एवं अनुभव (Academic Qualifications & Experience)
+                            </div>
+
+                            <table style="width:100%; border-collapse:collapse; font-size:9.5px; margin-bottom:5px;">
+                                <thead>
+                                    <tr style="background:#f1f5f9;">
+                                        <th style="border:1px solid #475569; padding:2px 4px; text-align:left; width:22%;">परीक्षा (Exam / Degree)</th>
+                                        <th style="border:1px solid #475569; padding:2px 4px; text-align:left; width:30%;">बोर्ड / विश्वविद्यालय (Board / Univ)</th>
+                                        <th style="border:1px solid #475569; padding:2px 4px; text-align:center; width:12%;">वर्ष (Year)</th>
+                                        <th style="border:1px solid #475569; padding:2px 4px; text-align:center; width:12%;">प्राप्तांक (%)</th>
+                                        <th style="border:1px solid #475569; padding:2px 4px; text-align:left; width:24%;">मुख्य विषय (Subjects)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="border:1px solid #475569; padding:3px 4px; font-weight:700;">हाईस्कूल (10th)</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #475569; padding:3px 4px; font-weight:700;">इंटरमीडिएट (12th)</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #475569; padding:3px 4px; font-weight:700;">स्नातक (BA / B.Sc / B.Com / B.Tech)</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #475569; padding:3px 4px; font-weight:700;">B.Ed / D.El.Ed / M.A / M.Sc</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                        <td style="border:1px solid #475569; padding:3px 4px;">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="display:grid; grid-template-columns:1fr 2fr; gap:10px; font-size:10.5px;">
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:130px;">कुल शिक्षण अनुभव:</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                                </div>
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:160px;">पूर्व कार्यरत संस्था का नाम:</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 4: BANK ACCOUNT DETAILS -->
+                        <div style="margin-bottom:7px;">
+                            <div style="background:#e2e8f0; font-weight:800; font-size:10px; padding:2px 6px; border-radius:2px; margin-bottom:5px; text-transform:uppercase; color:#0f172a; border-left:3px solid #0284c7;">
+                                4. बैंक खाता विवरण (Bank Details for Salary Direct Deposit)
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1.2fr 1.4fr 1fr 1fr; gap:8px; font-size:10.5px;">
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:70px;">बैंक का नाम:</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                                </div>
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:95px;">खाता संख्या (A/c No):</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                                </div>
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:70px;">IFSC Code:</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                                </div>
+                                <div style="display:flex; align-items:flex-end;">
+                                    <span style="font-weight:700; width:55px;">शाखा (Branch):</span>
+                                    <span style="flex:1; border-bottom:1px dotted #000; min-height:14px;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 5: DECLARATION & SIGNATURES -->
+                        <div style="border:1.2px solid #64748b; border-radius:3px; padding:6px 10px; background:#fafafa;">
+                            <div style="font-size:9.5px; font-weight:800; color:#0f172a; text-transform:uppercase; margin-bottom:2px;">
+                                कर्मचारी घोषणा पत्र एवं सेवा शर्तें (Employee Undertaking)
+                            </div>
+                            <p style="font-size:9px; color:#334155; line-height:1.3; margin:0 0 10px 0;">
+                                मैं सत्यनिष्ठा से प्रतिज्ञान करता/करती हूँ कि इस आवेदन में मेरे द्वारा दिए गए सभी विवरण पूर्णतः सत्य एवं प्रमाणित हैं। यदि कोई जानकारी असत्य पाई जाती है तो संस्था को मेरी सेवाएं समाप्त करने का पूर्ण अधिकार होगा। मैं विद्यालय के नियमों, सेवा शर्तों व आचार संहिता का पूर्ण निष्ठा से पालन करूँगा/करूँगी।
+                            </p>
+
+                            <div style="display:flex; justify-content:space-between; align-items:flex-end; font-size:10.5px; margin-top:12px;">
+                                <div>
+                                    दिनांक (Date): <strong>____/____/2026</strong><br>
+                                    स्थान (Place): <strong>____________________</strong>
+                                </div>
+                                <div style="text-align:center;">
+                                    <div style="border-top:1.2px solid #000; width:160px; padding-top:2px; font-weight:700;">
+                                        कर्मचारी / शिक्षक के हस्ताक्षर
+                                    </div>
+                                    <span style="font-size:8.5px; color:#64748b;">(Candidate's Signature)</span>
+                                </div>
+                                <div style="text-align:center;">
+                                    <div style="border-top:1.2px solid #000; width:150px; padding-top:2px; font-weight:700;">
+                                        सत्यापितकर्ता (HR / Admin)
+                                    </div>
+                                    <span style="font-size:8.5px; color:#64748b;">(Verified by HR)</span>
+                                </div>
+                                <div style="text-align:center;">
+                                    <div style="border-top:1.2px solid #000; width:160px; padding-top:2px; font-weight:700;">
+                                        प्रधानाचार्य मोहर व हस्ताक्षर
+                                    </div>
+                                    <span style="font-size:8.5px; color:#64748b;">(Principal / Director Seal)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-heading').innerText = "🖨️ 1-Page A4 कर्मचारी जॉइनिंग फॉर्म प्रिव्यू (Staff Joining Form)";
+            document.getElementById('app-modal').classList.add('active');
+        }
+
+        function printStaffJoiningFormSheet() {
+            const printContent = document.getElementById('printable-staff-joining-sheet').innerHTML;
+            const prof = schoolProfile || {};
+            const printWin = window.open('', '_blank', 'width=880,height=920');
+            printWin.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <title>Staff Joining Form — ${prof.school_name || 'School'}</title>
+                    <style>
+                        @page {
+                            size: A4 portrait;
+                            margin: 7mm 10mm 7mm 10mm;
+                        }
+                        body {
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            color: #000000;
+                            background: #ffffff;
+                            -webkit-print-color-adjust: exact;
+                            print-color-adjust: exact;
+                        }
+                        * {
+                            box-sizing: border-box;
+                        }
+                        @media print {
+                            body {
+                                width: 100%;
+                            }
+                            #printable-staff-joining-sheet {
+                                border: none !important;
+                                box-shadow: none !important;
+                                padding: 0 !important;
+                                max-height: none !important;
+                                overflow: visible !important;
+                            }
+                        }
+                    </style>
+                </head>
+                <body onload="window.print(); setTimeout(() => { window.close(); }, 800);">
+                    <div style="padding:2px;">
+                        ${printContent}
+                    </div>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+        }
+
+        // ==========================================================
+        // DIGITAL NEW EMPLOYEE / TEACHER ENTRY MODAL
+        // ==========================================================
+        let newEmpPhotoBase64 = '';
+
+        function openNewEmployeeModal() {
+            newEmpPhotoBase64 = '';
+            const today = new Date().toISOString().slice(0, 10);
+            const area = document.getElementById('modal-content-area');
+            area.innerHTML = `
+                <form onsubmit="submitNewEmployee(event)" style="padding:4px; max-height:80vh; overflow-y:auto;">
+                    <div style="background:#f0fdf4; border-left:4px solid #16a34a; padding:10px 14px; border-radius:6px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div style="font-weight:700; color:#15803d; font-size:13px;">💼 नया शिक्षक / कर्मचारी पंजीकरण (Staff Joining Entry)</div>
+                            <div style="font-size:11.5px; color:#475569;">कर्मचारी का संपूर्ण प्रोफाइल, बैंक खाता एवं डिजिटल फोटो दर्ज करें। यह डेटाबेस में सुरक्षित रहेगा।</div>
+                        </div>
+                        <button type="button" class="btn btn-outline" style="font-size:11px; padding:3px 10px; background:#ffffff; color:#15803d; border-color:#86efac; font-weight:700; cursor:pointer;" onclick="openPrintableStaffFormModal()" title="1 पेज A4 खाली फॉर्म प्रिंट निकालें">
+                            🖨️ खाली फॉर्म प्रिंट (A4)
+                        </button>
+                    </div>
+
+                    <!-- Row 1: Photo & Core Details -->
+                    <div style="display:flex; gap:16px; margin-bottom:14px; align-items:flex-start;">
+                        <!-- Photo Upload Box -->
+                        <div style="width:120px; text-align:center;">
+                            <div style="width:110px; height:125px; border:2px dashed #0284c7; border-radius:8px; display:flex; align-items:center; justify-content:center; background:#f0f9ff; overflow:hidden; position:relative; margin-bottom:6px;">
+                                <img id="new-emp-photo-preview" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
+                                <div id="new-emp-photo-placeholder" style="font-size:11px; color:#0369a1; font-weight:600; padding:4px;">
+                                    <span>📷</span><br>डिजिटल फोटो अपलोड करें
+                                </div>
+                            </div>
+                            <label class="btn btn-outline" style="font-size:10.5px; padding:3px 8px; cursor:pointer; display:inline-block; width:110px;">
+                                📁 फोटो चुनें
+                                <input type="file" accept="image/*" style="display:none;" onchange="handleNewEmpPhotoUpload(event)">
+                            </label>
+                        </div>
+
+                        <!-- Core Inputs -->
+                        <div style="flex:1;">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px;">
+                                <div>
+                                    <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">कर्मचारी का पूरा नाम (Full Name) *</label>
+                                    <input type="text" id="new-emp-name" required placeholder="जैसे: अमित कुमार शर्मा" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">कर्मचारी कोड (Emp Code) <span style="font-weight:400; color:#64748b;">(खाली पर ऑटो जनरेट)</span></label>
+                                    <input type="text" id="new-emp-code" placeholder="उदा. EMP-005 (वैकल्पिक)" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                </div>
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+                                <div>
+                                    <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">विभाग (Department) *</label>
+                                    <select id="new-emp-dept" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                        <option value="Teaching" selected>शिक्षक वर्ग (Teaching)</option>
+                                        <option value="Administration">प्रशासन (Administration)</option>
+                                        <option value="Non-Teaching">गैर-शिक्षण (Non-Teaching)</option>
+                                        <option value="Transport">वाहन / ट्रांसपोर्ट (Transport)</option>
+                                        <option value="Support">सपोर्ट व सुरक्षा (Support & Security)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">पदनाम (Designation) *</label>
+                                    <input type="text" id="new-emp-desig" required placeholder="उदा. PGT English, Clerk, Driver" value="Teacher" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">मूल मासिक वेतन (Monthly Basic ₹) *</label>
+                                    <input type="number" id="new-emp-salary" required value="15000" min="1000" step="500" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px; font-weight:700; color:#15803d;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Parents & Personal Details -->
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">पिता / पति का नाम (Father / Spouse Name)</label>
+                            <input type="text" id="new-emp-father" placeholder="उदा. श्री राधेश्याम शर्मा" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">माता का नाम (Mother's Name)</label>
+                            <input type="text" id="new-emp-mother" placeholder="उदा. श्रीमती कौशल्या शर्मा" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Gender, DOB, Blood Group, Joining Date -->
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">लिंग (Gender)</label>
+                            <select id="new-emp-gender" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                <option value="Male" selected>पुरुष (Male)</option>
+                                <option value="Female">महिला (Female)</option>
+                                <option value="Other">अन्य (Other)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">जन्म तिथि (DOB)</label>
+                            <input type="date" id="new-emp-dob" style="width:100%; padding:7px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">रक्त समूह (Blood Group)</label>
+                            <select id="new-emp-blood" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                <option value="O+" selected>O+</option>
+                                <option value="A+">A+</option>
+                                <option value="B+">B+</option>
+                                <option value="AB+">AB+</option>
+                                <option value="O-">O-</option>
+                                <option value="A-">A-</option>
+                                <option value="B-">B-</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">जॉइनिंग तिथि (Joining Date)</label>
+                            <input type="date" id="new-emp-joining" value="${today}" style="width:100%; padding:7px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Contacts & Email -->
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">मोबाइल नंबर (Mobile) *</label>
+                            <input type="tel" id="new-emp-phone" required pattern="[0-9]{10}" placeholder="10-digit mobile" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">वैकल्पिक मोबाइल / WhatsApp</label>
+                            <input type="tel" id="new-emp-alt-phone" pattern="[0-9]{10}" placeholder="दूसरा मोबाइल नं." style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">ईमेल ID (Email Address)</label>
+                            <input type="email" id="new-emp-email" placeholder="teacher@gmail.com" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Qualifications & KYC -->
+                    <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">उच्चतम योग्यता (Qualification)</label>
+                            <input type="text" id="new-emp-qual" placeholder="उदा. M.Sc (Maths), B.Ed" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">कुल अनुभव (Experience)</label>
+                            <input type="text" id="new-emp-exp" placeholder="उदा. 4 Years" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">आधार नंबर (Aadhaar No)</label>
+                            <input type="text" id="new-emp-aadhaar" maxlength="14" placeholder="12 अंक आधार" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">पैन कार्ड (PAN No)</label>
+                            <input type="text" id="new-emp-pan" maxlength="10" placeholder="उदा. ABCDE1234F" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px; text-transform:uppercase;">
+                        </div>
+                    </div>
+
+                    <!-- Row 6: Bank Details -->
+                    <div style="display:grid; grid-template-columns:1.2fr 1.5fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">बैंक का नाम (Bank Name)</label>
+                            <input type="text" id="new-emp-bank-name" placeholder="उदा. State Bank of India" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">बैंक खाता संख्या (A/c No)</label>
+                            <input type="text" id="new-emp-bank-acc" placeholder="उदा. 30894567890" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">IFSC कोड</label>
+                            <input type="text" id="new-emp-bank-ifsc" placeholder="SBIN0001234" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px; text-transform:uppercase;">
+                        </div>
+                    </div>
+
+                    <!-- Row 7: Address -->
+                    <div style="margin-bottom:16px;">
+                        <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">स्थाई पता (Permanent Address)</label>
+                        <input type="text" id="new-emp-address" placeholder="उदा. ग्राम- भादर, पो- भादर, जिला- अमेठी, उ.प्र. 227406" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                    </div>
+
+                    <div id="new-emp-msg-status" style="display:none; font-size:12.5px; padding:8px 12px; border-radius:6px; margin-bottom:12px;"></div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:11.5px; color:#64748b;">(सहेजने के बाद कर्मचारी का ID कार्ड तुरंत प्रिंट किया जा सकता है)</span>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-outline" onclick="closeAppModal()">रद्द करें (Cancel)</button>
+                            <button type="submit" id="btn-save-new-emp" class="btn" style="background:#16a34a; color:white; font-weight:700; padding:8px 20px; border-radius:6px; border:none; cursor:pointer;">
+                                💾 कर्मचारी रिकॉर्ड सुरक्षित करें (Save Record)
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            `;
+            document.getElementById('modal-heading').innerText = "💼 नया शिक्षक / कर्मचारी पंजीकरण (Add Employee)";
+            document.getElementById('app-modal').classList.add('active');
+        }
+
+        function handleNewEmpPhotoUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                newEmpPhotoBase64 = evt.target.result;
+                const img = document.getElementById('new-emp-photo-preview');
+                const ph = document.getElementById('new-emp-photo-placeholder');
+                if (img) {
+                    img.src = newEmpPhotoBase64;
+                    img.style.display = 'block';
+                }
+                if (ph) ph.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function submitNewEmployee(event) {
+            event.preventDefault();
+            const btn = document.getElementById('btn-save-new-emp');
+            const statusBox = document.getElementById('new-emp-msg-status');
+            btn.disabled = true;
+            btn.innerText = "⏳ सहेज रहे हैं...";
+
+            const payload = {
+                employee_name: document.getElementById('new-emp-name').value.trim(),
+                employee_id: document.getElementById('new-emp-code').value.trim(),
+                department: document.getElementById('new-emp-dept').value,
+                designation: document.getElementById('new-emp-desig').value.trim(),
+                monthly_salary: parseFloat(document.getElementById('new-emp-salary').value) || 12000,
+                father_name: document.getElementById('new-emp-father').value.trim(),
+                mother_name: document.getElementById('new-emp-mother').value.trim(),
+                gender: document.getElementById('new-emp-gender').value,
+                dob: document.getElementById('new-emp-dob').value || null,
+                blood_group: document.getElementById('new-emp-blood').value,
+                joining_date: document.getElementById('new-emp-joining').value,
+                mobile_no: document.getElementById('new-emp-phone').value.trim(),
+                alt_mobile: document.getElementById('new-emp-alt-phone').value.trim(),
+                email: document.getElementById('new-emp-email').value.trim(),
+                qualification: document.getElementById('new-emp-qual').value.trim(),
+                experience_years: document.getElementById('new-emp-exp').value.trim(),
+                aadhaar_no: document.getElementById('new-emp-aadhaar').value.trim(),
+                pan_no: document.getElementById('new-emp-pan').value.trim(),
+                bank_name: document.getElementById('new-emp-bank-name').value.trim(),
+                bank_account_no: document.getElementById('new-emp-bank-acc').value.trim(),
+                ifsc_code: document.getElementById('new-emp-bank-ifsc').value.trim(),
+                address: document.getElementById('new-emp-address').value.trim(),
+                photo_path: newEmpPhotoBase64
+            };
+
+            try {
+                const res = await fetch('/api/employees', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    statusBox.style.display = 'block';
+                    statusBox.style.background = '#dcfce7';
+                    statusBox.style.color = '#15803d';
+                    statusBox.style.border = '1px solid #86efac';
+                    statusBox.innerHTML = `<strong>✓ बधाई!</strong> ${data.message} (कोड: <strong>${data.employee.employee_id}</strong>)`;
+
+                    // Reload employees
+                    const empRes = await fetch('/api/payroll/employees');
+                    allEmployees = await empRes.json();
+                    renderPayroll(allEmployees);
+
+                    setTimeout(() => {
+                        closeAppModal();
+                    }, 1400);
+                } else {
+                    btn.disabled = false;
+                    btn.innerText = "💾 कर्मचारी रिकॉर्ड सुरक्षित करें (Save Record)";
+                    statusBox.style.display = 'block';
+                    statusBox.style.background = '#fee2e2';
+                    statusBox.style.color = '#b91c1c';
+                    statusBox.style.border = '1px solid #fca5a5';
+                    statusBox.innerHTML = `<strong>त्रुटि:</strong> ${data.error || 'कर्मचारी जोड़ने में विफल।'}`;
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerText = "💾 कर्मचारी रिकॉर्ड सुरक्षित करें (Save Record)";
+                statusBox.style.display = 'block';
+                statusBox.style.background = '#fee2e2';
+                statusBox.style.color = '#b91c1c';
+                statusBox.style.border = '1px solid #fca5a5';
+                statusBox.innerHTML = `<strong>सर्वर त्रुटि:</strong> ${err.message}`;
+            }
+        }
+
+        // ==========================================================
+        // OFFICIAL EMPLOYEE ID CARD GENERATOR & PRINT MODAL
+        // ==========================================================
+        function openEmployeeIdCardModal(empId) {
+            const emp = allEmployees.find(e => e.id === empId);
+            if (!emp) return;
+
+            const prof = schoolProfile || {};
+            const logoSrc = prof.logo_path || '/logo.png';
+            const photoSrc = emp.photo_path || '';
+            const session = prof.current_session || '2026-27';
+
+            const area = document.getElementById('modal-content-area');
+            area.innerHTML = `
+                <div style="padding:4px;">
+                    <!-- Action Bar -->
+                    <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; padding:10px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:20px;">🪪</span>
+                            <div>
+                                <strong style="font-size:13px; color:#0f172a;">कर्मचारी आधिकारिक पहचान पत्र (Staff Identity Card)</strong>
+                                <div style="font-size:11.5px; color:#64748b;">${emp.employee_name} (${emp.designation}) — स्टैंडर्ड PVC / A4 प्रिंट तैयार</div>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button type="button" class="btn btn-outline" onclick="closeAppModal()">बंद करें (Close)</button>
+                            <button type="button" class="btn" style="background:#0284c7; color:white; font-weight:700; padding:8px 18px; font-size:13px; display:flex; align-items:center; gap:6px;" onclick="printEmployeeIdCardSheet()">
+                                🖨️ ID कार्ड प्रिंट निकालें (Print ID Card)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Printable ID Card Container (Front & Back side by side) -->
+                    <div id="printable-employee-id-card" style="display:flex; justify-content:center; gap:24px; padding:16px; background:#e2e8f0; border-radius:8px; flex-wrap:wrap;">
+                        
+                        <!-- CARD FRONT -->
+                        <div style="width:310px; height:480px; background:#ffffff; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,0.18); overflow:hidden; display:flex; flex-direction:column; position:relative; border:1px solid #94a3b8; font-family:'Segoe UI', Arial, sans-serif;">
+                            
+                            <!-- Header Bar -->
+                            <div style="background:linear-gradient(135deg, #07152b 0%, #0c2340 50%, #0f2e59 100%); color:#ffffff; padding:14px 12px 10px 12px; text-align:center; border-bottom:3px solid #38bdf8; position:relative;">
+                                <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:4px;">
+                                    <img src="${logoSrc}" style="width:36px; height:36px; object-fit:contain; border-radius:6px; background:#fff; padding:2px;" onerror="this.style.display='none'">
+                                    <div style="font-size:14px; font-weight:900; text-transform:uppercase; letter-spacing:0.5px; line-height:1.15; color:#ffffff;">
+                                        ${prof.school_name || 'LAKSHYA SCHOOL'}
+                                    </div>
+                                </div>
+                                <div style="font-size:9px; color:#94a3b8; letter-spacing:0.3px;">${prof.address ? prof.address.slice(0, 42) + '...' : 'Affiliated & Recognized Institution'}</div>
+                                <div style="display:inline-block; margin-top:5px; background:#38bdf8; color:#07152b; font-size:9.5px; font-weight:800; padding:2px 10px; border-radius:12px; letter-spacing:0.5px; text-transform:uppercase;">
+                                    STAFF IDENTITY CARD
+                                </div>
+                            </div>
+
+                            <!-- Photo & Name Body -->
+                            <div style="padding:14px 16px; text-align:center; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:space-between;">
+                                
+                                <!-- Employee Photo Frame -->
+                                <div style="width:100px; height:115px; border-radius:8px; overflow:hidden; border:2.5px solid #0284c7; box-shadow:0 4px 12px rgba(2,132,199,0.25); background:#f0f9ff; display:flex; align-items:center; justify-content:center;">
+                                    ${photoSrc
+                                        ? `<img src="${photoSrc}" style="width:100%; height:100%; object-fit:cover;">`
+                                        : `<span style="font-size:36px; font-weight:800; color:#0284c7;">${(emp.employee_name || 'E').charAt(0)}</span>`
+                                    }
+                                </div>
+
+                                <!-- Name & Role -->
+                                <div>
+                                    <div style="font-size:16px; font-weight:900; color:#0f172a; margin-top:6px; line-height:1.2;">
+                                        ${emp.employee_name}
+                                    </div>
+                                    <div style="font-size:12px; font-weight:700; color:#0284c7; margin-top:2px;">
+                                        ${emp.designation || 'Faculty Member'}
+                                    </div>
+                                    <div style="display:inline-block; background:#f1f5f9; color:#475569; font-size:10px; font-weight:600; padding:2px 8px; border-radius:4px; margin-top:3px; border:1px solid #cbd5e1;">
+                                        ${emp.department || 'Teaching'} Department
+                                    </div>
+                                </div>
+
+                                <!-- Grid Details -->
+                                <div style="width:100%; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px; text-align:left; font-size:11px; line-height:1.6; margin-top:8px;">
+                                    <div style="display:flex; justify-content:space-between;">
+                                        <span style="color:#64748b; font-weight:600;">Emp Code:</span>
+                                        <strong style="color:#0f172a;">${emp.employee_id || ('EMP-' + emp.id)}</strong>
+                                    </div>
+                                    <div style="display:flex; justify-content:space-between;">
+                                        <span style="color:#64748b; font-weight:600;">Blood Group:</span>
+                                        <span style="background:#fee2e2; color:#b91c1c; font-weight:800; padding:1px 6px; border-radius:4px; font-size:10.5px;">🩸 ${emp.blood_group || 'O+'}</span>
+                                    </div>
+                                    <div style="display:flex; justify-content:space-between;">
+                                        <span style="color:#64748b; font-weight:600;">Emergency Phone:</span>
+                                        <strong style="color:#0f172a;">${emp.mobile_no || emp.phone || '9005924960'}</strong>
+                                    </div>
+                                    <div style="display:flex; justify-content:space-between;">
+                                        <span style="color:#64748b; font-weight:600;">Valid Session:</span>
+                                        <strong style="color:#15803d;">${session}</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Signature Strip -->
+                                <div style="width:100%; display:flex; justify-content:space-between; align-items:flex-end; margin-top:6px; padding:0 4px;">
+                                    <div style="font-size:9px; color:#64748b; text-align:left;">
+                                        DOJ: <strong>${emp.joining_date || '2026-04-01'}</strong>
+                                    </div>
+                                    <div style="text-align:center;">
+                                        <div style="border-top:1px solid #000; width:100px; font-size:9px; font-weight:800; padding-top:2px;">
+                                            Principal Signature
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Bottom Strip -->
+                            <div style="background:#07152b; height:8px; width:100%;"></div>
+                        </div>
+
+                        <!-- CARD BACK -->
+                        <div style="width:310px; height:480px; background:#ffffff; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,0.18); overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; position:relative; border:1px solid #94a3b8; font-family:'Segoe UI', Arial, sans-serif; padding:18px 16px;">
+                            <div>
+                                <div style="text-align:center; border-bottom:1.5px solid #0f172a; padding-bottom:8px; margin-bottom:12px;">
+                                    <div style="font-size:13px; font-weight:900; color:#0f172a; text-transform:uppercase;">
+                                        TERMS & INSTRUCTIONS
+                                    </div>
+                                    <div style="font-size:9.5px; color:#64748b;">पहचान पत्र नियम व निर्देश</div>
+                                </div>
+
+                                <div style="font-size:10px; color:#334155; line-height:1.6; text-align:left;">
+                                    <p style="margin:0 0 6px 0;">1. This identity card is strictly non-transferable and must be worn or produced during duty hours inside the school campus.</p>
+                                    <p style="margin:0 0 6px 0;">2. The card remains the property of the school and must be surrendered immediately upon cessation of employment.</p>
+                                    <p style="margin:0 0 6px 0;">3. In case of loss or damage, report immediately to the school administration office for a replacement duplicate card.</p>
+                                </div>
+
+                                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:8px 10px; margin-top:10px; font-size:10px; line-height:1.5;">
+                                    <strong>Permanent Address / निवास:</strong><br>
+                                    <span style="color:#475569;">${emp.address || (prof.address ? prof.address.slice(0, 50) : 'Bhadar, Amethi, UP')}</span>
+                                </div>
+                            </div>
+
+                            <!-- Return / School Contacts -->
+                            <div style="text-align:center; border-top:1.5px solid #cbd5e1; padding-top:10px;">
+                                <div style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">
+                                    IF FOUND, PLEASE RETURN TO:
+                                </div>
+                                <div style="font-size:11px; font-weight:900; color:#0f172a; margin-top:2px;">
+                                    ${prof.school_name || 'LAKSHYA PUBLIC SCHOOL'}
+                                </div>
+                                <div style="font-size:9.5px; color:#475569; margin-top:2px;">
+                                    ${prof.address || 'Bhadar, Amethi, Uttar Pradesh'}
+                                </div>
+                                <div style="font-size:10px; font-weight:700; color:#15803d; margin-top:3px;">
+                                    📞 Helpline: ${prof.phone || '8504985149'}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-heading').innerText = `🪪 कर्मचारी पहचान पत्र — ${emp.employee_name}`;
+            document.getElementById('app-modal').classList.add('active');
+        }
+
+        function printEmployeeIdCardSheet() {
+            const printContent = document.getElementById('printable-employee-id-card').innerHTML;
+            const prof = schoolProfile || {};
+            const printWin = window.open('', '_blank', 'width=850,height=800');
+            printWin.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <title>Staff Identity Card — ${prof.school_name || 'School'}</title>
+                    <style>
+                        @page {
+                            size: A4 portrait;
+                            margin: 15mm;
+                        }
+                        body {
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background: #ffffff;
+                            -webkit-print-color-adjust: exact;
+                            print-color-adjust: exact;
+                        }
+                        @media print {
+                            #printable-employee-id-card {
+                                background: transparent !important;
+                                padding: 0 !important;
+                            }
+                        }
+                    </style>
+                </head>
+                <body onload="window.print(); setTimeout(() => { window.close(); }, 800);">
+                    <div style="display:flex; justify-content:center; gap:24px; padding:10px;">
+                        ${printContent}
+                    </div>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+        }
+
+        // ==========================================================
+        // EMPLOYEE DIGITAL PHOTO MODAL
+        // ==========================================================
+        function openEmployeePhotoModal(empId) {
+            const emp = allEmployees.find(e => e.id === empId);
+            if (!emp) return;
+
+            const currentPhoto = emp.photo_path || '';
+            const area = document.getElementById('modal-content-area');
+            area.innerHTML = `
+                <div style="padding:14px; text-align:center;">
+                    <div style="font-size:15px; font-weight:800; color:#0f172a; margin-bottom:4px;">
+                        ${emp.employee_name} (${emp.designation})
+                    </div>
+                    <div style="font-size:12px; color:#64748b; margin-bottom:16px;">
+                        कर्मचारी का डिजिटल फोटो जोड़ें या बदलें (ID कार्ड व पोर्टल में प्रदर्शित होगा)
+                    </div>
+
+                    <div style="width:140px; height:160px; border-radius:10px; border:2.5px solid #0284c7; box-shadow:0 4px 14px rgba(2,132,199,0.2); margin:0 auto 16px auto; overflow:hidden; background:#f0f9ff; display:flex; align-items:center; justify-content:center;">
+                        ${currentPhoto
+                            ? `<img id="emp-photo-modal-preview" src="${currentPhoto}" style="width:100%; height:100%; object-fit:cover;">`
+                            : `<div id="emp-photo-modal-preview-placeholder" style="font-size:12px; color:#0284c7; font-weight:700;">📷 कोई फोटो नहीं</div>`
+                        }
+                    </div>
+
+                    <label class="btn btn-purple" style="font-size:12px; padding:7px 18px; cursor:pointer; display:inline-block; margin-bottom:14px;">
+                        📁 नई फोटो चुनें (Choose Photo)
+                        <input type="file" accept="image/*" style="display:none;" onchange="handleEmpModalPhotoSelect(event, ${emp.id})">
+                    </label>
+
+                    <div id="emp-photo-upload-msg" style="display:none; font-size:12px; padding:8px; border-radius:6px; margin-bottom:12px;"></div>
+
+                    <div style="display:flex; justify-content:center; gap:10px;">
+                        <button type="button" class="btn btn-outline" onclick="closeAppModal()">पूर्ण हुआ (Done)</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modal-heading').innerText = `📷 डिजिटल फोटो प्रबंधन — ${emp.employee_name}`;
+            document.getElementById('app-modal').classList.add('active');
+        }
+
+        async function handleEmpModalPhotoSelect(e, empId) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const msgBox = document.getElementById('emp-photo-upload-msg');
+            msgBox.style.display = 'block';
+            msgBox.style.background = '#f0f9ff';
+            msgBox.style.color = '#0369a1';
+            msgBox.innerText = '⏳ फोटो अपलोड हो रही है...';
+
+            const reader = new FileReader();
+            reader.onload = async function(evt) {
+                const base64 = evt.target.result;
+                try {
+                    const res = await fetch(`/api/employees/${empId}/photo`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ photo: base64 })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        msgBox.style.background = '#dcfce7';
+                        msgBox.style.color = '#15803d';
+                        msgBox.innerText = '✓ फोटो सफलतापूर्वक अपडेट हो गई!';
+
+                        // Update local object
+                        const target = allEmployees.find(e => e.id === empId);
+                        if (target) target.photo_path = base64;
+                        renderPayroll(allEmployees);
+
+                        const imgEl = document.getElementById('emp-photo-modal-preview');
+                        if (imgEl) {
+                            imgEl.src = base64;
+                        } else {
+                            const placeholder = document.getElementById('emp-photo-modal-preview-placeholder');
+                            if (placeholder) {
+                                placeholder.outerHTML = `<img id="emp-photo-modal-preview" src="${base64}" style="width:100%; height:100%; object-fit:cover;">`;
+                            }
+                        }
+                    } else {
+                        msgBox.style.background = '#fee2e2';
+                        msgBox.style.color = '#b91c1c';
+                        msgBox.innerText = 'त्रुटि: ' + (data.error || 'अपलोड विफल');
+                    }
+                } catch (err) {
+                    msgBox.style.background = '#fee2e2';
+                    msgBox.style.color = '#b91c1c';
+                    msgBox.innerText = 'त्रुटि: ' + err.message;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+
         // DYNAMIC FORM & SALARY CONFIGURATIONS
         // ==========================================
         let currentAdmissionFormConfig = {
@@ -6680,20 +7633,55 @@ Bhadar, Amethi (U.P.)`;
 
         function renderPayroll(emps) {
             const tbody = document.getElementById('payroll-tbody');
-            tbody.innerHTML = emps.map(e => `
+            if (!tbody) return;
+            tbody.innerHTML = emps.map(e => {
+                const photoHtml = e.photo_path
+                    ? `<img src="${e.photo_path}" style="width:100%; height:100%; object-fit:cover;">`
+                    : `<span style="font-weight:800; color:#0369a1; font-size:13px;">${(e.employee_name || 'E').charAt(0).toUpperCase()}</span>`;
+
+                return `
                 <tr>
-                    <td><strong>${e.employee_id}</strong></td>
                     <td>
-                        <strong>${e.employee_name}</strong>
-                        <div style="font-size:11px; color:var(--text-muted);">${e.department || 'Teaching'} Staff</div>
+                        <span style="font-weight:700; font-size:12px; background:var(--bg-page); padding:3px 7px; border-radius:4px; border:1px solid var(--border);">${e.employee_id || ('EMP-' + e.id)}</span>
                     </td>
-                    <td>${e.designation}</td>
-                    <td><strong>₹${e.monthly_salary.toLocaleString('en-IN')}</strong> / mo</td>
                     <td>
-                        <button class="btn btn-purple" style="padding:4px 10px; font-size:11px;" onclick="openSalaryProcessModal(${e.id})">💸 Process Payslip</button>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div style="width:36px; height:36px; min-width:36px; border-radius:50%; overflow:hidden; background:#e0f2fe; border:1.5px solid #38bdf8; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 3px rgba(0,0,0,0.1); cursor:pointer;" onclick="openEmployeePhotoModal(${e.id})" title="फोटो बदलने हेतु क्लिक करें">
+                                ${photoHtml}
+                            </div>
+                            <div>
+                                <div style="font-weight:700; color:var(--text-heading); font-size:13px;">${e.employee_name}</div>
+                                <div style="font-size:11px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+                                    <span>${e.department || 'Teaching'}</span>
+                                    ${e.blood_group ? `<span style="background:#fee2e2; color:#b91c1c; padding:1px 5px; border-radius:3px; font-weight:700; font-size:10px;">🩸 ${e.blood_group}</span>` : ''}
+                                    ${e.mobile_no || e.phone ? `<span>📞 ${e.mobile_no || e.phone}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
                     </td>
-                </tr>
-            `).join('');
+                    <td>
+                        <div style="font-weight:600; font-size:12.5px;">${e.designation || 'Staff'}</div>
+                        <div style="font-size:10.5px; color:var(--text-muted);">${e.qualification || 'Full-Time'}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight:800; color:#15803d; font-size:13px;">₹${Number(e.monthly_salary || 0).toLocaleString('en-IN')}</div>
+                        <div style="font-size:10.5px; color:var(--text-muted);">मूल वेतन (Basic)</div>
+                    </td>
+                    <td>
+                        <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                            <button class="btn btn-purple" style="padding:5px 9px; font-size:11px; font-weight:600;" onclick="openSalaryProcessModal(${e.id})" title="मासिक वेतन पर्ची तैयार करें">
+                                💸 वेतन पर्ची
+                            </button>
+                            <button class="btn" style="padding:5px 9px; font-size:11px; background:#0284c7; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;" onclick="openEmployeeIdCardModal(${e.id})" title="कर्मचारी पहचान पत्र देखें व प्रिंट करें">
+                                🪪 ID कार्ड
+                            </button>
+                            <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="openEmployeePhotoModal(${e.id})" title="डिजिटल फोटो अपलोड करें">
+                                📷 फोटो
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
         }
 
         

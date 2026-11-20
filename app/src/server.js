@@ -693,6 +693,112 @@ const server = http.createServer(async (req, res) => {
             return sendJson(res, 200, PayrollService.getEmployees());
         }
 
+        // 11A. Comprehensive Staff / Employee Directory & Management
+        if (pathname === '/api/employees' && method === 'GET') {
+            const rows = db.prepare('SELECT * FROM employees ORDER BY id ASC').all();
+            return sendJson(res, 200, rows);
+        }
+
+        if (pathname === '/api/employees' && method === 'POST') {
+            const b = await parseBody(req);
+            try {
+                const empName = String(b.employee_name || b.name || '').trim();
+                if (!empName) {
+                    return sendJson(res, 400, { success: false, error: 'कर्मचारी का नाम (Employee Name) अनिवार्य है।' });
+                }
+
+                let empCode = String(b.employee_id || b.code || '').trim();
+                if (!empCode) {
+                    const row = db.prepare('SELECT MAX(id) as max_id FROM employees').get();
+                    const nextNum = (row && row.max_id ? row.max_id : 0) + 1;
+                    empCode = 'EMP-' + String(nextNum).padStart(3, '0');
+                }
+
+                const existing = db.prepare('SELECT id FROM employees WHERE employee_id = ?').get(empCode);
+                if (existing) {
+                    return sendJson(res, 400, { success: false, error: `कर्मचारी कोड '${empCode}' पहले से मौजूद है!` });
+                }
+
+                const phoneVal = String(b.mobile_no || b.phone || '').trim();
+                let empType = String(b.employment_type || 'Permanent').trim();
+                if (!['Permanent', 'Contract', 'Part-Time', 'Guest'].includes(empType)) {
+                    empType = 'Permanent';
+                }
+
+                const stmt = db.prepare(`
+                    INSERT INTO employees (
+                        employee_id, employee_name, father_name, mother_name, gender, dob,
+                        blood_group, mobile_no, phone, alt_mobile, email, address,
+                        joining_date, designation, department, employment_type,
+                        monthly_salary, qualification, experience_years,
+                        aadhaar_no, pan_no, bank_name, bank_account_no, ifsc_code,
+                        photo_path, status, remarks
+                    ) VALUES (
+                        ?, ?, ?, ?, ?, ?,
+                        ?, ?, ?, ?, ?, ?,
+                        ?, ?, ?, ?,
+                        ?, ?, ?,
+                        ?, ?, ?, ?, ?,
+                        ?, 'Active', ?
+                    )
+                `);
+
+                const info = stmt.run(
+                    empCode,
+                    empName,
+                    String(b.father_name || '').trim(),
+                    String(b.mother_name || '').trim(),
+                    String(b.gender || 'Male'),
+                    b.dob || null,
+                    String(b.blood_group || '').trim(),
+                    phoneVal,
+                    phoneVal,
+                    String(b.alt_mobile || '').trim(),
+                    String(b.email || '').trim(),
+                    String(b.address || '').trim(),
+                    b.joining_date || new Date().toISOString().slice(0, 10),
+                    String(b.designation || 'Teacher').trim(),
+                    String(b.department || 'Teaching').trim(),
+                    empType,
+                    parseFloat(b.monthly_salary || b.salary) || 12000,
+                    String(b.qualification || '').trim(),
+                    String(b.experience_years || '').trim(),
+                    String(b.aadhaar_no || '').trim(),
+                    String(b.pan_no || '').trim(),
+                    String(b.bank_name || '').trim(),
+                    String(b.bank_account_no || '').trim(),
+                    String(b.ifsc_code || '').trim(),
+                    String(b.photo_path || '').trim(),
+                    String(b.remarks || '').trim()
+                );
+
+                syncShadowVault();
+                return sendJson(res, 201, {
+                    success: true,
+                    message: 'नया कर्मचारी / शिक्षक सफलतापूर्वक जोड़ दिया गया है!',
+                    employee: {
+                        id: Number(info.lastInsertRowid),
+                        employee_id: empCode,
+                        employee_name: empName,
+                        designation: b.designation || 'Teacher',
+                        department: b.department || 'Teaching'
+                    }
+                });
+            } catch (err) {
+                return sendJson(res, 500, { success: false, error: err.message });
+            }
+        }
+
+        // Employee Digital Photo Upload
+        if (pathname.startsWith('/api/employees/') && pathname.endsWith('/photo') && method === 'POST') {
+            const parts = pathname.split('/');
+            const empId = parseInt(parts[3]);
+            const b = await parseBody(req);
+            db.prepare('UPDATE employees SET photo_path = ? WHERE id = ?').run(b.photo || '', empId);
+            syncShadowVault();
+            return sendJson(res, 200, { success: true, photo_path: b.photo || '' });
+        }
+
         if (pathname === '/api/payroll/pay' && method === 'POST') {
             const b = await parseBody(req);
             return sendJson(res, 200, PayrollService.processSalaryPayment(b));
