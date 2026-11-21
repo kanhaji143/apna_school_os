@@ -20,9 +20,9 @@ console.log('\n[TEST 2] Applying CBSE Pattern Preset...');
 terms = ExamService.applyExamPreset('CBSE_PERIODIC');
 console.log(`Updated Terms count: ${terms.length} (${terms.map(t => t.term_name).join(', ')})`);
 
-// 4. Test Switching back to Lakshya 4-Term UP Board
-console.log('\n[TEST 3] Restoring Lakshya 4-Term Board...');
-terms = ExamService.applyExamPreset('LAKSHYA_4_TERM');
+// 4. Test Switching back to Apna Institute 4-Term UP Board
+console.log('\n[TEST 3] Restoring Apna Institute 4-Term Board...');
+terms = ExamService.applyExamPreset('APNA_4_TERM');
 console.log(`Restored Terms count: ${terms.length} (${terms.map(t => t.term_name).join(', ')})`);
 
 // 5. Test Evaluation Policy (Only Grade vs Both)

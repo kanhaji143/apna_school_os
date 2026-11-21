@@ -141,7 +141,7 @@ const server = http.createServer(async (req, res) => {
         }
         if (pathname === '/api/super-admin/exam-policy' && method === 'POST') {
             const body = await parseBody(req);
-            const schoolName = body.school_name || 'Lakshya School';
+            const schoolName = body.school_name || 'Apna Institute';
             return sendJson(res, 200, ExamService.updateExamPolicy(body, schoolName, 'Platform Owner'));
         }
         if (pathname === '/api/super-admin/exam-terms' && method === 'GET') {
@@ -149,7 +149,7 @@ const server = http.createServer(async (req, res) => {
         }
         if (pathname === '/api/super-admin/apply-preset' && method === 'POST') {
             const body = await parseBody(req);
-            const schoolName = body.school_name || 'Lakshya School';
+            const schoolName = body.school_name || 'Apna Institute';
             return sendJson(res, 200, ExamService.applyExamPreset(body.presetKey, schoolName, 'Platform Owner'));
         }
         if (pathname === '/api/super-admin/audit-history' && method === 'GET') {
@@ -173,7 +173,7 @@ const server = http.createServer(async (req, res) => {
                 helpline: '8504985149',
                 company_logo_url: '/logo.png',
                 developer_credit: 'SOFTWARE DEVELOPED & MAINTAINED BY APNA SOFTWARE HUB',
-                customer_school: 'Lakshya School'
+                customer_school: 'Apna Institute'
             };
             if (row) {
                 try { branding = { ...branding, ...JSON.parse(row.value) }; } catch (e) {}
@@ -197,7 +197,7 @@ const server = http.createServer(async (req, res) => {
                 helpline: '8504985149',
                 company_logo_url: '/logo.png',
                 developer_credit: 'SOFTWARE DEVELOPED & MAINTAINED BY APNA SOFTWARE HUB',
-                customer_school: 'Lakshya School'
+                customer_school: 'Apna Institute'
             };
             if (row) {
                 try { branding = { ...branding, ...JSON.parse(row.value) }; } catch (e) {}
@@ -431,7 +431,7 @@ const server = http.createServer(async (req, res) => {
             const currentProfile = AuthService.getInstitutionProfile() || {};
             
             // Allow changing school_name if Super Admin OR during registration / onboarding
-            let finalSchoolName = currentProfile.school_name || 'Lakshya School';
+            let finalSchoolName = currentProfile.school_name || 'Apna Institute';
             if ((isSuper || body.admin_password) && body.school_name && body.school_name.trim()) {
                 finalSchoolName = body.school_name.trim();
             }
@@ -717,7 +717,7 @@ const server = http.createServer(async (req, res) => {
             return sendJson(res, 200, AttendanceService.addHoliday(body));
         }
 
-        // 8. Class Fee Setup / Plan (Lakshya exact formula heads)
+        // 8. Class Fee Setup / Plan (Apna Institute standard formula heads)
         if (pathname === '/api/fees/class-setup' && method === 'GET') {
             const cls = parsedUrl.query.class || 'Class 1';
             const feeRow = db.prepare(`
@@ -1216,7 +1216,7 @@ const server = http.createServer(async (req, res) => {
         if (pathname === '/api/settings/backup/local' && method === 'POST') {
             syncShadowVault();
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-            const backupFileName = `Lakshya_Backup_${timestamp}.db`;
+            const backupFileName = `Apna_Institute_Backup_${timestamp}.db`;
             const backupTarget = path.join(path.dirname(PRIMARY_DB_PATH), backupFileName);
             fs.copyFileSync(PRIMARY_DB_PATH, backupTarget);
             db.prepare("INSERT INTO audit_logs (action_type, module, details, performed_by) VALUES ('BACKUP_CREATED', 'Settings', ?, 'Admin')").run(`Local DB Backup created: ${backupFileName}`);
@@ -1291,7 +1291,7 @@ const server = http.createServer(async (req, res) => {
             syncShadowVault();
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             const profile = db.prepare("SELECT * FROM institution_profile WHERE id = 1").get() || {};
-            const targetEmail = profile.email || 'lakshyaschool@gmail.com';
+            const targetEmail = profile.email || 'apnainstitute@gmail.com';
             
             // Auto-detect Google Drive Desktop or OneDrive sync folders (Zero API Key)
             const userProfile = process.env.USERPROFILE || 'C:\\Users\\user';

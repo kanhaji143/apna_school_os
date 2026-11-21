@@ -1,11 +1,11 @@
-; Inno Setup Script for Apna School OS (Lakshya School Edition)
+; Inno Setup Script for Apna School OS (Apna Institute Edition)
 ; Developed & Maintained By Apna Software Hub (AI & Technology Division) | Helpline: 8504985149 | Dedicated Port 8085 | 100% Offline Secured
 
 [Setup]
 AppId={{D703F7E0-C276-46D1-8BEA-7D4191F6E463}
 AppName=Apna School OS
 AppVersion=2.0.0
-AppVerName=Apna School OS v2.0 (Lakshya School Edition)
+AppVerName=Apna School OS v2.0 (Apna Institute Edition)
 AppPublisher=Apna Software Hub
 AppPublisherURL=https://apnasoftwarehub.com
 AppSupportURL=https://apnasoftwarehub.com
@@ -34,6 +34,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "d:\School_Lakshya\bin\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "d:\School_Lakshya\app\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "d:\School_Lakshya\app_icon.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\Apna_School_OS.vbs"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\Lakshya_School_OS.vbs"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\_ARCHIVED_UNRELATED_FILES\Launch_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\_ARCHIVED_UNRELATED_FILES\Stop_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
@@ -45,7 +46,7 @@ Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\CAMP
 Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\OFFLINE_WIFI_CAMPUS_NETWORKING_GUIDE.pdf"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\Apna School OS"; Filename: "{app}\Lakshya_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"
+Name: "{group}\Apna School OS"; Filename: "{app}\Apna_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"
 Name: "{group}\Start School OS (Console Log Mode)"; Filename: "{app}\Launch_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\📖 Staff Training Manual (PDF)"; Filename: "{app}\STAFF_TRAINING_MANUAL.pdf"; WorkingDir: "{app}"
 Name: "{group}\📖 User Operating Manual (PDF)"; Filename: "{app}\USER_OPERATING_MANUAL.pdf"; WorkingDir: "{app}"
@@ -55,7 +56,7 @@ Name: "{group}\📡 Offline Wi-Fi Campus Networking Guide (PDF)"; Filename: "{ap
 Name: "{group}\Backup School Database"; Filename: "{app}\Backup_Database.bat"; WorkingDir: "{app}"
 Name: "{group}\Stop School OS"; Filename: "{app}\Stop_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\{cm:UninstallProgram,Apna School OS}"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\Apna School OS"; Filename: "{app}\Lakshya_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"; Tasks: desktopicon
+Name: "{autodesktop}\Apna School OS"; Filename: "{app}\Apna_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\Lakshya_School_OS.vbs"; Description: "{cm:LaunchProgram,Lakshya Institute School OS}"; Flags: shellexec postinstall nowait skipifsilent
+Filename: "{app}\Apna_School_OS.vbs"; Description: "{cm:LaunchProgram,Apna Institute School OS}"; Flags: shellexec postinstall nowait skipifsilent

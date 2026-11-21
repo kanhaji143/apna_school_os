@@ -75,7 +75,7 @@ class FeedbackService {
             );
         `);
 
-        // Seed initial Lakshya School campaign if none exists
+        // Seed initial Apna Institute campaign if none exists
         const count = db.prepare('SELECT COUNT(*) as c FROM feedback_campaigns WHERE institution_id = 1').get().c;
         if (count === 0) {
             db.prepare(`
@@ -84,12 +84,12 @@ class FeedbackService {
                     google_form_id, google_sheet_url, google_sheet_id, prefilled_field_id,
                     start_date, expiry_date, status
                 ) VALUES (
-                    1, 'Lakshya School – Term 1 Parent Feedback (2026–27)',
+                    1, 'Apna Institute – Term 1 Parent Feedback (2026–27)',
                     'kanhadigimkt@gmail.com',
-                    'https://docs.google.com/forms/d/e/1FAIpQLScSampleLakshyaFormID/viewform',
-                    '1FAIpQLScSampleLakshyaFormID',
-                    'https://docs.google.com/spreadsheets/d/1SampleLakshyaSheetID/edit',
-                    '1SampleLakshyaSheetID',
+                    'https://docs.google.com/forms/d/e/1FAIpQLScSampleApnaFormID/viewform',
+                    '1FAIpQLScSampleApnaFormID',
+                    'https://docs.google.com/spreadsheets/d/1SampleApnaSheetID/edit',
+                    '1SampleApnaSheetID',
                     'entry.184920482',
                     DATE('now'),
                     DATE('now', '+30 days'),

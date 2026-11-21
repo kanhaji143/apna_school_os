@@ -9,7 +9,7 @@ class ExamService {
         db.exec(`
             CREATE TABLE IF NOT EXISTS policy_audit_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                school_name TEXT NOT NULL DEFAULT 'Lakshya School',
+                school_name TEXT NOT NULL DEFAULT 'Apna Institute',
                 action_type TEXT NOT NULL,
                 preset_key TEXT,
                 policy_snapshot_json TEXT NOT NULL,
@@ -20,7 +20,7 @@ class ExamService {
         `);
     }
 
-    static createAuditSnapshot(actionType, presetKey = null, schoolName = 'Lakshya School', performedBy = 'Platform Owner') {
+    static createAuditSnapshot(actionType, presetKey = null, schoolName = 'Apna Institute', performedBy = 'Platform Owner') {
         try {
             this.ensureAuditTable();
             const db = getDb();
@@ -153,7 +153,7 @@ class ExamService {
         };
     }
 
-    static updateExamPolicy(policyData, schoolName = 'Lakshya School', performedBy = 'Platform Owner') {
+    static updateExamPolicy(policyData, schoolName = 'Apna Institute', performedBy = 'Platform Owner') {
         this.createAuditSnapshot('POLICY_UPDATED', null, schoolName, performedBy);
         const db = getDb();
         const stmt = db.prepare(`
@@ -220,12 +220,12 @@ class ExamService {
         return db.prepare('DELETE FROM exam_terms WHERE id = ?').run(termId);
     }
 
-    static applyExamPreset(presetKey, schoolName = 'Lakshya School', performedBy = 'Platform Owner') {
+    static applyExamPreset(presetKey, schoolName = 'Apna Institute', performedBy = 'Platform Owner') {
         this.createAuditSnapshot('PRESET_APPLIED', presetKey, schoolName, performedBy);
         const db = getDb();
         
         let targetTerms = [];
-        if (presetKey === 'LAKSHYA_4_TERM') {
+        if (presetKey === 'APNA_4_TERM' || presetKey === 'LAKSHYA_4_TERM') {
             targetTerms = [
                 { term_code: 'UNIT_1', term_name: 'First Unit Test', max_written: 10.0, max_oral: 10.0, display_order: 1 },
                 { term_code: 'HALF_YEARLY', term_name: 'First Term / Half-Yearly Exam', max_written: 70.0, max_oral: 10.0, display_order: 2 },

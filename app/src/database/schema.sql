@@ -1,6 +1,6 @@
 -- =========================================================================
 -- APNA COMPUTER RMS ENTERPRISE v2.0 - CORE DATABASE SCHEMA
--- Default Pre-loaded Institution: Lakshya Institute Of Child Education
+-- Default Pre-loaded Institution: Apna Institute
 -- Architecture: 100% Offline-First SQLite (WAL Mode) with Self-Healing Shadow Vault
 -- =========================================================================
 
@@ -11,15 +11,15 @@ PRAGMA synchronous = NORMAL;
 -- 1. INSTITUTION WHITE-LABEL PROFILE
 CREATE TABLE IF NOT EXISTS institution_profile (
     id INTEGER PRIMARY KEY CHECK (id = 1),
-    school_name TEXT NOT NULL DEFAULT 'Lakshya Institute Of Child Education',
-    tag_line TEXT DEFAULT 'A Premier Center of Child Development & Education',
+    school_name TEXT NOT NULL DEFAULT 'Apna Institute',
+    tag_line TEXT DEFAULT 'A Premier Center of Quality Education',
     affiliation_no TEXT DEFAULT 'UP-STATE-BOARD / CBSE-ALIGNED',
     udise_code TEXT DEFAULT '09430801234',
     address TEXT NOT NULL DEFAULT 'Amethi - Durgapur Rd, Ngardeeh, Bhadar, Amethi, Uttar Pradesh 227406',
     phone TEXT NOT NULL DEFAULT '8303324088',
     alt_phone TEXT DEFAULT '8504985149',
-    email TEXT DEFAULT 'lakshyaschool@gmail.com',
-    website TEXT DEFAULT 'https://lakshyachildedu.org',
+    email TEXT DEFAULT 'apnainstitute@gmail.com',
+    website TEXT DEFAULT 'https://apnainstitute.org',
     logo_path TEXT DEFAULT '',
     board_type TEXT NOT NULL DEFAULT 'UP_STATE', -- 'UP_STATE', 'CBSE', 'CUSTOM'
     current_session TEXT NOT NULL DEFAULT '2026-27',

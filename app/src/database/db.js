@@ -180,35 +180,35 @@ function ensureSchemaMigrations(db) {
             // Check & seed / sync 'admin' (Director / Principal)
             const adminUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'admin'").get();
             if (adminUser) {
-                db.prepare("UPDATE users SET password_hash = 'admin123', role = 'admin', full_name = 'School Director / Principal', phone = '9005924960', email = 'lakshyaschool@gmail.com' WHERE id = ?").run(adminUser.id);
+                db.prepare("UPDATE users SET password_hash = 'admin123', role = 'admin', full_name = 'School Director / Principal', phone = '9005924960', email = 'apnainstitute@gmail.com' WHERE id = ?").run(adminUser.id);
             } else {
-                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('admin', 'admin123', 'admin', 'School Director / Principal', '9005924960', 'lakshyaschool@gmail.com', 'active')").run();
+                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('admin', 'admin123', 'admin', 'School Director / Principal', '9005924960', 'apnainstitute@gmail.com', 'active')").run();
             }
 
             // Check & seed / sync 'clerk' (Accounts Clerk / Cashier)
             const clerkUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'clerk'").get();
             if (clerkUser) {
-                db.prepare("UPDATE users SET password_hash = 'clerk123', role = 'accountant', full_name = 'Accounts Clerk / Cashier', phone = '8303324088', email = 'accountant@lakshyaschool.in' WHERE id = ?").run(clerkUser.id);
+                db.prepare("UPDATE users SET password_hash = 'clerk123', role = 'accountant', full_name = 'Accounts Clerk / Cashier', phone = '8303324088', email = 'accountant@apnainstitute.in' WHERE id = ?").run(clerkUser.id);
             } else {
-                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('clerk', 'clerk123', 'accountant', 'Accounts Clerk / Cashier', '8303324088', 'accountant@lakshyaschool.in', 'active')").run();
+                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('clerk', 'clerk123', 'accountant', 'Accounts Clerk / Cashier', '8303324088', 'accountant@apnainstitute.in', 'active')").run();
             }
 
             // Check & seed / sync 'teacher' (Academic In-charge / Teacher)
             const teacherUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'teacher'").get();
             if (teacherUser) {
-                db.prepare("UPDATE users SET password_hash = 'teacher123', role = 'counselor', full_name = 'Academic In-charge / Teacher', phone = '8303324089', email = 'academics@lakshyaschool.in' WHERE id = ?").run(teacherUser.id);
+                db.prepare("UPDATE users SET password_hash = 'teacher123', role = 'counselor', full_name = 'Academic In-charge / Teacher', phone = '8303324089', email = 'academics@apnainstitute.in' WHERE id = ?").run(teacherUser.id);
             } else {
-                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('teacher', 'teacher123', 'counselor', 'Academic In-charge / Teacher', '8303324089', 'academics@lakshyaschool.in', 'active')").run();
+                db.prepare("INSERT INTO users (username, password_hash, role, full_name, phone, email, status) VALUES ('teacher', 'teacher123', 'counselor', 'Academic In-charge / Teacher', '8303324089', 'academics@apnainstitute.in', 'active')").run();
             }
 
             // Keep legacy aliases (accountant & counselor) in sync so old shortcuts never break
             const accUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'accountant'").get();
             if (accUser) {
-                db.prepare("UPDATE users SET password_hash = 'clerk123', role = 'accountant', full_name = 'Accounts Clerk / Cashier', phone = '8303324088', email = 'accountant@lakshyaschool.in' WHERE id = ?").run(accUser.id);
+                db.prepare("UPDATE users SET password_hash = 'clerk123', role = 'accountant', full_name = 'Accounts Clerk / Cashier', phone = '8303324088', email = 'accountant@apnainstitute.in' WHERE id = ?").run(accUser.id);
             }
             const counsUser = db.prepare("SELECT id FROM users WHERE LOWER(username) = 'counselor'").get();
             if (counsUser) {
-                db.prepare("UPDATE users SET password_hash = 'teacher123', role = 'counselor', full_name = 'Academic In-charge / Teacher', phone = '8303324089', email = 'academics@lakshyaschool.in' WHERE id = ?").run(counsUser.id);
+                db.prepare("UPDATE users SET password_hash = 'teacher123', role = 'counselor', full_name = 'Academic In-charge / Teacher', phone = '8303324089', email = 'academics@apnainstitute.in' WHERE id = ?").run(counsUser.id);
             }
 
             // Super Admin: Ensure untouched vendor authority
@@ -354,11 +354,11 @@ function seedDefaults() {
                 id, school_name, tag_line, affiliation_no, udise_code, address,
                 phone, alt_phone, email, website, board_type, current_session, principal_name
             ) VALUES (
-                1, 'Lakshya Institute Of Child Education',
-                'A Premier Center of Child Development & Education',
+                1, 'Apna Institute',
+                'A Premier Center of Quality Education',
                 'UP-STATE-BOARD / CBSE-ALIGNED', '09430801234',
                 'Amethi - Durgapur Rd, Ngardeeh, Bhadar, Amethi, Uttar Pradesh 227406',
-                '8303324088', '8504985149', 'lakshyaschool@gmail.com', 'https://lakshyachildedu.org',
+                '8303324088', '8504985149', 'apnainstitute@gmail.com', 'https://apnainstitute.org',
                 'UP_STATE', '2026-27', 'Principal / Director'
             )
         `).run();
