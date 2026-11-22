@@ -10,6 +10,14 @@ echo.
 set "SETUP_EXE=%~dp0Setup_Apna_School_OS.exe"
 set "BACKUP_DIR=%USERPROFILE%\Documents\Apna_Backups"
 
+:: Unblock AnyDesk / Internet transferred files
+powershell -NoProfile -Command "Get-ChildItem -Path '%~dp0' -Recurse -ErrorAction SilentlyContinue | Unblock-File -ErrorAction SilentlyContinue"
+
+:: Redirect TEMP away from AppData\Temp to bypass Windows 11 Error 4551
+set "TEMP=%~dp0setup_temp"
+set "TMP=%~dp0setup_temp"
+if not exist "%TEMP%" mkdir "%TEMP%"
+
 :: 1. RUN SETUP EXECUTABLE IF PRESENT
 if exist "%SETUP_EXE%" (
     echo [1/3] Launching Apna School OS Installer...
