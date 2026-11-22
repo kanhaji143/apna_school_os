@@ -84,19 +84,30 @@ class FeeService {
 
         const dueBalance = Math.max(0, (tx.expected_fee || 0) - (tx.total_collected || 0));
 
-        // Generate Zero-API WhatsApp URL
+        // Generate Zero-API WhatsApp URL (Bilingual Standard: English on Top, Hindi Translation Below)
         const phone = tx.mobile ? tx.mobile.replace(/\D/g, '') : '';
         let waUrl = '';
         if (phone && phone.length === 10) {
+            const dueStatusEn = dueBalance > 0 ? `Net Outstanding Dues: ₹${dueBalance.toLocaleString('en-IN')}` : `Status: Fully Paid (No Dues) ✅`;
+            const dueStatusHi = dueBalance > 0 ? `शेष बकाया राशि: ₹${dueBalance.toLocaleString('en-IN')}` : `फीस स्थिति: पूर्ण चुकता (कोई बकाया नहीं) ✅`;
+
             const textMsg = encodeURIComponent(
-                `*${profile.school_name}*\n` +
+                `*${(profile.school_name || 'Apna Institute').toUpperCase()}*\n` +
+                `*OFFICIAL FEE PAYMENT RECEIPT*\n` +
+                `Receipt No: ${tx.receipt_no}\n` +
+                `Student: ${tx.student_name} (${tx.class}-${tx.section || 'A'})\n` +
+                `Amount Received: ₹${tx.net_amount.toLocaleString('en-IN')}\n` +
+                `Payment Mode: ${tx.payment_mode}\n` +
+                `Date: ${tx.payment_date}\n` +
+                `${dueStatusEn}\n\n` +
+                `------------------------------------\n` +
+                `*आधिकारिक फ़ीस भुगतान रसीद (हिंदी विवरण)*\n` +
                 `रसीद संख्या: ${tx.receipt_no}\n` +
-                `छात्र का नाम: ${tx.student_name} (${tx.class}-${tx.section})\n` +
-                `जमा राशि: ₹${tx.net_amount.toLocaleString('en-IN')}\n` +
-                `पेमेंट मोड: ${tx.payment_mode}\n` +
-                `तारीख: ${tx.payment_date}\n` +
-                (dueBalance > 0 ? `शेष बकाया राशि: ₹${dueBalance.toLocaleString('en-IN')}\n` : `फीस स्थिति: पूर्ण चुकता ✅\n`) +
-                `धन्यवाद!\nहेल्पलाइन: ${profile.phone}`
+                `छात्र का नाम: ${tx.student_name}\n` +
+                `प्राप्त राशि: ₹${tx.net_amount.toLocaleString('en-IN')}\n` +
+                `${dueStatusHi}\n\n` +
+                `Thank you / धन्यवाद!\n` +
+                `Helpline: ${profile.phone || '8504985149'}`
             );
             waUrl = `https://wa.me/91${phone}?text=${textMsg}`;
         }

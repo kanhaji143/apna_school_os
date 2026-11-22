@@ -26,13 +26,25 @@ class QuestionPaperService {
         if (rows.length === 0 && subjectId) {
             const sub = db.prepare('SELECT subject_name FROM subjects WHERE id = ?').get(subjectId);
             const subName = sub ? sub.subject_name : 'Subject';
-            rows = [
-                { id: 901, class: className, subject_id: subjectId, chapter_name: 'Fundamentals', question_type: 'mcq', question_text: `Choose the correct statement regarding core concepts of ${subName}.`, options_json: JSON.stringify(['Option A is accurate', 'Option B is an exception', 'Option C is standard', 'None of the above']), marks: 1, subject_name: subName },
-                { id: 902, class: className, subject_id: subjectId, chapter_name: 'Key Principles', question_type: 'mcq', question_text: `Which of the following best defines the primary rule in ${subName}?`, options_json: JSON.stringify(['Principle 1', 'Principle 2', 'Principle 3', 'Principle 4']), marks: 1, subject_name: subName },
-                { id: 903, class: className, subject_id: subjectId, chapter_name: 'Basic Theory', question_type: 'short', question_text: `Define key terminology and principles of ${subName} with two suitable examples.`, options_json: '[]', marks: 2, subject_name: subName },
-                { id: 904, class: className, subject_id: subjectId, chapter_name: 'Applied Concepts', question_type: 'short', question_text: `Explain how the fundamental principles of ${subName} apply in daily practical scenarios.`, options_json: '[]', marks: 3, subject_name: subName },
-                { id: 905, class: className, subject_id: subjectId, chapter_name: 'Comprehensive Analysis', question_type: 'long', question_text: `Write an in-depth essay or solve a detailed case study explaining the main topics of ${subName} studied during this academic session.`, options_json: '[]', marks: 5, subject_name: subName }
-            ];
+            const isHindi = /hindi|हिंदी|व्याकरण|संस्कृत/i.test(subName);
+
+            if (isHindi) {
+                rows = [
+                    { id: 901, class: className, subject_id: subjectId, chapter_name: 'मूलभूत व्याकरण व परिचय', question_type: 'mcq', question_text: `निम्नलिखित में से '${subName}' के संबंध में सही कथन चुनिए।`, options_json: JSON.stringify(['(क) यह भाषा का प्रमुख आधार है', '(ख) यह केवल पठन हेतु प्रयुक्त होता है', '(ग) इसका कोई निश्चित नियम नहीं है', '(घ) उपर्युक्त में से कोई नहीं']), marks: 1, subject_name: subName },
+                    { id: 902, class: className, subject_id: subjectId, chapter_name: 'परिभाषा एवं सिद्धांत', question_type: 'mcq', question_text: `'${subName}' के मुख्य नियमों में से कौन-सा नियम सर्वाधिक महत्वपूर्ण है?`, options_json: JSON.stringify(['(क) शुद्ध उच्चारण एवं वर्तनी', '(ख) वर्ण विन्यास', '(ग) शब्द भेद', '(घ) वाक्य रचना']), marks: 1, subject_name: subName },
+                    { id: 903, class: className, subject_id: subjectId, chapter_name: 'लघु उत्तरीय व्याकरण', question_type: 'short', question_text: `'${subName}' की परिभाषा दीजिए तथा इसके दो प्रमुख भेदों/लक्षणों को उदाहरण सहित स्पष्ट कीजिए।`, options_json: '[]', marks: 2, subject_name: subName },
+                    { id: 904, class: className, subject_id: subjectId, chapter_name: 'व्यावहारिक भाषा प्रयोग', question_type: 'short', question_text: `दैनिक जीवन एवं वाक्य प्रयोग में '${subName}' के नियमों का क्या महत्व है? दो उपयुक्त उदाहरण देकर समझाइए।`, options_json: '[]', marks: 3, subject_name: subName },
+                    { id: 905, class: className, subject_id: subjectId, chapter_name: 'विस्तृत निबंधात्मक विश्लेषण', question_type: 'long', question_text: `'${subName}' के सभी प्रमुख अंगों, नियमों एवं इसके साहित्यिक महत्व पर एक विस्तृत एवं सारगर्भित निबंध लिखिए।`, options_json: '[]', marks: 5, subject_name: subName }
+                ];
+            } else {
+                rows = [
+                    { id: 901, class: className, subject_id: subjectId, chapter_name: 'Fundamentals', question_type: 'mcq', question_text: `Choose the correct statement regarding core concepts of ${subName}.`, options_json: JSON.stringify(['Option A is accurate', 'Option B is an exception', 'Option C is standard', 'None of the above']), marks: 1, subject_name: subName },
+                    { id: 902, class: className, subject_id: subjectId, chapter_name: 'Key Principles', question_type: 'mcq', question_text: `Which of the following best defines the primary rule in ${subName}?`, options_json: JSON.stringify(['Principle 1', 'Principle 2', 'Principle 3', 'Principle 4']), marks: 1, subject_name: subName },
+                    { id: 903, class: className, subject_id: subjectId, chapter_name: 'Basic Theory', question_type: 'short', question_text: `Define key terminology and principles of ${subName} with two suitable examples.`, options_json: '[]', marks: 2, subject_name: subName },
+                    { id: 904, class: className, subject_id: subjectId, chapter_name: 'Applied Concepts', question_type: 'short', question_text: `Explain how the fundamental principles of ${subName} apply in daily practical scenarios.`, options_json: '[]', marks: 3, subject_name: subName },
+                    { id: 905, class: className, subject_id: subjectId, chapter_name: 'Comprehensive Analysis', question_type: 'long', question_text: `Write an in-depth essay or solve a detailed case study explaining the main topics of ${subName} studied during this academic session.`, options_json: '[]', marks: 5, subject_name: subName }
+                ];
+            }
         }
 
         return rows.map(q => {

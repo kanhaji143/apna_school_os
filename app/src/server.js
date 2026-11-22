@@ -1434,34 +1434,114 @@ const server = http.createServer(async (req, res) => {
             }
 
             const sampleStudents = [
-                ['LAK-001', '1001', 1, 'आरव शर्मा', 'राजेश शर्मा', 'सुनीता शर्मा', 'Male', '2016-05-12', '9876543210', 'Class 5', 'A', 'Active'],
-                ['LAK-002', '1002', 2, 'अनन्या सिंह', 'विक्रम सिंह', 'रीता सिंह', 'Female', '2016-08-20', '9876543211', 'Class 5', 'A', 'Active'],
-                ['LAK-003', '1003', 3, 'आदित्य वर्मा', 'मनोज वर्मा', 'सीमा वर्मा', 'Male', '2015-02-14', '9876543212', 'Class 6', 'B', 'Active'],
-                ['LAK-004', '1004', 4, 'दीया मिश्रा', 'संजय मिश्रा', 'पूनम मिश्रा', 'Female', '2015-11-05', '9876543213', 'Class 6', 'B', 'Active'],
-                ['LAK-005', '1005', 5, 'रोहन गुप्ता', 'अनिल गुप्ता', 'आरती गुप्ता', 'Male', '2014-04-18', '9876543214', 'Class 7', 'A', 'Active'],
-                ['LAK-006', '1006', 6, 'इशिका यादव', 'सुरेश यादव', 'मंजू यादव', 'Female', '2014-09-22', '9876543215', 'Class 7', 'A', 'Active'],
-                ['LAK-007', '1007', 7, 'हर्ष त्रिपाठी', 'दिनेश त्रिपाठी', 'रेखा त्रिपाठी', 'Male', '2013-01-30', '9876543216', 'Class 8', 'A', 'Active'],
-                ['LAK-008', '1008', 8, 'खुशी दुबे', 'अशोक दुबे', 'शारदा दुबे', 'Female', '2013-07-15', '9876543217', 'Class 8', 'B', 'Active'],
-                ['LAK-009', '1009', 9, 'विवेक चौहान', 'राकेश चौहान', 'सविता चौहान', 'Male', '2012-03-10', '9876543218', 'Class 9', 'A', 'Active'],
-                ['LAK-010', '1010', 10, 'तन्वी पाण्डेय', 'अरुण पाण्डेय', 'कविता पाण्डेय', 'Female', '2011-12-25', '9876543219', 'Class 10', 'A', 'Active']
+                ['LAK-1001', '1001', 1, 'आरव शर्मा (Aarav Sharma)', 'राजेश शर्मा', 'सुनीता शर्मा', 'Male', '2016-05-12', '9876543210', 'Class 5', 'A', 'Active', '9876-5432-1001', 'PEN-UP-2026-101', '784512349011', 2500],
+                ['LAK-1002', '1002', 2, 'अनन्या सिंह (Ananya Singh)', 'विक्रम सिंह', 'रीता सिंह', 'Female', '2016-08-20', '9876543211', 'Class 5', 'A', 'Active', '9876-5432-1002', 'PEN-UP-2026-102', '784512349012', 0],
+                ['LAK-1003', '1003', 3, 'आदित्य वर्मा (Aditya Verma)', 'मनोज वर्मा', 'सीमा वर्मा', 'Male', '2015-02-14', '9876543212', 'Class 6', 'B', 'Active', '9876-5432-1003', 'PEN-UP-2026-103', '784512349013', 3800],
+                ['LAK-1004', '1004', 4, 'दीया मिश्रा (Diya Mishra)', 'संजय मिश्रा', 'पूनम मिश्रा', 'Female', '2015-11-05', '9876543213', 'Class 6', 'B', 'Active', '9876-5432-1004', 'PEN-UP-2026-104', '784512349014', 0],
+                ['LAK-1005', '1005', 5, 'रोहन गुप्ता (Rohan Gupta)', 'अनिल गुप्ता', 'आरती गुप्ता', 'Male', '2014-04-18', '9876543214', 'Class 7', 'A', 'Active', '9876-5432-1005', 'PEN-UP-2026-105', '784512349015', 1200],
+                ['LAK-1006', '1006', 6, 'इशिका यादव (Ishika Yadav)', 'सुरेश यादव', 'मंजू यादव', 'Female', '2014-09-22', '9876543215', 'Class 7', 'A', 'Active', '9876-5432-1006', 'PEN-UP-2026-106', '784512349016', 0],
+                ['LAK-1007', '1007', 7, 'हर्ष त्रिपाठी (Harsh Tripathi)', 'दिनेश त्रिपाठी', 'रेखा त्रिपाठी', 'Male', '2013-01-30', '9876543216', 'Class 8', 'A', 'Active', '9876-5432-1007', 'PEN-UP-2026-107', '784512349017', 4500],
+                ['LAK-1008', '1008', 8, 'खुशी दुबे (Khushi Dubey)', 'अशोक दुबे', 'शारदा दुबे', 'Female', '2013-07-15', '9876543217', 'Class 8', 'B', 'Active', '9876-5432-1008', 'PEN-UP-2026-108', '784512349018', 0],
+                ['LAK-1009', '1009', 9, 'विवेक चौहान (Vivek Chauhan)', 'राकेश चौहान', 'सविता चौहान', 'Male', '2017-03-10', '9876543218', 'Class 4', 'A', 'Active', '9876-5432-1009', 'PEN-UP-2026-109', '784512349019', 2000],
+                ['LAK-1010', '1010', 10, 'तन्वी पाण्डेय (Tanvi Pandey)', 'अरुण पाण्डेय', 'कविता पाण्डेय', 'Female', '2017-12-25', '9876543219', 'Class 4', 'A', 'Active', '9876-5432-1010', 'PEN-UP-2026-110', '784512349020', 0],
+                ['LAK-1011', '1011', 11, 'प्रियांशु मौर्य (Priyanshu Maurya)', 'सुरेंद्र मौर्य', 'शकुंतला मौर्य', 'Male', '2018-06-14', '9876543221', 'Class 3', 'A', 'Active', '9876-5432-1011', 'PEN-UP-2026-111', '784512349021', 1500],
+                ['LAK-1012', '1012', 12, 'सान्वी श्रीवास्तव (Saanvi Srivastava)', 'आलोक श्रीवास्तव', 'प्रतिभा श्रीवास्तव', 'Female', '2018-10-18', '9876543222', 'Class 3', 'A', 'Active', '9876-5432-1012', 'PEN-UP-2026-112', '784512349022', 0],
+                ['LAK-1013', '1013', 13, 'आयुष तिवारी (Ayush Tiwari)', 'कमलेश तिवारी', 'विद्या तिवारी', 'Male', '2019-01-22', '9876543223', 'Class 2', 'B', 'Active', '9876-5432-1013', 'PEN-UP-2026-113', '784512349023', 0],
+                ['LAK-1014', '1014', 14, 'परी जायसवाल (Pari Jaiswal)', 'दीपक जायसवाल', 'अंजू जायसवाल', 'Female', '2019-08-09', '9876543224', 'Class 2', 'B', 'Active', '9876-5432-1014', 'PEN-UP-2026-114', '784512349024', 3200],
+                ['LAK-1015', '1015', 15, 'शिवांश पटेल (Shivansh Patel)', 'उमेश पटेल', 'सरोज पटेल', 'Male', '2020-04-11', '9876543225', 'Class 1', 'A', 'Active', '9876-5432-1015', 'PEN-UP-2026-115', '784512349025', 0]
             ];
 
             const insertStudent = db.prepare(`
-                INSERT INTO students (admission_no, sr_no, roll_no, student_name, father_name, mother_name, gender, dob, mobile, class, section, status, remarks)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Sample Demo Student')
+                INSERT INTO students (
+                    admission_no, sr_no, roll_no, student_name, father_name, mother_name,
+                    gender, dob, mobile, class, section, status, remarks,
+                    apaar_id, pen_no, aadhaar_no, photo_path, address
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Sample Demo Student', ?, ?, ?, ?, 'Campus Local Area, Amethi')
             `);
 
             const insertFeeStructure = db.prepare(`
-                INSERT INTO student_fee_structure (student_id, session, admission_fee, monthly_fee, expected_fee)
-                VALUES (?, '2026-27', 1500, 1200, 15900)
+                INSERT INTO student_fee_structure (
+                    student_id, session, admission_fee, monthly_fee, quarterly_exam_fee,
+                    half_yearly_exam_fee, annual_exam_fee, transport_fee, computer_fee, sports_fee,
+                    old_due, expected_fee
+                ) VALUES (?, '2026-27', 1500, 1200, 400, 600, 800, 600, 300, 200, ?, ?)
             `);
+
+            const insertTransaction = db.prepare(`
+                INSERT INTO fee_transactions (
+                    transaction_id, receipt_no, session, student_id, payment_date,
+                    fee_month, fee_head, standard_fee, amount_received, late_fee,
+                    discount, net_amount, payment_mode, reference_no, status, collected_by, remarks
+                ) VALUES (?, ?, '2026-27', ?, DATE('now'), ?, 'Tuition & Academic Fee', ?, ?, 0.0, 0.0, ?, ?, ?, 'Paid', 'Admin (Cashier)', 'Demo Payment Receipt')
+            `);
+
+            const insertAttSummary = db.prepare(`
+                INSERT OR REPLACE INTO student_attendance_summary 
+                (student_id, session, class, total_working_days, days_present, promotion_status, teacher_remarks)
+                VALUES (?, '2026-27', ?, 220, ?, 'Promoted', ?)
+            `);
+
+            const remarksPool = [
+                'Exemplary conduct, diligent in studies and respectful to teachers.',
+                'Active classroom participation and consistent academic performance.',
+                'Hardworking with keen interest in science and mathematics.',
+                'Very sincere, punctual and shows strong analytical abilities.',
+                'Consistent performer with excellent social and leadership qualities.'
+            ];
 
             db.exec('BEGIN IMMEDIATE TRANSACTION');
             try {
-                sampleStudents.forEach(st => {
-                    const res = insertStudent.run(...st);
-                    insertFeeStructure.run(res.lastInsertRowid);
+                let receiptSeq = 1;
+                sampleStudents.forEach((st, idx) => {
+                    const isBoy = st[6] === 'Male';
+                    const avatarColor = isBoy ? '%230284c7' : '%23ec4899';
+                    const avatarBg = isBoy ? '%23e0f2fe' : '%23fce7f3';
+                    const samplePhoto = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="120" viewBox="0 0 100 120"><rect width="100" height="120" rx="8" fill="${avatarBg}"/><circle cx="50" cy="46" r="24" fill="${avatarColor}"/><path d="M15 110 C20 78, 80 78, 85 110 Z" fill="${avatarColor}" opacity="0.85"/><text x="50" y="52" fill="%23ffffff" font-size="16" font-family="sans-serif" font-weight="bold" text-anchor="middle">${st[3].split(' ')[0][0]}</text></svg>`;
+
+                    const oldDue = st[15] || 0;
+                    const annualFee = 15900;
+                    const totalExpected = annualFee + oldDue;
+
+                    const res = insertStudent.run(
+                        st[0], st[1], st[2], st[3], st[4], st[5],
+                        st[6], st[7], st[8], st[9], st[10], st[11],
+                        st[12], st[13], st[14], samplePhoto
+                    );
+                    const newStudentId = res.lastInsertRowid;
+
+                    insertFeeStructure.run(newStudentId, oldDue, totalExpected);
+
+                    // Insert realistic fee payment transactions
+                    // Even students paid in full, odd students paid partial
+                    const paidAmount = (idx % 2 === 0) ? (annualFee - (oldDue > 0 ? 1000 : 0)) : (annualFee / 2);
+                    const rNo = `RCP${String(receiptSeq++).padStart(6, '0')}`;
+                    const txId = `TXN-${Date.now()}-${receiptSeq}`;
+                    const pMode = idx % 3 === 0 ? 'Cash' : (idx % 3 === 1 ? 'UPI / QR' : 'Net Banking');
+                    const refNo = pMode === 'Cash' ? 'NA' : `UPI-${987650000 + idx}`;
+
+                    insertTransaction.run(txId, rNo, newStudentId, 'April 2026', paidAmount, paidAmount, paidAmount, pMode, refNo);
+
+                    // Insert attendance summary
+                    const presentDays = 196 + (idx % 22);
+                    const rem = remarksPool[idx % remarksPool.length];
+                    insertAttSummary.run(newStudentId, st[9], presentDays, rem);
                 });
+
+                // Seed sample employees if table is empty
+                const empCount = db.prepare("SELECT COUNT(*) as c FROM employees").get().c;
+                if (empCount === 0) {
+                    const insertEmp = db.prepare(`
+                        INSERT INTO employees (
+                            employee_id, employee_name, designation, department, monthly_salary,
+                            phone, mobile_no, status, qualification, experience_years
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, 'Active', ?, ?)
+                    `);
+                    insertEmp.run('EMP-101', 'रमेश कुमार शर्मा (Ramesh K. Sharma)', 'Principal / Director', 'Administration', 45000, '9876540001', '9876540001', 'M.Sc., B.Ed.', 14);
+                    insertEmp.run('EMP-102', 'प्रिया वर्मा (Priya Verma)', 'Senior Teacher', 'Academics', 28000, '9876540002', '9876540002', 'M.A. (English), B.Ed.', 8);
+                    insertEmp.run('EMP-103', 'अमित कुमार सिंह (Amit Kumar Singh)', 'Maths & Science Teacher', 'Academics', 26000, '9876540003', '9876540003', 'M.Sc. (Maths)', 6);
+                    insertEmp.run('EMP-104', 'सुरेश यादव (Suresh Yadav)', 'School Bus Driver', 'Transport', 16000, '9876540004', '9876540004', 'Commercial Heavy License', 10);
+                }
+
                 db.exec('COMMIT');
             } catch(e) {
                 db.exec('ROLLBACK');
@@ -1469,7 +1549,10 @@ const server = http.createServer(async (req, res) => {
             }
 
             syncShadowVault();
-            return sendJson(res, 200, { success: true, message: '🎉 10 ताज़ा सैंपल डेमो छात्र सफलतापूर्वक लोड हो गए हैं!' });
+            return sendJson(res, 200, {
+                success: true,
+                message: '🎉 समृद्ध डेमो डेटा (15 छात्र + फोटो अवतार + APAAR ID + फीस रसीदें + हाजिरी + शिक्षक स्टाफ) 1-क्लिक में सफलतापूर्वक लोड हो गया है!\n\nअब आप क्लाइंट को पूरा स्कूल चलता हुआ दिखा सकते हैं।'
+            });
         }
 
         // ==========================================
