@@ -5,6 +5,8 @@ SUPER_ADMIN_CONFIDENTIAL_MASTER.txt
 _ARCHIVED_UNRELATED_FILES/
 *.zip
 *.rar
+*.wav
+*.mp3
 
 # Dependencies & Node modules
 node_modules/
