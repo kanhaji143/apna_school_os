@@ -1,7 +1,7 @@
 {
   "name": "apna-computer-school-rms",
-  "version": "2.0.0",
-  "description": "APNA Computer RMS Enterprise v2.0 - Offline-First Multi-Board School Management Desktop Application",
+  "version": "2.1.0",
+  "description": "APNA Computer RMS Enterprise v2.1 - Offline-First Multi-Board School Management Desktop Application",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

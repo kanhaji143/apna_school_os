@@ -4,8 +4,8 @@
 [Setup]
 AppId={{D703F7E0-C276-46D1-8BEA-7D4191F6E463}
 AppName=Apna School OS
-AppVersion=2.0.0
-AppVerName=Apna School OS v2.0 (Apna Institute Edition)
+AppVersion=2.1.0
+AppVerName=Apna School OS v2.1 Enterprise Edition (Apna Institute Edition)
 AppPublisher=Apna Software Hub
 AppPublisherURL=https://apnasoftwarehub.com
 AppSupportURL=https://apnasoftwarehub.com
