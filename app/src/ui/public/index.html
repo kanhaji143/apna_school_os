@@ -418,6 +418,7 @@
                     <span id="user-display-name">Super Admin</span>
                 </div>
                 <button class="btn" style="background:#8b5cf6; color:white; padding:4px 9px; font-size:11px; font-weight:700; border:none; border-radius:6px; cursor:pointer;" onclick="window.open('/STAFF_TRAINING_MANUAL.pdf', '_blank')">📖 ट्रेनिंग मैनुअल (PDF)</button>
+                <button class="btn btn-outline" style="padding:4px 9px; font-size:11px; font-weight:700; cursor:pointer;" onclick="refreshAllAppData(this)">🔄 रिफ्रेश</button>
                 <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="openEODReport()">📧 EOD Mail</button>
                 <button class="btn" style="background:#ef4444; color:white; padding:4px 10px; font-size:11px; font-weight:700; border:none; border-radius:6px; cursor:pointer;" onclick="logoutApp()">🚪 लॉगआउट</button>
             </div>
@@ -437,16 +438,16 @@
                         <div class="stat-icon-wrap blue">🎓</div>
                         <div>
                             <div class="stat-label">Total students</div>
-                            <div class="stat-number">426</div>
-                            <div class="stat-sub">426 active records</div>
+                            <div class="stat-number" id="dash-stat-students-cnt">426</div>
+                            <div class="stat-sub" id="dash-stat-students-sub">426 active records</div>
                         </div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-icon-wrap green">👨‍🏫</div>
                         <div>
                             <div class="stat-label">Teachers</div>
-                            <div class="stat-number">3</div>
-                            <div class="stat-sub">3 active faculty</div>
+                            <div class="stat-number" id="dash-stat-teachers-cnt">3</div>
+                            <div class="stat-sub" id="dash-stat-teachers-sub">3 active faculty</div>
                         </div>
                     </div>
                     <div class="stat-box">
@@ -533,7 +534,7 @@
                             </div>
                             <div style="background:var(--bg-page); padding:10px 14px; border-radius:8px; border:1px solid var(--border);">
                                 <div style="color:var(--text-muted); font-size:11px;">Faculty On Duty</div>
-                                <div style="font-weight:800; font-size:15px; color:#15803d; margin-top:2px;">3 Active Teachers</div>
+                                <div style="font-weight:800; font-size:15px; color:#15803d; margin-top:2px;" id="dash-stat-faculty-duty">3 Active Teachers</div>
                             </div>
                             <div style="background:var(--bg-page); padding:10px 14px; border-radius:8px; border:1px solid var(--border);">
                                 <div style="color:var(--text-muted); font-size:11px;">Attendance Marked</div>
@@ -580,7 +581,7 @@
                     <div style="padding:14px 18px; font-weight:700; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
                         <div>
                             <span style="font-size:14px; font-weight:800;">Recent Enrolled Students (हाल के छात्र)</span>
-                            <span style="font-size:11px; color:var(--text-muted); margin-left:8px;">426 Active Records</span>
+                            <span style="font-size:11px; color:var(--text-muted); margin-left:8px;" id="dash-recent-records-label">426 Active Records</span>
                         </div>
                         <span style="font-size:12px; font-weight:700; color:var(--primary); cursor:pointer;" onclick="navigate('students')">View All Students →</span>
                     </div>
@@ -4110,6 +4111,7 @@
             allStudents = await sRes.json();
             renderDashboardTable(allStudents.slice(0, 8));
             renderMasterStudents(allStudents);
+            updateDashboardCounters();
             renderFeesTable(allStudents);
             initIDCards();
             loadStudentAttendanceRoster();
@@ -5000,6 +5002,28 @@ Bhadar, Amethi (U.P.)`;
             const target = document.getElementById(`pane-${tabId}`);
             if (target) target.classList.add('active');
 
+            if (tabId === 'teachers') {
+                fetch('/api/teachers').then(r => r.json()).then(renderTeachers).catch(() => {});
+            }
+            if (tabId === 'staff') {
+                fetch('/api/staff').then(r => r.json()).then(renderStaff).catch(() => {});
+            }
+            if (tabId === 'students') {
+                fetch('/api/students').then(r => r.json()).then(stus => {
+                    allStudents = stus;
+                    renderMasterStudents(stus);
+                    updateDashboardCounters();
+                }).catch(() => {});
+            }
+            if (tabId === 'dashboard') {
+                fetch('/api/students').then(r => r.json()).then(stus => {
+                    allStudents = stus;
+                    renderDashboardTable(stus.slice(0, 10));
+                    updateDashboardCounters();
+                }).catch(() => {});
+                fetch('/api/teachers').then(r => r.json()).then(renderTeachers).catch(() => {});
+            }
+
             const navItem = Array.from(document.querySelectorAll('.nav-item')).find(el => el.getAttribute('onclick')?.includes(tabId));
             if (navItem) navItem.classList.add('active');
 
@@ -5231,18 +5255,55 @@ Bhadar, Amethi (U.P.)`;
             renderMasterStudents(filtered);
         }
 
+        function updateDashboardCounters() {
+            const stuCount = (allStudents || []).length;
+            const stuCntEl = document.getElementById('dash-stat-students-cnt');
+            if (stuCntEl) stuCntEl.innerText = stuCount;
+            const stuSubEl = document.getElementById('dash-stat-students-sub');
+            if (stuSubEl) stuSubEl.innerText = `${stuCount} active records`;
+            const recentLbl = document.getElementById('dash-recent-records-label');
+            if (recentLbl) recentLbl.innerText = `${stuCount} Active Records`;
+        }
+
+        async function refreshAllAppData(btn) {
+            const orig = btn ? btn.innerHTML : '';
+            if (btn) btn.innerHTML = '⏳ सिंक...';
+            try {
+                await initApp();
+                if (btn) btn.innerHTML = '✅ सिंक!';
+                setTimeout(() => { if (btn) btn.innerHTML = orig || '🔄 रिफ्रेश'; }, 1500);
+            } catch(e) {
+                if (btn) btn.innerHTML = orig || '🔄 रिफ्रेश';
+            }
+        }
+
         function renderTeachers(teachers) {
+            const list = teachers || [];
+            const activeCnt = list.filter(t => !t.status || t.status.toLowerCase() === 'active').length;
+            
+            const elCnt = document.getElementById('stat-teachers-cnt');
+            if (elCnt) elCnt.innerText = list.length;
+            const elAct = document.getElementById('stat-teachers-act');
+            if (elAct) elAct.innerText = activeCnt;
+
+            const dashCnt = document.getElementById('dash-stat-teachers-cnt');
+            if (dashCnt) dashCnt.innerText = list.length;
+            const dashSub = document.getElementById('dash-stat-teachers-sub');
+            if (dashSub) dashSub.innerText = `${activeCnt} active faculty`;
+            const dashDuty = document.getElementById('dash-stat-faculty-duty');
+            if (dashDuty) dashDuty.innerText = `${activeCnt} Active Teachers`;
+
             const tbody = document.getElementById('teachers-tbody');
             if (!tbody) return;
-            tbody.innerHTML = teachers.map(t => `
+            tbody.innerHTML = list.map(t => `
                 <tr>
                     <td><strong>${t.name}</strong></td>
                     <td>${t.code}</td>
                     <td>${t.designation}</td>
-                    <td>${t.qualification}</td>
-                    <td>${t.subjects}</td>
-                    <td>${t.appointment_date}</td>
-                    <td><span style="color:#15803d; font-weight:700;">${t.status}</span></td>
+                    <td>${t.qualification || '—'}</td>
+                    <td>${t.subjects || 'All Academic Subjects'}</td>
+                    <td>${t.appointment_date || '—'}</td>
+                    <td><span style="color:#15803d; font-weight:700;">${t.status || 'Active'}</span></td>
                 </tr>
             `).join('');
         }

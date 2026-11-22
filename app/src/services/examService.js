@@ -225,7 +225,7 @@ class ExamService {
         const db = getDb();
         
         let targetTerms = [];
-        if (presetKey === 'APNA_4_TERM' || presetKey === 'LAKSHYA_4_TERM') {
+        if (presetKey === 'APNA_4_TERM') {
             targetTerms = [
                 { term_code: 'UNIT_1', term_name: 'First Unit Test', max_written: 10.0, max_oral: 10.0, display_order: 1 },
                 { term_code: 'HALF_YEARLY', term_name: 'First Term / Half-Yearly Exam', max_written: 70.0, max_oral: 10.0, display_order: 2 },

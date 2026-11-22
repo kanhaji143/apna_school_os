@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "test": "node src/test_suite.js",
-    "seed": "python src/database/seed_lakshya.py"
+    "seed": "python src/database/seed_apna.py"
   },
   "keywords": [
     "school-management",

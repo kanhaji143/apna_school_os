@@ -60,7 +60,7 @@ class AuthService {
                 user = db.prepare("SELECT * FROM users WHERE LOWER(username) IN ('clerk', 'accountant') ORDER BY CASE WHEN LOWER(username) = 'clerk' THEN 0 ELSE 1 END LIMIT 1").get();
             } else if (low === 'teacher' || low === 'counselor') {
                 user = db.prepare("SELECT * FROM users WHERE LOWER(username) IN ('teacher', 'counselor') ORDER BY CASE WHEN LOWER(username) = 'teacher' THEN 0 ELSE 1 END LIMIT 1").get();
-            } else if (low === 'admin' || ident === '9005924960' || ident === '8303324088' || low === 'apnainstitute@gmail.com' || low === 'admin@apnainstitute.in' || low === 'lakshyaschool@gmail.com') {
+            } else if (low === 'admin' || ident === '9005924960' || ident === '8303324088' || low === 'apnainstitute@gmail.com' || low === 'admin@apnainstitute.in' || low === 'apna.school@gmail.com') {
                 user = db.prepare("SELECT * FROM users WHERE LOWER(username) = 'admin'").get();
             } else if (low === 'hanuganeshan' || ident === '8504985149' || low === 'krishnaskb143@gmail.com') {
                 user = db.prepare("SELECT * FROM users WHERE LOWER(username) = 'hanuganeshan'").get();
