@@ -820,9 +820,22 @@ const server = http.createServer(async (req, res) => {
             return sendJson(res, 200, FeeService.getMonthlyCollectionReport());
         }
 
+        if (pathname === '/api/reports/session-dues' && method === 'GET') {
+            const session = parsedUrl.query.session || 'all_previous';
+            const cls = parsedUrl.query.class || 'all';
+            return sendJson(res, 200, FeeService.getSessionOutstandingReport(session, cls));
+        }
+
+        if (pathname === '/api/fees/import-old-dues' && method === 'POST') {
+            const body = await parseBody(req);
+            const result = FeeService.importOldDuesBatch(body.records || []);
+            return sendJson(res, 200, result);
+        }
+
         if (pathname.startsWith('/api/reports/student-ledger/') && method === 'GET') {
             const studentId = pathname.replace('/api/reports/student-ledger/', '');
-            const ledger = FeeService.getStudentLedger(studentId);
+            const session = parsedUrl.query.session || 'all';
+            const ledger = FeeService.getStudentLedger(studentId, session);
             if (!ledger) return sendJson(res, 404, { error: 'Student ledger not found' });
             return sendJson(res, 200, ledger);
         }

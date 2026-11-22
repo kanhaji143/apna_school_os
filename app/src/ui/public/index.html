@@ -1471,6 +1471,7 @@
                 <!-- Sub-tabs navigation -->
                 <div class="sub-tab-bar" style="margin-bottom:16px;">
                     <button class="sub-tab-btn active" id="btn-rep-ledger" onclick="switchReportSubTab('ledger')">📑 Student Ledger (छात्र बहीखाता)</button>
+                    <button class="sub-tab-btn" id="btn-rep-session-due" onclick="switchReportSubTab('session-due')">⏳ सत्र-वार बकाया रिपोर्ट (Session Dues)</button>
                     <button class="sub-tab-btn" id="btn-rep-class" onclick="switchReportSubTab('class')">🏫 Class-wise Recovery % (कक्षा-वार वसूली)</button>
                     <button class="sub-tab-btn" id="btn-rep-monthly" onclick="switchReportSubTab('monthly')">📅 Monthly Timeline (माह-वार कलेक्शन)</button>
                     <button class="sub-tab-btn" id="btn-rep-summary" onclick="switchReportSubTab('summary')">📊 Executive Summary (स्कूल KPI समरी)</button>
@@ -1479,14 +1480,23 @@
                 <!-- 1. STUDENT LEDGER SUB-TAB -->
                 <div id="rep-sub-ledger">
                     <div class="table-card" style="padding:16px; margin-bottom:16px; display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
-                        <div style="flex:1; min-width:220px;">
+                        <div style="flex:1; min-width:200px;">
                             <label style="font-size:12px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">🔍 त्वरित खोज (Adm No / नाम):</label>
-                            <input type="text" id="ledger-fast-search" placeholder="उदा. 1001, 9649 या छात्र का नाम..." oninput="onLedgerFastSearch(this.value)" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border); font-size:13px; font-weight:600; background:var(--bg-page); color:var(--text-heading);">
+                            <input type="text" id="ledger-fast-search" placeholder="उदा. 40, 1001 या छात्र का नाम..." oninput="onLedgerFastSearch(this.value)" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border); font-size:13px; font-weight:600; background:var(--bg-page); color:var(--text-heading);">
                         </div>
-                        <div style="flex:1.4; min-width:280px;">
+                        <div style="flex:1.2; min-width:240px;">
                             <label style="font-size:12px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Select Student (सूची में से चुनें):</label>
                             <select id="ledger-student-select" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border); font-size:13px; font-weight:600;" onchange="onLedgerStudentChanged()">
                                 <option value="">-- Choose Student from Directory --</option>
+                            </select>
+                        </div>
+                        <div style="flex:1; min-width:180px;">
+                            <label style="font-size:12px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">📅 शैक्षणिक सत्र (Session):</label>
+                            <select id="ledger-session-filter" style="width:100%; padding:8px 12px; border-radius:6px; border:1.5px solid #0284c7; font-size:13px; font-weight:700; background:var(--bg-page); color:var(--text-heading);" onchange="onLedgerSessionFilterChanged()">
+                                <option value="all" selected>📅 समस्त सत्र (All Sessions Master)</option>
+                                <option value="2026-27">सत्र 2026-27 (चालू सत्र)</option>
+                                <option value="2025-26">सत्र 2025-26 (पिछला सत्र)</option>
+                                <option value="2024-25">सत्र 2024-25 (पूर्व सत्र)</option>
                             </select>
                         </div>
                         <div style="display:flex; gap:10px; align-self:flex-end;">
@@ -1501,6 +1511,109 @@
                             <div style="font-size:15px; font-weight:600;">Please select a student from the dropdown above to view full financial ledger.</div>
                             <div style="font-size:12px; margin-top:4px;">All 426 student ledgers are ready with formula-linked 8 fee heads and transaction history.</div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- 1.5 SESSION OUTSTANDING DUES SUB-TAB -->
+                <div id="rep-sub-session-due" style="display:none;">
+                    <!-- Filter and Action Bar -->
+                    <div class="table-card" style="padding:16px; margin-bottom:16px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; justify-content:space-between;">
+                        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; flex:1;">
+                            <div style="min-width:180px;">
+                                <label style="font-size:11.5px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">सत्र फ़िल्टर (Select Session):</label>
+                                <select id="sd-session-select" style="width:100%; padding:8px 12px; border-radius:6px; border:1.5px solid #0284c7; font-size:13px; font-weight:700;" onchange="loadSessionDuesReport()">
+                                    <option value="all_previous" selected>⏳ समस्त पिछला बकाया (All Past Dues)</option>
+                                    <option value="2025-26">सत्र 2025-26 का बकाया</option>
+                                    <option value="2024-25">सत्र 2024-25 का बकाया</option>
+                                    <option value="all_dues">सकल बकाया (पिछला + चालू समस्त)</option>
+                                </select>
+                            </div>
+                            <div style="min-width:140px;">
+                                <label style="font-size:11.5px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">कक्षा (Class):</label>
+                                <select id="sd-class-select" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border); font-size:13px; font-weight:600;" onchange="loadSessionDuesReport()">
+                                    <option value="all" selected>All Classes (सभी कक्षाएं)</option>
+                                    <option value="Class 8">Class 8</option>
+                                    <option value="Class 7">Class 7</option>
+                                    <option value="Class 6">Class 6</option>
+                                    <option value="Class 5">Class 5</option>
+                                    <option value="Class 4">Class 4</option>
+                                    <option value="Class 3">Class 3</option>
+                                    <option value="Class 2">Class 2</option>
+                                    <option value="Class 1">Class 1</option>
+                                    <option value="UKG">UKG</option>
+                                    <option value="LKG">LKG</option>
+                                    <option value="Nursery">Nursery</option>
+                                </select>
+                            </div>
+                            <div style="min-width:200px; flex:1;">
+                                <label style="font-size:11.5px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">खोज (Search Name/Adm):</label>
+                                <input type="text" id="sd-search-input" placeholder="नाम, रोल न. या मोबाइल से खोजें..." oninput="filterSessionDuesTable()" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border); font-size:13px;">
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                            <button type="button" class="btn btn-outline" onclick="openQuickImportOldDuesModal()" style="font-size:12px; font-weight:700; padding:8px 14px; border-color:#0284c7; color:#0284c7;">
+                                📤 पुराना बकाया एक्सेल से लोड करें
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="exportSessionDuesCSV()" style="font-size:12px; font-weight:700; padding:8px 14px;">
+                                📥 एक्सेल / CSV डाउनलोड
+                            </button>
+                            <button type="button" class="btn btn-purple" onclick="printSessionDuesRegisterA4()" style="font-size:12px; font-weight:700; padding:8px 14px;">
+                                🖨️ A4 बकाया रजिस्टर प्रिंट
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 3 Master KPI Summary Cards -->
+                    <div class="stat-grid-3" style="margin-bottom:16px;">
+                        <div class="stat-box" style="border-left:4px solid #ea580c;">
+                            <div>
+                                <div class="stat-label">पूर्व सत्रों का कुल फंसा बकाया (Old Dues Stuck)</div>
+                                <div class="stat-number" id="sd-kpi-old-total" style="color:#ea580c;">₹0</div>
+                                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">ग्रामीण स्कूलों की रिकवरी हेतु लक्षित</div>
+                            </div>
+                        </div>
+                        <div class="stat-box" style="border-left:4px solid #0284c7;">
+                            <div>
+                                <div class="stat-label">कुल बकायादार छात्र संख्या (Defaulter Students)</div>
+                                <div class="stat-number" id="sd-kpi-count" style="color:#0284c7;">0</div>
+                                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" id="sd-kpi-count-sub">सक्रिय छात्रों में से</div>
+                            </div>
+                        </div>
+                        <div class="stat-box" style="border-left:4px solid #dc2626;">
+                            <div>
+                                <div class="stat-label">सकल शुद्ध देय अवशेष (Gross Total Due)</div>
+                                <div class="stat-number" id="sd-kpi-net-total" style="color:#dc2626;">₹0</div>
+                                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">पुराना बकाया + चालू सत्र बकाया</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dues Table -->
+                    <div class="table-card">
+                        <div style="padding:12px 18px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:var(--bg-page);">
+                            <strong style="font-size:13px;" id="sd-table-heading">📜 सत्र-वार बकाया रजिस्टर सूची</strong>
+                            <span style="font-size:12px; color:var(--text-muted);" id="sd-table-sub">Instant 1-Click WhatsApp Reminders Enabled</span>
+                        </div>
+                        <table class="app-table">
+                            <thead>
+                                <tr>
+                                    <th>Adm No</th>
+                                    <th>Student Name</th>
+                                    <th>Class</th>
+                                    <th>Father Name</th>
+                                    <th>Mobile No</th>
+                                    <th style="color:#ea580c;">पिछला बकाया (Old Due ₹)</th>
+                                    <th>चालू बकाया (₹)</th>
+                                    <th style="color:#dc2626;">कुल शुद्ध बाकी (₹)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sd-tbody">
+                                <tr>
+                                    <td colspan="9" style="text-align:center; padding:30px; color:var(--text-muted);">लोड हो रहा है...</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -10001,17 +10114,28 @@ Bhadar, Amethi (U.P.)`;
             openStudentLedger(sel.value);
         }
 
-        async function openStudentLedger(studentId) {
+        async function openStudentLedger(studentId, session = null) {
             navigate('reports');
             switchReportSubTab('ledger');
             const select = document.getElementById('ledger-student-select');
             if (select) select.value = studentId;
 
-            const res = await fetch(`/api/reports/student-ledger/${studentId}`);
+            const sessionFilter = document.getElementById('ledger-session-filter');
+            const sess = session || (sessionFilter ? sessionFilter.value : 'all');
+            if (sessionFilter && session) sessionFilter.value = session;
+
+            const res = await fetch(`/api/reports/student-ledger/${studentId}?session=${encodeURIComponent(sess)}`);
             if (!res.ok) return alert('Unable to load student ledger');
             const data = await res.json();
             currentActiveLedger = data;
             renderLedgerDetails(data);
+        }
+
+        function onLedgerSessionFilterChanged() {
+            const select = document.getElementById('ledger-student-select');
+            if (!select || !select.value) return;
+            const sessionFilter = document.getElementById('ledger-session-filter');
+            openStudentLedger(select.value, sessionFilter ? sessionFilter.value : 'all');
         }
 
         function onLedgerFastSearch(query) {
@@ -10085,24 +10209,28 @@ Bhadar, Amethi (U.P.)`;
                             <div>
                                 <div class="stat-label">चालू सत्र निर्धारित फीस (Annual Fee)</div>
                                 <div class="stat-number">₹${(sum.expected_fee || 0).toLocaleString('en-IN')}</div>
+                                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">सत्र 2026-27 बोर्ड अनुमोदित</div>
                             </div>
                         </div>
                         <div class="stat-box">
                             <div>
                                 <div class="stat-label">पूर्व सत्रों का पुराना बकाया (Old Dues)</div>
                                 <div class="stat-number" style="color:#ea580c;">₹${(sum.old_due || fs.old_due || 0).toLocaleString('en-IN')}</div>
+                                <div style="font-size:11px; color:#c2410c; margin-top:2px;">पिछले वर्षों का अवशेष ⚠️</div>
                             </div>
                         </div>
                         <div class="stat-box">
                             <div>
                                 <div class="stat-label">कुल जमा की गई फीस (Total Paid)</div>
                                 <div class="stat-number" style="color:#15803d;">₹${(sum.total_paid || 0).toLocaleString('en-IN')}</div>
+                                <div style="font-size:11px; color:#15803d; margin-top:2px;">${sum.receipts_count || txs.length} रसीदें निर्गत ✓</div>
                             </div>
                         </div>
                         <div class="stat-box">
                             <div>
                                 <div class="stat-label">कुल शुद्ध शेष बाकी (Net Balance)</div>
                                 <div class="stat-number" style="color:${sum.outstanding_due === 0 ? '#15803d' : '#dc2626'};">₹${(sum.outstanding_due || 0).toLocaleString('en-IN')}</div>
+                                ${sum.advance_amount > 0 ? `<div style="font-size:11px; color:#2563eb; font-weight:700; margin-top:2px;">💰 अग्रिम जमा: ₹${sum.advance_amount.toLocaleString('en-IN')}</div>` : `<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">अंतिम देय स्थिति</div>`}
                             </div>
                         </div>
                     </div>
@@ -10247,11 +10375,18 @@ Bhadar, Amethi (U.P.)`;
             currentReportSubTab = tab;
             document.querySelectorAll('#pane-reports .sub-tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('rep-sub-ledger').style.display = tab === 'ledger' ? 'block' : 'none';
+            const sdPane = document.getElementById('rep-sub-session-due');
+            if (sdPane) sdPane.style.display = tab === 'session-due' ? 'block' : 'none';
             document.getElementById('rep-sub-class').style.display = tab === 'class' ? 'block' : 'none';
             document.getElementById('rep-sub-monthly').style.display = tab === 'monthly' ? 'block' : 'none';
             document.getElementById('rep-sub-summary').style.display = tab === 'summary' ? 'block' : 'none';
 
             if (tab === 'ledger') document.getElementById('btn-rep-ledger').classList.add('active');
+            if (tab === 'session-due') {
+                const btn = document.getElementById('btn-rep-session-due');
+                if (btn) btn.classList.add('active');
+                await loadSessionDuesReport();
+            }
             if (tab === 'class') {
                 document.getElementById('btn-rep-class').classList.add('active');
                 await loadClassRecoveryReport();
@@ -10263,6 +10398,255 @@ Bhadar, Amethi (U.P.)`;
             if (tab === 'summary') {
                 document.getElementById('btn-rep-summary').classList.add('active');
                 await loadExecutiveSummaryReport();
+            }
+        }
+
+        let activeSessionDuesData = null;
+        async function loadSessionDuesReport() {
+            const sess = document.getElementById('sd-session-select')?.value || 'all_previous';
+            const cls = document.getElementById('sd-class-select')?.value || 'all';
+
+            const tbody = document.getElementById('sd-tbody');
+            if (tbody) tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:var(--text-muted);">लोड हो रहा है... कृपया प्रतीक्षा करें...</td></tr>`;
+
+            try {
+                const res = await fetch(`/api/reports/session-dues?session=${encodeURIComponent(sess)}&class=${encodeURIComponent(cls)}`);
+                const data = await res.json();
+                activeSessionDuesData = data;
+
+                const oldEl = document.getElementById('sd-kpi-old-total');
+                const cntEl = document.getElementById('sd-kpi-count');
+                const cntSub = document.getElementById('sd-kpi-count-sub');
+                const netEl = document.getElementById('sd-kpi-net-total');
+
+                if (oldEl) oldEl.innerText = `₹${(data.total_old_dues || 0).toLocaleString('en-IN')}`;
+                if (cntEl) cntEl.innerText = `${data.student_count || 0}`;
+                if (cntSub) cntSub.innerText = `${cls === 'all' ? 'सभी कक्षाओं' : cls} के बकाएदार`;
+                if (netEl) netEl.innerText = `₹${(data.total_net_dues || 0).toLocaleString('en-IN')}`;
+
+                renderSessionDuesTable(data.students);
+            } catch (err) {
+                console.error('Error loading session dues report:', err);
+                if (tbody) tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:#dc2626;">रिपोर्ट लोड करने में त्रुटि आई। कृपया पुनः प्रयास करें।</td></tr>`;
+            }
+        }
+
+        function renderSessionDuesTable(students) {
+            const tbody = document.getElementById('sd-tbody');
+            if (!tbody) return;
+
+            if (!students || students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:#15803d; font-weight:700;">🎉 इस चयन में किसी भी छात्र का कोई पिछला अथवा चालू बकाया शेष नहीं है। सभी खाते चुकता हैं!</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = students.map(s => {
+                const waText = encodeURIComponent(
+                    `*${(schoolProfile && schoolProfile.school_name) || 'Apna Institute'}*\n` +
+                    `*आवश्यक फीस सूचना (Fee Reminder Notice)*\n` +
+                    `सादर प्रणाम,\n` +
+                    `छात्र: *${s.student_name}* (कक्षा: ${s.class})\n` +
+                    `प्रवेश संख्या (Adm No): ${s.admission_no}\n` +
+                    `पिता का नाम: ${s.father_name || 'अभिभावक'}\n` +
+                    `------------------------------------\n` +
+                    `• पूर्व सत्रों का पुराना बकाया: *₹${s.old_due.toLocaleString('en-IN')}*\n` +
+                    `• चालू सत्र बकाया: ₹${s.current_due.toLocaleString('en-IN')}\n` +
+                    `• *कुल शुद्ध देय बकाया: ₹${s.net_due.toLocaleString('en-IN')}*\n` +
+                    `------------------------------------\n` +
+                    `कृपया समय से विद्यालय कार्यालय में बकाया फीस जमा कराकर आधिकारिक रसीद प्राप्त करें।\n` +
+                    `धन्यवाद!\nहेल्पलाइन: ${(schoolProfile && schoolProfile.phone) || '8504985149'}`
+                );
+
+                return `
+                    <tr>
+                        <td><strong>${s.admission_no}</strong></td>
+                        <td>
+                            <strong>${s.student_name}</strong>
+                            <div style="font-size:11px; color:var(--text-muted);">Roll: ${s.roll_no || '—'}</div>
+                        </td>
+                        <td><span style="background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;">${s.class} (${s.section})</span></td>
+                        <td>${s.father_name || '—'}</td>
+                        <td>${s.mobile || '—'}</td>
+                        <td><strong style="color:#ea580c; font-size:13px;">₹${s.old_due.toLocaleString('en-IN')}</strong></td>
+                        <td>₹${s.current_due.toLocaleString('en-IN')}</td>
+                        <td><strong style="color:#dc2626; font-size:13px;">₹${s.net_due.toLocaleString('en-IN')}</strong></td>
+                        <td>
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <button class="btn btn-sm" style="background:#0284c7; color:white; font-size:11px; padding:3px 8px; font-weight:700;" onclick="openFeeCollectModal(${s.id})">💳 Record</button>
+                                ${s.mobile ? `
+                                    <button class="btn btn-sm btn-success" style="font-size:11px; padding:3px 8px;" onclick="window.open('https://wa.me/91${s.mobile.replace(/\\D/g,'')}?text=${waText}', '_blank')" title="व्हाट्सएप पर तगादा भेजें">💬 WA</button>
+                                ` : ''}
+                                <button class="btn btn-sm btn-outline" style="font-size:11px; padding:3px 8px;" onclick="openStudentLedger(${s.id})">📑 Ledger</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterSessionDuesTable() {
+            if (!activeSessionDuesData || !activeSessionDuesData.students) return;
+            const query = (document.getElementById('sd-search-input')?.value || '').toLowerCase().trim();
+            if (!query) {
+                renderSessionDuesTable(activeSessionDuesData.students);
+                return;
+            }
+            const filtered = activeSessionDuesData.students.filter(s => 
+                String(s.admission_no).toLowerCase().includes(query) ||
+                s.student_name.toLowerCase().includes(query) ||
+                (s.father_name && s.father_name.toLowerCase().includes(query)) ||
+                (s.mobile && s.mobile.includes(query)) ||
+                s.class.toLowerCase().includes(query)
+            );
+            renderSessionDuesTable(filtered);
+        }
+
+        function exportSessionDuesCSV() {
+            if (!activeSessionDuesData || !activeSessionDuesData.students || activeSessionDuesData.students.length === 0) {
+                return alert('डाउनलोड करने के लिए कोई बकाया रिकॉर्ड उपलब्ध नहीं है।');
+            }
+            let csv = 'Adm No,Student Name,Class,Section,Father Name,Mobile,Old Dues,Current Due,Total Net Due\\n';
+            activeSessionDuesData.students.forEach(s => {
+                csv += `"${s.admission_no}","${s.student_name}","${s.class}","${s.section}","${s.father_name || ''}","${s.mobile || ''}",${s.old_due},${s.current_due},${s.net_due}\\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Session_Outstanding_Dues_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+        }
+
+        function printSessionDuesRegisterA4() {
+            if (!activeSessionDuesData || !activeSessionDuesData.students || activeSessionDuesData.students.length === 0) {
+                return alert('प्रिंट करने के लिए कोई बकाया रिकॉर्ड उपलब्ध नहीं है।');
+            }
+            const schoolName = (schoolProfile && schoolProfile.school_name) || 'APNA INSTITUTE';
+            const sessLabel = document.getElementById('sd-session-select')?.selectedOptions[0]?.text || 'समस्त पिछला बकाया';
+            const clsLabel = document.getElementById('sd-class-select')?.value || 'All Classes';
+
+            const printHtml = `
+                <div class="print-sheet" style="font-family:'Times New Roman', serif; max-width:850px; margin:0 auto; padding:20px; color:#0f172a;">
+                    <div style="text-align:center; border-bottom:2px solid #0f172a; padding-bottom:8px; margin-bottom:12px;">
+                        <h2 style="font-size:20px; font-weight:800; margin:0; text-transform:uppercase;">${schoolName}</h2>
+                        <div style="font-size:12px; color:#475569;">सत्र-वार बकाया रिकवरी रजिस्टर (OFFICIAL DUES RECOVERY REGISTER)</div>
+                        <div style="font-size:11px; font-weight:700; margin-top:4px;">फ़िल्टर: <strong>${sessLabel}</strong> | कक्षा: <strong>${clsLabel}</strong> | दिनांक: ${new Date().toLocaleDateString('en-IN')}</div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; font-size:12px; background:#f1f5f9; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-weight:700;">
+                        <span>कुल बकाया छात्र: ${activeSessionDuesData.student_count}</span>
+                        <span>पूर्व सत्रों का कुल बकाया: ₹${activeSessionDuesData.total_old_dues.toLocaleString('en-IN')}</span>
+                        <span>सकल कुल बकाया: ₹${activeSessionDuesData.total_net_dues.toLocaleString('en-IN')}</span>
+                    </div>
+
+                    <table style="width:100%; border-collapse:collapse; font-size:11px;">
+                        <thead>
+                            <tr style="background:#0f172a; color:white;">
+                                <th style="border:1px solid #cbd5e1; padding:6px;">Adm</th>
+                                <th style="border:1px solid #cbd5e1; padding:6px;">Student Name</th>
+                                <th style="border:1px solid #cbd5e1; padding:6px;">Class</th>
+                                <th style="border:1px solid #cbd5e1; padding:6px;">Father Name</th>
+                                <th style="border:1px solid #cbd5e1; padding:6px;">Mobile</th>
+                                <th style="border:1px solid #cbd5e1; padding:6px;">पुराना बकाया (₹)</th>
+                                <th style="border:1px solid #cbd5e1; padding:6px;">चालू बकाया (₹)</th>
+                                <th style="border:1px solid #cbd5e1; padding:6px;">कुल देय (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${activeSessionDuesData.students.map(s => `
+                                <tr>
+                                    <td style="border:1px solid #cbd5e1; padding:5px; text-align:center;">${s.admission_no}</td>
+                                    <td style="border:1px solid #cbd5e1; padding:5px; font-weight:700;">${s.student_name}</td>
+                                    <td style="border:1px solid #cbd5e1; padding:5px; text-align:center;">${s.class} (${s.section})</td>
+                                    <td style="border:1px solid #cbd5e1; padding:5px;">${s.father_name || '—'}</td>
+                                    <td style="border:1px solid #cbd5e1; padding:5px; text-align:center;">${s.mobile || '—'}</td>
+                                    <td style="border:1px solid #cbd5e1; padding:5px; text-align:right; font-weight:700; color:#c2410c;">₹${s.old_due.toLocaleString('en-IN')}</td>
+                                    <td style="border:1px solid #cbd5e1; padding:5px; text-align:right;">₹${s.current_due.toLocaleString('en-IN')}</td>
+                                    <td style="border:1px solid #cbd5e1; padding:5px; text-align:right; font-weight:800; color:#b91c1c;">₹${s.net_due.toLocaleString('en-IN')}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top:40px; display:flex; justify-content:space-between; padding:0 30px; font-size:12px; font-weight:700;">
+                        <div>हस्ताक्षर लेखाकार / कैशियर</div>
+                        <div>हस्ताक्षर प्रबंधक / प्रधानाचार्य</div>
+                    </div>
+                </div>
+            `;
+
+            const area = document.getElementById('modal-content-area');
+            area.innerHTML = printHtml;
+            document.getElementById('modal-heading').innerText = `Print Dues Register - ${sessLabel}`;
+            document.getElementById('app-modal').classList.add('active');
+            setTimeout(() => window.print(), 300);
+        }
+
+        function openQuickImportOldDuesModal() {
+            const area = document.getElementById('modal-content-area');
+            area.innerHTML = `
+                <div style="padding:10px 4px;">
+                    <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:12px; color:#1e40af;">
+                        💡 <strong>ग्रामीण व प्राइवेट स्कूलों हेतु विशेष सुविधा:</strong> यदि आपके पास पिछले सत्रों का बकाया रजिस्टर या एक्सेल में है, तो आप नीचे 2 कॉलम का डेटा पेस्ट कर सकते हैं (प्रवेश संख्या और पुराना बकाया)। सिस्टम 2 सेकंड में सभी छात्रों के बही-खाते में पुराना बकाया सुरक्षित कर देगा।
+                    </div>
+
+                    <form onsubmit="submitBatchOldDuesImport(event)">
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">डेटा इनपुट प्रारूप (CSV Format: Admission_No, Old_Due):</label>
+                            <textarea id="import-old-dues-text" rows="8" style="width:100%; padding:10px; border:1.5px solid #0284c7; border-radius:8px; font-family:monospace; font-size:12.5px;" placeholder="उदा:\\n40, 8500\\n112, 9000\\n113, 2050\\n1001, 4500" required></textarea>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">एक पंक्ति में एक छात्र: Admission_No, Old_Due (जैसे: <code>1001, 5000</code>)</div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+                            <button type="button" class="btn btn-outline" onclick="closeModal()">रद्द करें</button>
+                            <button type="submit" class="btn btn-success" style="padding:8px 18px; font-weight:700;">💾 पुराना बकाया तुरंत लोड करें (Commit Batch)</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            document.getElementById('modal-heading').innerText = '📤 पुराना बकाया एक्सेल / CSV से लोड करें (Import Old Dues)';
+            document.getElementById('app-modal').classList.add('active');
+        }
+
+        async function submitBatchOldDuesImport(e) {
+            e.preventDefault();
+            const text = document.getElementById('import-old-dues-text')?.value.trim();
+            if (!text) return;
+
+            const lines = text.split('\\n');
+            const records = [];
+            lines.forEach(line => {
+                const parts = line.split(/[,\\t]/);
+                if (parts.length >= 2) {
+                    const adm = parts[0].trim();
+                    const due = parseFloat(parts[1].trim());
+                    if (adm && !isNaN(due)) {
+                        records.push({ admission_no: adm, old_due: due });
+                    }
+                }
+            });
+
+            if (records.length === 0) {
+                return alert('कोई वैध डेटा नहीं मिला। कृपया प्रारूप जांचें (उदा. 1001, 5000)।');
+            }
+
+            try {
+                const res = await fetch('/api/fees/import-old-dues', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ records })
+                });
+                const data = await res.json();
+                alert(`✅ सफलता: ${data.updated_count} छात्रों का पिछला बकाया सफलतापूर्वक अपडेट किया गया!`);
+                closeModal();
+                if (currentReportSubTab === 'session-due') {
+                    loadSessionDuesReport();
+                } else if (currentActiveLedger && currentActiveLedger.student) {
+                    openStudentLedger(currentActiveLedger.student.id);
+                }
+            } catch (err) {
+                console.error('Error importing old dues:', err);
+                alert('आयात करते समय त्रुटि आई। कृपया पुनः प्रयास करें।');
             }
         }
 
@@ -10334,19 +10718,63 @@ Bhadar, Amethi (U.P.)`;
             const st = (allFeeStudents && allFeeStudents.find(s => s.id === studentId)) || (allStudents && allStudents.find(s => s.id === studentId));
             if (!st) return;
 
+            const oldDue = Number(st.old_due || 0);
+            const expectedFee = Number(st.expected_fee || st.annual_fee || 0);
+            const collectedFee = Number(st.total_collected || 0);
+            const currentSessionDue = Math.max(0, expectedFee - collectedFee);
+            const totalNetDue = oldDue + currentSessionDue;
+
             const area = document.getElementById('modal-content-area');
             area.innerHTML = `
                 <div style="padding:10px 4px;">
-                    <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:14px; font-size:12.5px;">
-                        <div><strong>Student:</strong> ${st.student_name} (${st.class}) | <strong>SR No:</strong> ${st.admission_no}</div>
-                        <div><strong>Father:</strong> ${st.father_name} | <strong>Mobile:</strong> ${st.mobile || '—'}</div>
-                        <div style="margin-top:4px; font-weight:700; color:#ea580c;">Current Balance Due: ₹${(st.due_amount || 0).toLocaleString('en-IN')}</div>
+                    <!-- Student & Dual Session Breakdown Banner -->
+                    <div style="background:#f8fafc; padding:14px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:14px; font-size:12.5px;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+                            <div>
+                                <div style="font-size:16px; font-weight:800; color:#0f172a;">${st.student_name} <span style="font-size:12px; font-weight:600; color:#64748b;">(कक्षा ${st.class} ${st.section ? `(${st.section})` : ''})</span></div>
+                                <div style="color:#64748b; font-size:12px; margin-top:3px;">
+                                    प्रवेश सं. (Adm No): <strong>${st.admission_no}</strong> | पिता: ${st.father_name || '—'} | 📞 ${st.mobile || '—'}
+                                </div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-size:11px; font-weight:700; color:#64748b;">सकल देय अवशेष (Net Due)</div>
+                                <div style="font-size:17px; font-weight:900; color:${totalNetDue > 0 ? '#dc2626' : '#15803d'};">₹${totalNetDue.toLocaleString('en-IN')}</div>
+                            </div>
+                        </div>
+
+                        <!-- Session Split Grid -->
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; padding-top:10px; border-top:1px dashed #cbd5e1; font-size:12px;">
+                            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; padding:8px 10px;">
+                                <div style="color:#1e40af; font-size:11px; font-weight:700;">चालू सत्र 2026-27 देय:</div>
+                                <div style="font-weight:800; color:#1e3a8a; font-size:13.5px;">₹${currentSessionDue.toLocaleString('en-IN')} <span style="font-size:10.5px; font-weight:normal; color:#3b82f6;">(निर्धारित: ₹${expectedFee.toLocaleString('en-IN')})</span></div>
+                            </div>
+                            <div style="background:${oldDue > 0 ? '#fff7ed' : '#f0fdf4'}; border:1px solid ${oldDue > 0 ? '#fdba74' : '#bbf7d0'}; border-radius:6px; padding:8px 10px;">
+                                <div style="color:${oldDue > 0 ? '#c2410c' : '#15803d'}; font-size:11px; font-weight:700;">पूर्व सत्रों का पुराना बकाया:</div>
+                                <div style="font-weight:800; color:${oldDue > 0 ? '#ea580c' : '#166534'}; font-size:13.5px;">₹${oldDue.toLocaleString('en-IN')} ${oldDue > 0 ? '⚠️' : '✓'}</div>
+                            </div>
+                        </div>
+
+                        ${oldDue > 0 ? `
+                            <div style="margin-top:10px;">
+                                <button type="button" class="btn btn-sm" style="background:#ea580c; color:white; font-size:11.5px; font-weight:700; padding:6px 14px; border-radius:6px;" onclick="prefillPayOldDue(${oldDue})">
+                                    ⚡ पुराने सत्र का बकाया जमा करें (Pay Old Due: ₹${oldDue.toLocaleString('en-IN')})
+                                </button>
+                            </div>
+                        ` : ''}
                     </div>
 
                     <form onsubmit="submitFeePayment(event, ${st.id})">
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
                             <div>
-                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Fee Head:</label>
+                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">सत्र (Academic Session):</label>
+                                <select id="pay-session" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-weight:700;" onchange="onPaySessionChange(this.value, ${oldDue})">
+                                    <option value="2026-27" selected>2026-27 (चालू सत्र)</option>
+                                    <option value="2025-26">2025-26 (पिछला सत्र)</option>
+                                    <option value="2024-25">2024-25 (पूर्व सत्र)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Fee Head (मद):</label>
                                 <select id="pay-fee-head" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
                                     <option value="Monthly Tuition Fee">Monthly Tuition Fee</option>
                                     <option value="Admission Fee">Admission Fee</option>
@@ -10355,11 +10783,14 @@ Bhadar, Amethi (U.P.)`;
                                     <option value="Half-Yearly Exam Fee">Half-Yearly Exam Fee</option>
                                     <option value="Annual Exam Fee">Annual Exam Fee</option>
                                     <option value="Computer & Lab Fee">Computer & Lab Fee</option>
-                                    <option value="Old Session Due">Old Session Due</option>
+                                    <option value="Old Session Due">Old Session Due (पिछला सत्र बकाया)</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
                             <div>
-                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Academic Month:</label>
+                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Academic Month (माह):</label>
                                 <select id="pay-fee-month" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
                                     <option value="April">April</option>
                                     <option value="May">May</option>
@@ -10373,15 +10804,16 @@ Bhadar, Amethi (U.P.)`;
                                     <option value="January">January</option>
                                     <option value="February">February</option>
                                     <option value="March">March</option>
+                                    <option value="Annual">Annual (वार्षिक / पिछला बकाया)</option>
                                 </select>
+                            </div>
+                            <div>
+                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Amount to Pay (जमा राशि ₹):</label>
+                                <input type="number" id="pay-amount" required value="${st.monthly_fee || 800}" min="1" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-weight:700;">
                             </div>
                         </div>
 
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
-                            <div>
-                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Amount to Pay (₹):</label>
-                                <input type="number" id="pay-amount" required value="${st.monthly_fee || 800}" min="1" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-weight:700;">
-                            </div>
                             <div>
                                 <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Payment Mode:</label>
                                 <select id="pay-mode" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
@@ -10391,16 +10823,15 @@ Bhadar, Amethi (U.P.)`;
                                     <option value="Cheque">Cheque</option>
                                 </select>
                             </div>
+                            <div>
+                                <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Reference No. / UTR / Remarks:</label>
+                                <input type="text" id="pay-ref" placeholder="Optional UTR No or notes" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
+                            </div>
                         </div>
 
-                        <div style="margin-bottom:16px;">
-                            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Reference No. / UTR / Remarks:</label>
-                            <input type="text" id="pay-ref" placeholder="Optional UTR No or notes" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
-                        </div>
-
-                        <div style="display:flex; justify-content:flex-end; gap:10px;">
+                        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
                             <button type="button" class="btn btn-outline" onclick="closeAppModal()">Cancel</button>
-                            <button type="submit" class="btn btn-success" style="padding:8px 16px;">✅ Record Payment & Issue Receipt</button>
+                            <button type="submit" class="btn btn-success" style="padding:8px 18px; font-weight:700;">✅ Record Payment & Issue Receipt</button>
                         </div>
                     </form>
                 </div>
@@ -10409,8 +10840,31 @@ Bhadar, Amethi (U.P.)`;
             document.getElementById('app-modal').classList.add('active');
         }
 
+        function prefillPayOldDue(amount) {
+            const feeHead = document.getElementById('pay-fee-head');
+            const sessionEl = document.getElementById('pay-session');
+            const amtEl = document.getElementById('pay-amount');
+            const monthEl = document.getElementById('pay-fee-month');
+            if (feeHead) feeHead.value = 'Old Session Due';
+            if (sessionEl) sessionEl.value = '2025-26';
+            if (amtEl) amtEl.value = amount;
+            if (monthEl) monthEl.value = 'Annual';
+        }
+
+        function onPaySessionChange(sessionVal, oldDueVal) {
+            const feeHead = document.getElementById('pay-fee-head');
+            const amtEl = document.getElementById('pay-amount');
+            const monthEl = document.getElementById('pay-fee-month');
+            if (sessionVal !== '2026-27') {
+                if (feeHead) feeHead.value = 'Old Session Due';
+                if (monthEl) monthEl.value = 'Annual';
+                if (amtEl && oldDueVal > 0) amtEl.value = oldDueVal;
+            }
+        }
+
         async function submitFeePayment(event, studentId) {
             event.preventDefault();
+            const session = document.getElementById('pay-session')?.value || '2026-27';
             const amount = parseFloat(document.getElementById('pay-amount').value);
             const feeHead = document.getElementById('pay-fee-head').value;
             const feeMonth = document.getElementById('pay-fee-month').value;
@@ -10422,6 +10876,7 @@ Bhadar, Amethi (U.P.)`;
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     studentId,
+                    session,
                     amount,
                     feeHead,
                     feeMonth,
@@ -10441,6 +10896,9 @@ Bhadar, Amethi (U.P.)`;
             loadFeeStudentsList();
             loadFeeReceiptsList();
             loadExecutiveSummaryReport();
+            if (currentReportSubTab === 'session-due') {
+                loadSessionDuesReport();
+            }
 
             viewFeeReceiptModal(receiptData.transaction.receipt_no);
         }

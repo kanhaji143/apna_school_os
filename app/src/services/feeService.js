@@ -42,7 +42,7 @@ class FeeService {
         });
     }
 
-    static collectFee({ studentId, amount, feeHead = 'Monthly Tuition Fee', feeMonth = '', paymentMode = 'Cash', referenceNo = '', collectedBy = 'Admin', remarks = '' }) {
+    static collectFee({ studentId, amount, feeHead = 'Monthly Tuition Fee', feeMonth = '', session = '2026-27', paymentMode = 'Cash', referenceNo = '', collectedBy = 'Admin', remarks = '' }) {
         const db = getDb();
         const student = db.prepare('SELECT * FROM students WHERE id = ?').get(studentId);
         if (!student) throw new Error('Student not found');
@@ -58,10 +58,20 @@ class FeeService {
                 transaction_id, receipt_no, session, student_id, payment_date,
                 fee_month, fee_head, standard_fee, amount_received, late_fee,
                 discount, net_amount, payment_mode, reference_no, status, collected_by, remarks
-            ) VALUES (?, ?, '2026-27', ?, DATE('now'), ?, ?, ?, ?, 0.0, 0.0, ?, ?, ?, 'Paid', ?, ?)
+            ) VALUES (?, ?, ?, ?, DATE('now'), ?, ?, ?, ?, 0.0, 0.0, ?, ?, ?, 'Paid', ?, ?)
         `);
 
-        stmt.run(txId, receiptNo, studentId, feeMonth, feeHead, amount, amount, amount, paymentMode, referenceNo, collectedBy, remarks);
+        stmt.run(txId, receiptNo, session || '2026-27', studentId, feeMonth, feeHead, amount, amount, amount, paymentMode, referenceNo, collectedBy, remarks);
+
+        // If paying towards old session due, reduce old_due in student_fee_structure in real time
+        if (feeHead === 'Old Session Due' || (session && session !== '2026-27')) {
+            db.prepare(`
+                UPDATE student_fee_structure 
+                SET old_due = MAX(0, old_due - ?)
+                WHERE student_id = ?
+            `).run(Number(amount) || 0, studentId);
+        }
+
         syncShadowVault();
 
         return this.getFeeReceipt(receiptNo);
@@ -120,7 +130,7 @@ class FeeService {
         };
     }
 
-    static getStudentLedger(studentIdOrAdmNo) {
+    static getStudentLedger(studentIdOrAdmNo, selectedSession = 'all') {
         const db = getDb();
         const profile = db.prepare('SELECT * FROM institution_profile WHERE id = 1').get();
 
@@ -137,33 +147,52 @@ class FeeService {
             SELECT * FROM student_fee_structure WHERE student_id = ?
         `).get(student.id) || {};
 
-        const transactions = db.prepare(`
+        let allTransactions = db.prepare(`
             SELECT * FROM fee_transactions
             WHERE student_id = ? AND status = 'Paid'
             ORDER BY payment_date ASC, id ASC
         `).all(student.id);
 
-        const totalExpected = feeStruct.expected_fee || 0.0;
+        let transactions = allTransactions;
+        if (selectedSession && selectedSession !== 'all') {
+            transactions = allTransactions.filter(tx => tx.session === selectedSession);
+        }
+
+        const totalExpected = (selectedSession === 'all' || selectedSession === '2026-27') ? (feeStruct.expected_fee || 0.0) : 0.0;
         const totalOldDue = feeStruct.old_due || 0.0;
         const totalPaid = transactions.reduce((sum, tx) => sum + (tx.net_amount || 0.0), 0.0);
         const totalDiscount = transactions.reduce((sum, tx) => sum + (tx.discount || 0.0), 0.0);
-        const netDue = Math.max(0, (totalExpected + totalOldDue) - totalPaid);
+        
+        let netDue = 0;
+        let advanceAmount = 0;
+
+        if (selectedSession === '2025-26' || selectedSession === '2024-25') {
+            // For past session, expected is old_due
+            netDue = Math.max(0, totalOldDue - totalPaid);
+            advanceAmount = Math.max(0, totalPaid - totalOldDue);
+        } else {
+            // For current or all sessions
+            netDue = Math.max(0, (totalExpected + totalOldDue) - totalPaid);
+            advanceAmount = Math.max(0, totalPaid - (totalExpected + totalOldDue));
+        }
 
         // Pre-build 1-click WhatsApp Ledger Summary URL
         const phone = student.mobile ? student.mobile.replace(/\D/g, '') : '';
         let waUrl = '';
         if (phone && phone.length === 10) {
+            const dueTxt = netDue === 0 ? 'पूर्ण चुकता (No Dues) ✅' : `शेष बकाया: ₹${netDue.toLocaleString('en-IN')} ⚠️`;
+            const advTxt = advanceAmount > 0 ? `\nअग्रिम जमा (Advance): ₹${advanceAmount.toLocaleString('en-IN')} 💰` : '';
             const msg = encodeURIComponent(
-                `*${profile.school_name} - छात्र फीस विवरण (Ledger)*\n` +
+                `*${profile.school_name} - छात्र बही-खाता (360° Ledger)*\n` +
                 `छात्र का नाम: ${student.student_name}\n` +
-                `कक्षा: ${student.class} (${student.section}) | SR: ${student.admission_no}\n` +
-                `कुल वार्षिक अपेक्षित फीस: ₹${totalExpected.toLocaleString('en-IN')}\n` +
+                `कक्षा: ${student.class} (${student.section || 'A'}) | Adm No: ${student.admission_no}\n` +
+                `सत्र (Session): ${selectedSession === 'all' ? 'समस्त सत्र' : selectedSession}\n` +
+                `चालू सत्र फीस: ₹${totalExpected.toLocaleString('en-IN')}\n` +
+                `पुराना सत्र बकाया: ₹${totalOldDue.toLocaleString('en-IN')}\n` +
                 `कुल जमा राशि: ₹${totalPaid.toLocaleString('en-IN')}\n` +
-                `कुल छूट: ₹${totalDiscount.toLocaleString('en-IN')}\n` +
-                `शेष बकाया (Outstanding Balance): ₹${netDue.toLocaleString('en-IN')}\n` +
-                `लेनदेन रसीदें: ${transactions.length} रसीदें निर्गत\n` +
-                `स्थिति: ${netDue === 0 ? 'पूर्ण चुकता (No Dues) ✅' : 'बकाया शेष ⚠️'}\n` +
-                `हेल्पलाइन: ${profile.phone}`
+                `स्थिति: ${dueTxt}${advTxt}\n` +
+                `कुल रसीदें: ${transactions.length}\n` +
+                `हेल्पलाइन: ${profile.phone || '8504985149'}`
             );
             waUrl = `https://wa.me/91${phone}?text=${msg}`;
         }
@@ -173,17 +202,129 @@ class FeeService {
             student,
             fee_structure: feeStruct,
             transactions,
+            all_transactions_count: allTransactions.length,
+            selected_session: selectedSession,
             summary: {
+                selected_session: selectedSession,
                 expected_fee: totalExpected,
                 old_due: totalOldDue,
                 gross_payable: totalExpected + totalOldDue,
                 total_paid: totalPaid,
                 total_discount: totalDiscount,
                 outstanding_due: netDue,
+                advance_amount: advanceAmount,
                 fee_status: netDue === 0 ? 'Paid' : (totalPaid > 0 ? 'Partial' : 'Unpaid'),
                 receipts_count: transactions.length
             },
             whatsapp_url: waUrl
+        };
+    }
+
+    static getSessionOutstandingReport(session = 'all_previous', className = 'all') {
+        const db = getDb();
+        let query = `
+            SELECT s.id, s.admission_no, s.roll_no, s.student_name, s.father_name, s.mobile,
+                   s.class, s.section,
+                   COALESCE(fs.old_due, 0) as old_due,
+                   COALESCE(fs.expected_fee, 0) as expected_fee,
+                   COALESCE((SELECT SUM(ft.net_amount) FROM fee_transactions ft WHERE ft.student_id = s.id AND ft.status = 'Paid'), 0.0) as total_collected,
+                   COALESCE((SELECT SUM(ft.net_amount) FROM fee_transactions ft WHERE ft.student_id = s.id AND ft.status = 'Paid' AND (ft.fee_head = 'Old Session Due' OR ft.session != '2026-27')), 0.0) as old_due_collected
+            FROM students s
+            LEFT JOIN student_fee_structure fs ON s.id = fs.student_id
+            WHERE s.status = 'Active'
+        `;
+        const params = [];
+        if (className && className !== 'all') {
+            query += ` AND s.class = ? `;
+            params.push(className);
+        }
+
+        query += ` ORDER BY s.class ASC, s.student_name ASC`;
+        const allStudents = db.prepare(query).all(...params);
+
+        const studentsWithDues = allStudents.map(s => {
+            const currentExpected = s.expected_fee || 0;
+            const currentCollected = Math.max(0, s.total_collected - s.old_due_collected);
+            const currentDue = Math.max(0, currentExpected - currentCollected);
+            const remainingOldDue = Math.max(0, s.old_due);
+            const totalNetDue = remainingOldDue + currentDue;
+
+            return {
+                id: s.id,
+                admission_no: s.admission_no,
+                roll_no: s.roll_no,
+                student_name: s.student_name,
+                father_name: s.father_name,
+                mobile: s.mobile,
+                class: s.class,
+                section: s.section || 'A',
+                old_due: remainingOldDue,
+                current_fee: currentExpected,
+                current_due: currentDue,
+                total_collected: s.total_collected,
+                net_due: totalNetDue,
+                has_old_due: remainingOldDue > 0
+            };
+        }).filter(s => {
+            if (session === 'all_previous' || session === '2025-26' || session === '2024-25') {
+                return s.old_due > 0;
+            }
+            return s.net_due > 0;
+        });
+
+        const totalOldDues = studentsWithDues.reduce((sum, s) => sum + s.old_due, 0);
+        const totalCurrentDues = studentsWithDues.reduce((sum, s) => sum + s.current_due, 0);
+        const totalNetDues = studentsWithDues.reduce((sum, s) => sum + s.net_due, 0);
+
+        return {
+            session: session || 'all_previous',
+            class_filter: className || 'all',
+            student_count: studentsWithDues.length,
+            total_old_dues: totalOldDues,
+            total_current_dues: totalCurrentDues,
+            total_net_dues: totalNetDues,
+            students: studentsWithDues
+        };
+    }
+
+    static importOldDuesBatch(records) {
+        const db = getDb();
+        if (!Array.isArray(records) || records.length === 0) {
+            throw new Error('No records provided for import');
+        }
+
+        const updateStmt = db.prepare(`
+            UPDATE student_fee_structure
+            SET old_due = ?
+            WHERE student_id = (SELECT id FROM students WHERE admission_no = ? OR sr_no = ? LIMIT 1)
+        `);
+
+        let updatedCount = 0;
+        let notFoundCount = 0;
+
+        const tx = db.transaction(() => {
+            for (const r of records) {
+                const admNo = String(r.admission_no || r.adm_no || r.sr_no || '').trim();
+                const dueAmount = parseFloat(r.old_due || r.amount || r.due || 0);
+                if (admNo && !isNaN(dueAmount)) {
+                    const res = updateStmt.run(dueAmount, admNo, admNo);
+                    if (res.changes > 0) {
+                        updatedCount++;
+                    } else {
+                        notFoundCount++;
+                    }
+                }
+            }
+        });
+
+        tx();
+        syncShadowVault();
+
+        return {
+            success: true,
+            updated_count: updatedCount,
+            not_found_count: notFoundCount,
+            total_received: records.length
         };
     }
 
