@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="/exceljs.min.js"></script>
+    <script src="/i18n.js"></script>
     <style>
         :root {
             --bg-page: #f8fafc;
@@ -344,45 +345,45 @@
         <div class="sidebar-menu">
 
                 <!-- ── OVERVIEW ── -->
-                <div class="nav-item active" onclick="navigate('dashboard')"><span>📊</span> Dashboard</div>
-                <div class="nav-item" onclick="navigate('profile')"><span>🏫</span> School Profile</div>
+                <div class="nav-item active" onclick="navigate('dashboard')"><span>📊</span> <span data-i18n="nav_dashboard">Dashboard</span></div>
+                <div class="nav-item" onclick="navigate('profile')"><span>🏫</span> <span data-i18n="nav_profile">School Profile</span></div>
 
                 <!-- ── STUDENTS & ADMISSIONS ── -->
                 <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">👥 Students & Admissions</div>
-                <div class="nav-item" onclick="navigate('students')"><span>🎓</span> Students Directory</div>
-                <div class="nav-item" onclick="navigate('id-cards')"><span>🪪</span> ID Cards</div>
-                <div class="nav-item" onclick="navigate('classes')"><span>🏫</span> Class & Section Setup</div>
-                <div class="nav-item" onclick="navigate('growth-passport')"><span>🌟</span> Growth Passport</div>
+                <div class="nav-item" onclick="navigate('students')"><span>🎓</span> <span data-i18n="nav_students">Students Directory</span></div>
+                <div class="nav-item" onclick="navigate('id-cards')"><span>🪪</span> <span data-i18n="nav_id_cards">ID Cards 2.0</span></div>
+                <div class="nav-item" onclick="navigate('classes')"><span>🏫</span> <span data-i18n="nav_classes">Class & Section Setup</span></div>
+                <div class="nav-item" onclick="navigate('growth-passport')"><span>🌟</span> <span data-i18n="nav_passport">Growth Passport</span></div>
 
                 <!-- ── ACADEMICS ── -->
                 <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">📚 Academics</div>
-                <div class="nav-item" onclick="navigate('attendance')"><span>📅</span> Attendance</div>
-                <div class="nav-item" onclick="navigate('exams')"><span>📜</span> Marksheets (4-Pillar)</div>
-                <div class="nav-item" onclick="navigate('papers')"><span>📝</span> Question Paper Maker</div>
-                <div class="nav-item" onclick="navigate('ai-tools')" style="color:#38bdf8; font-weight:700;"><span>🤖</span> AI Teacher Tools</div>
+                <div class="nav-item" onclick="navigate('attendance')"><span>📅</span> <span data-i18n="nav_attendance">Attendance</span></div>
+                <div class="nav-item" onclick="navigate('exams')"><span>📜</span> <span data-i18n="nav_exams">Marksheets (4-Pillar)</span></div>
+                <div class="nav-item" onclick="navigate('papers')"><span>📝</span> <span data-i18n="nav_papers">Question Paper Maker</span></div>
+                <div class="nav-item" onclick="navigate('ai-tools')" style="color:#38bdf8; font-weight:700;"><span>🤖</span> <span data-i18n="nav_ai_tools">AI Teacher Tools</span></div>
 
                 <!-- ── FINANCE ── -->
                 <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">💰 Finance</div>
-                <div class="nav-item" onclick="navigate('fees')"><span>💳</span> Fee Collection</div>
-                <div class="nav-item" onclick="navigate('expenses')"><span>💰</span> Expenses & Budget</div>
-                <div class="nav-item" onclick="navigate('payroll')"><span>💸</span> Salary & Payslips</div>
+                <div class="nav-item" onclick="navigate('fees')"><span>💳</span> <span data-i18n="nav_fees">Fee Collection</span></div>
+                <div class="nav-item" onclick="navigate('expenses')"><span>💰</span> <span data-i18n="nav_expenses">Expenses & Budget</span></div>
+                <div class="nav-item" onclick="navigate('payroll')"><span>💸</span> <span data-i18n="nav_payroll">Salary & Payslips</span></div>
 
                 <!-- ── ADMINISTRATION ── -->
                 <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">🏫 Administration</div>
-                <div class="nav-item" onclick="navigate('teachers')"><span>👨‍🏫</span> Teachers</div>
-                <div class="nav-item" onclick="navigate('staff')"><span>👥</span> Non-Teaching Staff</div>
-                <div class="nav-item" onclick="navigate('transport')"><span>🚌</span> Transport & Routes</div>
-                <div class="nav-item" onclick="navigate('assets')"><span>🏢</span> Infrastructure & Assets</div>
-                <div class="nav-item" onclick="navigate('opportunity')"><span>🎯</span> Opportunity Desk</div>
+                <div class="nav-item" onclick="navigate('teachers')"><span>👨‍🏫</span> <span data-i18n="nav_teachers">Teachers</span></div>
+                <div class="nav-item" onclick="navigate('staff')"><span>👥</span> <span data-i18n="nav_staff">Non-Teaching Staff</span></div>
+                <div class="nav-item" onclick="navigate('transport')"><span>🚌</span> <span data-i18n="nav_transport">Transport & Routes</span></div>
+                <div class="nav-item" onclick="navigate('assets')"><span>🏢</span> <span data-i18n="nav_assets">Infrastructure & Assets</span></div>
+                <div class="nav-item" onclick="navigate('opportunity')"><span>🎯</span> <span data-i18n="nav_opportunity">Opportunity Desk</span></div>
 
                 <!-- ── REPORTS & SYSTEM ── -->
                 <div class="menu-section-header" style="margin:10px 10px 4px; font-size:9.5px; font-weight:800; letter-spacing:1.2px; color:#475569; text-transform:uppercase;">📈 Reports & System</div>
-                <div class="nav-item" onclick="navigate('reports')"><span>📑</span> Reports & Ledgers</div>
-                <div class="nav-item" onclick="navigate('quality-score')"><span>🏆</span> School Quality Score</div>
-                <div class="nav-item" onclick="navigate('settings')"><span>⚙️</span> Settings & Data Safety</div>
-                <div class="nav-item" onclick="navigate('migration')" style="color:#0284c7; font-weight:700;"><span>📦</span> Data Migration Center</div>
-                <div class="nav-item" onclick="navigate('contact-support')"><span>📞</span> Contact & Support</div>
-                <div class="nav-item super-admin-item" style="display:none;" onclick="navigate('super-admin')"><span>👑</span> Super Admin Customizer</div>
+                <div class="nav-item" onclick="navigate('reports')"><span>📑</span> <span data-i18n="nav_reports">Reports & Ledgers</span></div>
+                <div class="nav-item" onclick="navigate('quality-score')"><span>🏆</span> <span data-i18n="nav_quality">School Quality Score</span></div>
+                <div class="nav-item" onclick="navigate('settings')"><span>⚙️</span> <span data-i18n="nav_settings">Settings & Data Safety</span></div>
+                <div class="nav-item" onclick="navigate('migration')" style="color:#0284c7; font-weight:700;"><span>📦</span> <span data-i18n="nav_migration">Data Migration Center</span></div>
+                <div class="nav-item" onclick="navigate('contact-support')"><span>📞</span> <span data-i18n="nav_support">Contact & Support</span></div>
+                <div class="nav-item super-admin-item" style="display:none;" onclick="navigate('super-admin')"><span>👑</span> <span data-i18n="nav_super_admin">Super Admin Customizer</span></div>
             </div>
 
         <div class="sidebar-footer">
@@ -398,18 +399,21 @@
         <header class="top-navbar">
             <div class="search-box">
                 <span class="icon-search">🔍</span>
-                <input type="text" id="global-search" placeholder="Search students, classes, receipts..." oninput="handleGlobalSearch()">
+                <input type="text" id="global-search" placeholder="Search students, classes, receipts..." data-i18n-placeholder="search_placeholder" oninput="handleGlobalSearch()">
                 <span class="shortcut-pill">Ctrl K</span>
             </div>
 
             <div class="top-nav-right">
-                <span id="demo-mode-badge" class="pill-badge" style="background:#15803d; color:white; font-weight:700; display:none; padding:4px 10px; font-size:11.5px; border-radius:20px;">🎮 लाइव डेमो मोड (Live Demo)</span>
+                <span id="demo-mode-badge" class="pill-badge" style="background:#15803d; color:white; font-weight:700; display:none; padding:4px 10px; font-size:11.5px; border-radius:20px;" data-i18n="demo_badge">🎮 लाइव डेमो मोड (Live Demo)</span>
                 <!-- Universal 30-Day VIP Trial & License Status Badge -->
                 <div id="license-status-badge" class="pill-badge" onclick="openLicenseActivationModal()" style="cursor:pointer; font-weight:700; font-size:12px; padding:4px 12px; border-radius:20px; transition:all 0.2s; display:flex; align-items:center; gap:5px; background:linear-gradient(135deg, #fef3c7, #fde68a); color:#92400e; border:1px solid #f59e0b;" title="लाइसेंस स्थिति देखने या सक्रिय करने हेतु क्लिक करें">
                     <span id="license-badge-icon">⭐</span>
-                    <span id="license-badge-text">30-दिन VIP ट्रायल (लोडिंग...)</span>
+                    <span id="license-badge-text" data-i18n="trial_loading">30-दिन VIP ट्रायल (लोडिंग...)</span>
                 </div>
-                <div class="pill-badge offline"><span>🟢</span> 100% Offline Active</div>
+                <div class="pill-badge offline" data-i18n="offline_badge"><span>🟢</span> 100% Offline Active</div>
+                <button id="lang-switch-btn" class="theme-toggle-btn" onclick="toggleAppLanguage()" style="font-weight:700; border-color:var(--border); background:var(--bg-page); color:var(--text-heading); cursor:pointer;" title="भाषा बदलें (हिन्दी ⇄ English)">
+                    <span id="lang-icon">🌐</span> <span id="lang-switch-text">हिन्दी</span>
+                </button>
                 <button class="theme-toggle-btn" onclick="toggleTheme()">
                     <span id="theme-icon">☀️</span> <span id="theme-text">Light</span>
                 </button>
@@ -417,10 +421,10 @@
                     <span id="user-avatar-circle" style="width:22px; height:22px; border-radius:50%; background:#0284c7; color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800;">A</span>
                     <span id="user-display-name">Super Admin</span>
                 </div>
-                <button class="btn" style="background:#8b5cf6; color:white; padding:4px 9px; font-size:11px; font-weight:700; border:none; border-radius:6px; cursor:pointer;" onclick="window.open('/STAFF_TRAINING_MANUAL.pdf', '_blank')">📖 ट्रेनिंग मैनुअल (PDF)</button>
-                <button class="btn btn-outline" style="padding:4px 9px; font-size:11px; font-weight:700; cursor:pointer;" onclick="refreshAllAppData(this)">🔄 रिफ्रेश</button>
-                <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="openEODReport()">📧 EOD Mail</button>
-                <button class="btn" style="background:#ef4444; color:white; padding:4px 10px; font-size:11px; font-weight:700; border:none; border-radius:6px; cursor:pointer;" onclick="logoutApp()">🚪 लॉगआउट</button>
+                <button class="btn" style="background:#8b5cf6; color:white; padding:4px 9px; font-size:11px; font-weight:700; border:none; border-radius:6px; cursor:pointer;" onclick="window.open('/STAFF_TRAINING_MANUAL.pdf', '_blank')" data-i18n="training_pdf_btn">📖 ट्रेनिंग मैनुअल (PDF)</button>
+                <button class="btn btn-outline" style="padding:4px 9px; font-size:11px; font-weight:700; cursor:pointer;" onclick="refreshAllAppData(this)" data-i18n="refresh_btn">🔄 रिफ्रेश</button>
+                <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="openEODReport()" data-i18n="eod_btn">📧 EOD Mail</button>
+                <button class="btn" style="background:#ef4444; color:white; padding:4px 10px; font-size:11px; font-weight:700; border:none; border-radius:6px; cursor:pointer;" onclick="logoutApp()" data-i18n="logout_btn">🚪 लॉगआउट</button>
             </div>
         </header>
 
@@ -2033,7 +2037,140 @@
                     </div>
                 </div>
 
-                <!-- Target School & Safety Isolation Alert -->
+                
+                <!-- Super Admin Sub-Nav Tabs -->
+                <div style="display:flex; gap:10px; margin-bottom:20px; border-bottom:2px solid var(--border); padding-bottom:10px; flex-wrap:wrap;">
+                    <button id="sa-subtab-btn-crm" class="btn btn-purple" onclick="switchSuperAdminSubTab('crm')" style="font-size:12.5px; font-weight:800; padding:8px 16px; border-radius:8px;">
+                        💼 Vendor Client Portfolio & Sales CRM
+                    </button>
+                    <button id="sa-subtab-btn-policy" class="btn btn-outline" onclick="switchSuperAdminSubTab('policy')" style="font-size:12.5px; font-weight:700; padding:8px 16px; border-radius:8px;">
+                        ⚙️ Curriculum Presets & Platform Branding
+                    </button>
+                </div>
+
+                <!-- SUB-PANE 1: VENDOR CLIENT PORTFOLIO & SALES CRM -->
+                <div id="sa-subpane-crm">
+                    <!-- Top Status Banner -->
+                    <div style="background:linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); color:white; padding:18px 24px; border-radius:12px; margin-bottom:20px; border:1px solid rgba(129, 140, 248, 0.3); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <div style="font-size:11px; font-weight:800; color:#a5b4fc; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">
+                                💼 VENDOR COMMERCIAL MASTER DOSSIER • APNA SOFTWARE HUB
+                            </div>
+                            <h3 style="font-size:18px; font-weight:900; margin:0 0 4px 0;" data-i18n="vendor_title">Vendor Client Portfolio & Sales CRM</h3>
+                            <p style="font-size:12px; color:#cbd5e1; margin:0;" data-i18n="vendor_subtitle">
+                                Enterprise Client Portfolio, Sales Recovery, Offline Deployment & Device Ledger (Platform Owner Authority)
+                            </p>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:11px; background:rgba(16, 185, 129, 0.2); color:#34d399; border:1px solid rgba(16, 185, 129, 0.4); padding:4px 10px; border-radius:6px; font-weight:700;">
+                                🛡️ Git Crash-Proof Vault: Active
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 4 Top KPI Summary Cards -->
+                    <div class="stat-grid-4" style="margin-bottom:20px;">
+                        <div class="stat-box">
+                            <div class="stat-icon-wrap blue">🏫</div>
+                            <div>
+                                <div class="stat-label" data-i18n="vendor_total_clients">Total Client Schools</div>
+                                <div class="stat-number" id="crm-stat-total-clients">0</div>
+                                <div class="stat-sub"><span id="crm-stat-active-cnt" style="color:#16a34a; font-weight:700;">0 Active</span> • <span id="crm-stat-trial-cnt" style="color:#ea580c; font-weight:700;">0 Trial</span></div>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-icon-wrap purple">💰</div>
+                            <div>
+                                <div class="stat-label" data-i18n="vendor_total_sales">Total Gross Deals</div>
+                                <div class="stat-number" id="crm-stat-total-sales">₹0</div>
+                                <div class="stat-sub">Cumulative Contract Value</div>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-icon-wrap green">💵</div>
+                            <div>
+                                <div class="stat-label" data-i18n="vendor_total_collected">Total Collected</div>
+                                <div class="stat-number" id="crm-stat-total-collected" style="color:#16a34a;">₹0</div>
+                                <div class="stat-sub">Realized Cash / Bank Transfer</div>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-icon-wrap orange">⏳</div>
+                            <div>
+                                <div class="stat-label" data-i18n="vendor_total_outstanding">Market Dues Recovery</div>
+                                <div class="stat-number" id="crm-stat-total-due" style="color:#ea580c;">₹0</div>
+                                <div class="stat-sub"><span id="crm-stat-overdue-cnt" style="color:#dc2626; font-weight:700;">0 Overdue Alerts</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action & Filter Bar -->
+                    <div class="table-card" style="padding:16px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; flex:1;">
+                            <div style="position:relative; width:280px;">
+                                <span style="position:absolute; left:10px; top:9px; font-size:12px; color:var(--text-muted);">🔍</span>
+                                <input type="text" id="crm-search-input" placeholder="Search school, city, director, HWID..." oninput="filterCrmTable()" style="width:100%; padding:7px 12px 7px 32px; border:1px solid var(--border); border-radius:8px; font-size:12px; background:var(--bg-page); color:var(--text-heading); outline:none;">
+                            </div>
+                            <select id="crm-filter-status" onchange="filterCrmTable()" style="padding:7px 12px; border:1px solid var(--border); border-radius:8px; font-size:12px; background:var(--bg-page); color:var(--text-heading); font-weight:600; outline:none;">
+                                <option value="ALL">All Clients (सभी)</option>
+                                <option value="ACTIVE">🟢 Active Live (सक्रिय)</option>
+                                <option value="TRIAL">⭐ VIP Trial Running</option>
+                                <option value="OVERDUE">⚠️ Payment Overdue (बकाया)</option>
+                                <option value="EXPIRING">⏳ Expiring Soon (&lt;15 Days)</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <button class="btn btn-purple" onclick="openCrmClientModal(null)" style="font-size:12px; padding:7px 14px; font-weight:700;">
+                                ➕ नया क्लाइंट स्कूल जोड़ें
+                            </button>
+                            <button class="btn btn-outline" onclick="exportCrmToExcel()" style="font-size:12px; padding:7px 12px; font-weight:700; color:#15803d; border-color:#86efac; background:#f0fdf4;">
+                                📥 Export Master Excel (.XLSX)
+                            </button>
+                            <button class="btn btn-outline" onclick="downloadCrmCsv()" style="font-size:12px; padding:7px 12px; font-weight:600;">
+                                📥 CSV
+                            </button>
+                            <button class="btn btn-outline" onclick="openCrmKeyGenModal()" style="font-size:12px; padding:7px 12px; font-weight:700; color:#7e22ce; border-color:#d8b4fe; background:#faf5ff;">
+                                🔑 1-क्लिक की-जेनरेटर
+                            </button>
+                            <button class="btn btn-outline" onclick="loadCrmClients()" style="font-size:12px; padding:7px 10px;" title="रिफ्रेश करें">
+                                🔄
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Client Master Table -->
+                    <div class="table-card" style="padding:18px 20px; margin-bottom:24px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                            <div>
+                                <h4 style="font-size:14.5px; font-weight:800; color:var(--text-heading); margin:0;">Client Institutions & Commercial Ledger</h4>
+                                <span style="font-size:11.5px; color:var(--text-muted);">Persisted in 02_VENDOR_CONTROL_PRIVATE_HUB/client_portfolio_master.json (Crash-Proof Cloud Git Backup)</span>
+                            </div>
+                            <span id="crm-table-count-badge" style="font-size:11px; font-weight:700; background:#f1f5f9; color:#475569; padding:3px 10px; border-radius:12px;">Showing 0 records</span>
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table class="app-table" style="font-size:12px; min-width:980px;">
+                                <thead>
+                                    <tr style="background:#f8fafc;">
+                                        <th style="width:180px;">Client ID & School</th>
+                                        <th style="width:160px;">Director & Contact</th>
+                                        <th style="width:170px;">Commercials (₹)</th>
+                                        <th style="width:140px;">Payment Status & Due Date</th>
+                                        <th style="width:150px;">License & HWID</th>
+                                        <th>Voice of Customer / Notes</th>
+                                        <th style="width:120px; text-align:center;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vendor-crm-clients-tbody">
+                                    <tr><td colspan="7" style="text-align:center; padding:24px; color:var(--text-muted);">⏳ लोडिंग क्लाइंट पोर्टफोलियो...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-PANE 2: CURRICULUM PRESETS & PLATFORM BRANDING -->
+                <div id="sa-subpane-policy" style="display:none;">
+<!-- Target School & Safety Isolation Alert -->
                 <div style="background:rgba(245, 158, 11, 0.08); border:1px solid rgba(245, 158, 11, 0.3); border-radius:12px; padding:16px 20px; margin-bottom:20px; display:flex; align-items:flex-start; gap:14px;">
                     <span style="font-size:24px; line-height:1;">🏫</span>
                     <div style="flex:1;">
@@ -2193,6 +2330,8 @@
                         </button>
                     </div>
                 </div>
+                </div><!-- /sa-subpane-policy -->
+
             </div>
 
             <!-- 13. OPPORTUNITY DESK -->
@@ -3446,6 +3585,216 @@
             <!-- Bottom Micro-footer -->
             <div style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:16px;">
                 Apna School OS • Developed by Apna Software Hub • Helpline: 8504985149
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL: ADD / EDIT CLIENT SCHOOL (VENDOR CRM) -->
+    <div id="modal-crm-client" class="modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+        <div style="background:var(--bg-card); width:100%; max-width:760px; max-height:90vh; border-radius:14px; box-shadow:0 20px 40px rgba(0,0,0,0.3); overflow:hidden; display:flex; flex-direction:column; border:1px solid var(--border);">
+            <!-- Modal Header -->
+            <div style="padding:16px 22px; background:linear-gradient(135deg, #1e1b4b, #312e81); color:white; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div style="font-size:10.5px; font-weight:800; color:#a5b4fc; text-transform:uppercase; letter-spacing:0.8px;">VENDOR MASTER DOSSIER</div>
+                    <h3 id="crm-modal-title" style="margin:2px 0 0 0; font-size:17px; font-weight:800;">➕ नया क्लाइंट स्कूल जोड़ें (Onboard Client School)</h3>
+                </div>
+                <button type="button" onclick="closeCrmClientModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer; line-height:1;">✕</button>
+            </div>
+
+            <!-- Modal Body Scroll -->
+            <div style="padding:20px 24px; overflow-y:auto; flex:1;">
+                <input type="hidden" id="crm-input-id">
+
+                <!-- Section 1: Institution KYC & Address -->
+                <div style="margin-bottom:18px;">
+                    <div style="font-size:11.5px; font-weight:800; color:#4338ca; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:4px;">
+                        🏫 1. स्कूल व संचालक विवरण (KYC & Contact Info)
+                    </div>
+                    <div style="display:grid; grid-template-columns:2fr 1fr; gap:12px; margin-bottom:10px;">
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">स्कूल का नाम (School Name) *</label>
+                            <input type="text" id="crm-input-school-name" placeholder="उदा. Lakshya International Public School" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; margin-top:3px;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">बोर्ड (Affiliation)</label>
+                            <input type="text" id="crm-input-board" placeholder="CBSE / RBSE / UP Board / ICSE" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; margin-top:3px;">
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:10px;">
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">शहर / जिला (City)</label>
+                            <input type="text" id="crm-input-city" placeholder="उदा. Bikaner" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; margin-top:3px;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">राज्य (State)</label>
+                            <input type="text" id="crm-input-state" value="Rajasthan" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; margin-top:3px;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">पिनकोड (PIN)</label>
+                            <input type="text" id="crm-input-pin" placeholder="उदा. 334001" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; margin-top:3px;">
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:12px;">
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">डायरेक्टर / संचालक का नाम</label>
+                            <input type="text" id="crm-input-director" placeholder="उदा. Dr. Arvind Rathore" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; margin-top:3px;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">मोबाइल / कॉलिंग फोन *</label>
+                            <input type="text" id="crm-input-phone" placeholder="उदा. 9829012345" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; margin-top:3px;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">व्हाट्सएप नंबर (तकादा हेतु) *</label>
+                            <input type="text" id="crm-input-whatsapp" placeholder="उदा. 9829012345" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; margin-top:3px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Commercial Deal & Payment Terms -->
+                <div style="margin-bottom:18px;">
+                    <div style="font-size:11.5px; font-weight:800; color:#15803d; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:4px;">
+                        💰 2. सौदा मूल्य व भुगतान शेड्यूल (Commercial & Payment Terms)
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px; margin-bottom:10px;">
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">सेल / डिप्लॉयमेंट दिनांक</label>
+                            <input type="date" id="crm-input-sale-date" style="width:100%; padding:7px 8px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">कुल सौदा मूल्य (Deal ₹) *</label>
+                            <input type="number" id="crm-input-deal-val" placeholder="₹25,000" oninput="calcCrmDue()" style="width:100%; padding:7px 8px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px; font-weight:700;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">प्राप्त एडवांस (Received ₹)</label>
+                            <input type="number" id="crm-input-recv-val" placeholder="₹15,000" oninput="calcCrmDue()" style="width:100%; padding:7px 8px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px; color:#16a34a; font-weight:700;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">शुद्ध बकाया (Balance Due ₹)</label>
+                            <input type="number" id="crm-input-due-val" readonly style="width:100%; padding:7px 8px; border:1px solid #fed7aa; background:#fff7ed; border-radius:6px; font-size:12px; margin-top:3px; color:#c2410c; font-weight:800;">
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:10px;">
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">भुगतान मोड व रेफ़रेंस</label>
+                            <input type="text" id="crm-input-payment-mode" placeholder="उदा. UPI (PhonePe) / Cash / NEFT / Cheque" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">अगली किश्त देय तिथि (Due Date)</label>
+                            <input type="date" id="crm-input-due-date" style="width:100%; padding:7px 8px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px; font-weight:600;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: License & Machine Hardware (HWID) -->
+                <div style="margin-bottom:18px;">
+                    <div style="font-size:11.5px; font-weight:800; color:#7e22ce; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:4px;">
+                        🔑 3. लाइसेंस व मशीन HWID (Offline Hardware & License Key)
+                    </div>
+                    <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:10px; margin-bottom:10px;">
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">लाइसेंस प्रकार (Tier)</label>
+                            <select id="crm-input-tier" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px;">
+                                <option value="1-Year Annual License">1-Year Annual License (वार्षिक)</option>
+                                <option value="30-Day VIP Trial">30-Day VIP Trial (30-दिन ट्रायल)</option>
+                                <option value="2-Year Multi-Year License">2-Year Multi-Year License</option>
+                                <option value="Lifetime Perpetual License">Lifetime Perpetual (आजीवन)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">मशीन HWID / Installation ID</label>
+                            <input type="text" id="crm-input-hwid" placeholder="उदा. ASH-BKN-4491" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px; font-family:monospace; font-weight:700;">
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">रनिंग स्थिति (Running Status)</label>
+                            <select id="crm-input-running-status" style="width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px; font-weight:700;">
+                                <option value="ACTIVE" style="color:#16a34a;">🟢 ACTIVE (सक्रिय चल रहा है)</option>
+                                <option value="TRIAL" style="color:#ea580c;">⭐ TRIAL (ट्रायल रनिंग)</option>
+                                <option value="SUSPENDED" style="color:#dc2626;">🔴 SUSPENDED (स्थगित)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:2fr 1fr; gap:10px;">
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">मास्टर लाइसेंस एक्टिवेशन की (License Key)</label>
+                            <div style="display:flex; gap:6px; margin-top:3px;">
+                                <input type="text" id="crm-input-license-key" placeholder="ASH-XXXX-XXXX-XXXX" style="flex:1; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; font-family:monospace; font-weight:700; background:#f8fafc;">
+                                <button type="button" class="btn btn-outline" onclick="generateKeyForModal()" style="font-size:11px; padding:6px 10px; white-space:nowrap;">⚡ 1-क्लिक की बनाएं</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">लाइसेंस समाप्ति दिनांक (Expiry)</label>
+                            <input type="date" id="crm-input-expiry-date" style="width:100%; padding:7px 8px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Voice of Customer / CRM Feedback Log -->
+                <div>
+                    <div style="font-size:11.5px; font-weight:800; color:#c2410c; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:4px;">
+                        📝 4. क्लाइंट फीडबैक व भावी सुधार (Voice of Customer & Notes)
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">ऑब्जर्वेशन व स्कूल का अनुभव (Observations & Feedback)</label>
+                        <textarea id="crm-input-observations" rows="2" placeholder="स्कूल ऑपरेटर व डायरेक्टर का अनुभव, कार्यप्रणाली आदि दर्ज करें..." style="width:100%; padding:6px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px; resize:vertical;"></textarea>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">हार्डवेयर / कंप्यूटर समस्याएं (PC Issues Encountered)</label>
+                            <textarea id="crm-input-issues" rows="2" placeholder="उदा. पुराना प्रिंटर, 4GB RAM, धीमा पीसी, फ़ायरवॉल समस्या..." style="width:100%; padding:6px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px; resize:vertical;"></textarea>
+                        </div>
+                        <div>
+                            <label style="font-size:11.5px; font-weight:700; color:var(--text-heading);">प्रिंसिपल द्वारा मांगे गए नए फीचर्स (Requested Features)</label>
+                            <textarea id="crm-input-requested" rows="2" placeholder="उदा. बस जीपीएस, बायोमेट्रिक सिंक, आगामी मांगें..." style="width:100%; padding:6px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; margin-top:3px; resize:vertical;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div style="padding:14px 24px; background:var(--bg-page); border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                <button type="button" class="btn btn-outline" onclick="closeCrmClientModal()" style="font-size:12px; padding:7px 16px;">
+                    रद्द करें (Cancel)
+                </button>
+                <button type="button" class="btn btn-purple" onclick="saveCrmClient()" style="font-size:12.5px; padding:8px 24px; font-weight:800;">
+                    💾 सुरक्षित करें व गिट-बैकअप में जोड़ें
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: OFFLINE MASTER KEY GENERATOR -->
+    <div id="modal-crm-keygen" class="modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+        <div style="background:var(--bg-card); width:100%; max-width:480px; border-radius:14px; box-shadow:0 20px 40px rgba(0,0,0,0.3); overflow:hidden; border:1px solid var(--border);">
+            <div style="padding:16px 20px; background:linear-gradient(135deg, #4c1d95, #6d28d9); color:white; display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0; font-size:16px; font-weight:800;">🔑 1-क्लिक मास्टर लाइसेंस की जेनरेटर</h3>
+                <button type="button" onclick="closeCrmKeyGenModal()" style="background:none; border:none; color:white; font-size:18px; cursor:pointer;">✕</button>
+            </div>
+            <div style="padding:20px;">
+                <div style="margin-bottom:12px;">
+                    <label style="font-size:12px; font-weight:700; color:var(--text-heading);">स्कूल कंप्यूटर की HWID / Installation ID दर्ज करें *</label>
+                    <input type="text" id="crm-keygen-hwid" placeholder="उदा. ASH-BKN-4491" style="width:100%; padding:8px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; font-family:monospace; font-weight:800; margin-top:4px;">
+                </div>
+                <div style="margin-bottom:16px;">
+                    <label style="font-size:12px; font-weight:700; color:var(--text-heading);">लाइसेंस वैधता अवधि चुनें (Duration)</label>
+                    <select id="crm-keygen-duration" style="width:100%; padding:8px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; font-weight:600; margin-top:4px;">
+                        <option value="365">1 वर्ष (365 दिन) — वार्षिक रिन्यूअल लाइसेंस</option>
+                        <option value="30">30 दिन — VIP एक्सटेंशन / ट्रायल</option>
+                        <option value="730">2 वर्ष (730 दिन) — द्वि-वर्षीय लाइसेंस</option>
+                        <option value="1095">3 वर्ष (1095 दिन) — त्रि-वर्षीय लाइसेंस</option>
+                        <option value="3650">आजीवन / 10 वर्ष (3650 दिन) — परपेचुअल</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-purple" onclick="generateKeyOfflinePopup()" style="width:100%; padding:10px; font-size:13px; font-weight:800; justify-content:center; margin-bottom:14px;">
+                    ⚡ लाइसेंस की जनरेट करें (Generate Signed Key)
+                </button>
+                <div id="crm-keygen-result-wrap" style="display:none; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:12px; text-align:center;">
+                    <div style="font-size:11px; color:#64748b; font-weight:700; margin-bottom:4px;">हस्ताक्षरित मास्टर लाइसेंस की (Signed License Key):</div>
+                    <div id="crm-keygen-result-text" style="font-size:18px; font-family:monospace; font-weight:900; color:#1e1b4b; letter-spacing:1.5px; margin-bottom:8px;"></div>
+                    <button type="button" class="btn btn-outline" onclick="copyKeyGenResult()" style="font-size:11px; padding:4px 12px; font-weight:700;">
+                        📋 की कॉपी करें (Copy Key)
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -5427,6 +5776,7 @@ Bhadar, Amethi (U.P.)`;
             if (navItem) navItem.classList.add('active');
 
             if (tabId === 'super-admin') {
+                loadCrmClients();
                 loadSuperTerms();
                 loadPolicyAuditHistory();
                 loadPlatformBranding();
@@ -8686,6 +9036,559 @@ Bhadar, Amethi (U.P.)`;
                 'x-username': currentUser ? (currentUser.username || '') : ''
             };
         }
+
+        
+        // ======================================================================
+        // 👑 VENDOR CLIENT PORTFOLIO & SALES CRM ENGINE (Vendor Authority Only)
+        // ======================================================================
+
+        window.CRM_CLIENTS = [];
+
+        function switchSuperAdminSubTab(tab) {
+            const crmPane = document.getElementById('sa-subpane-crm');
+            const policyPane = document.getElementById('sa-subpane-policy');
+            const crmBtn = document.getElementById('sa-subtab-btn-crm');
+            const policyBtn = document.getElementById('sa-subtab-btn-policy');
+
+            if (tab === 'crm') {
+                if (crmPane) crmPane.style.display = 'block';
+                if (policyPane) policyPane.style.display = 'none';
+                if (crmBtn) { crmBtn.className = 'btn btn-purple'; }
+                if (policyBtn) { policyBtn.className = 'btn btn-outline'; }
+                loadCrmClients();
+            } else {
+                if (crmPane) crmPane.style.display = 'none';
+                if (policyPane) policyPane.style.display = 'block';
+                if (crmBtn) { crmBtn.className = 'btn btn-outline'; }
+                if (policyBtn) { policyBtn.className = 'btn btn-purple'; }
+                loadSuperTerms();
+                loadPolicyAuditHistory();
+                loadPlatformBranding();
+            }
+        }
+
+        async function loadCrmClients() {
+            try {
+                const res = await fetch('/api/vendor/clients', { headers: getAuthHeaders() });
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data.success) {
+                    window.CRM_CLIENTS = data.clients || [];
+                    updateCrmSummaryCards(data.summary || {});
+                    filterCrmTable();
+                }
+            } catch (err) {
+                console.error('[CRM] Load clients error:', err);
+            }
+        }
+
+        function updateCrmSummaryCards(summary) {
+            const totalEl = document.getElementById('crm-stat-total-clients');
+            const salesEl = document.getElementById('crm-stat-total-sales');
+            const recEl = document.getElementById('crm-stat-total-collected');
+            const dueEl = document.getElementById('crm-stat-total-due');
+            const activeSub = document.getElementById('crm-stat-active-cnt');
+            const trialSub = document.getElementById('crm-stat-trial-cnt');
+            const overdueSub = document.getElementById('crm-stat-overdue-cnt');
+
+            if (totalEl) totalEl.innerText = summary.total_clients || 0;
+            if (salesEl) salesEl.innerText = '₹' + Number(summary.total_deal_value || 0).toLocaleString('en-IN');
+            if (recEl) recEl.innerText = '₹' + Number(summary.total_received || 0).toLocaleString('en-IN');
+            if (dueEl) dueEl.innerText = '₹' + Number(summary.total_outstanding || 0).toLocaleString('en-IN');
+
+            if (activeSub) activeSub.innerText = `${summary.active_count || 0} Active`;
+            if (trialSub) trialSub.innerText = `${summary.trial_count || 0} Trial`;
+            if (overdueSub) overdueSub.innerText = `${summary.overdue_count || 0} Overdue Alerts`;
+        }
+
+        function filterCrmTable() {
+            const q = (document.getElementById('crm-search-input')?.value || '').toLowerCase().trim();
+            const filter = document.getElementById('crm-filter-status')?.value || 'ALL';
+            const now = new Date();
+
+            const filtered = (window.CRM_CLIENTS || []).filter(c => {
+                const matchSearch = !q ||
+                    (c.id && c.id.toLowerCase().includes(q)) ||
+                    (c.school_name && c.school_name.toLowerCase().includes(q)) ||
+                    (c.city && c.city.toLowerCase().includes(q)) ||
+                    (c.director_name && c.director_name.toLowerCase().includes(q)) ||
+                    (c.phone && c.phone.includes(q)) ||
+                    (c.whatsapp && c.whatsapp.includes(q)) ||
+                    (c.hwid && c.hwid.toLowerCase().includes(q));
+
+                if (!matchSearch) return false;
+
+                if (filter === 'ALL') return true;
+                if (filter === 'ACTIVE') return c.running_status === 'ACTIVE';
+                if (filter === 'TRIAL') return c.running_status === 'TRIAL';
+                if (filter === 'OVERDUE') {
+                    const due = Number(c.balance_due) || 0;
+                    if (due <= 0 || !c.next_due_date) return false;
+                    return new Date(c.next_due_date + 'T23:59:59') < now;
+                }
+                if (filter === 'EXPIRING') {
+                    if (!c.expiry_date) return false;
+                    const exp = new Date(c.expiry_date + 'T23:59:59');
+                    const diffDays = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+                    return diffDays >= 0 && diffDays <= 15;
+                }
+                return true;
+            });
+
+            renderCrmTableRows(filtered);
+        }
+
+        function renderCrmTableRows(clients) {
+            const tbody = document.getElementById('vendor-crm-clients-tbody');
+            const countBadge = document.getElementById('crm-table-count-badge');
+            if (countBadge) countBadge.innerText = `Showing ${clients.length} of ${(window.CRM_CLIENTS || []).length} records`;
+
+            if (!tbody) return;
+            if (!clients || clients.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted); font-size:13px;">🔍 कोई क्लाइंट स्कूल नहीं मिला।</td></tr>`;
+                return;
+            }
+
+            const now = new Date();
+
+            tbody.innerHTML = clients.map(c => {
+                const deal = Number(c.deal_value) || 0;
+                const rec = Number(c.received_amount) || 0;
+                const due = Number(c.balance_due != null ? c.balance_due : (deal - rec));
+
+                let payBadge = `<span style="font-size:10px; font-weight:800; background:#dcfce7; color:#15803d; padding:2px 7px; border-radius:10px; border:1px solid #86efac;">PAID</span>`;
+                if (due > 0 && rec > 0) {
+                    payBadge = `<span style="font-size:10px; font-weight:800; background:#fef3c7; color:#92400e; padding:2px 7px; border-radius:10px; border:1px solid #fde68a;">PARTIAL</span>`;
+                } else if (due > 0 && rec === 0) {
+                    payBadge = `<span style="font-size:10px; font-weight:800; background:#fee2e2; color:#b91c1c; padding:2px 7px; border-radius:10px; border:1px solid #fca5a5;">UNPAID</span>`;
+                }
+
+                let dueAlert = '';
+                if (due > 0 && c.next_due_date) {
+                    const dueDate = new Date(c.next_due_date + 'T23:59:59');
+                    if (dueDate < now) {
+                        dueAlert = `<div style="font-size:10px; font-weight:800; color:#dc2626; margin-top:2px;">⚠️ OVERDUE</div>`;
+                    }
+                }
+
+                let statusBadge = `<span style="font-size:10.5px; font-weight:700; background:#dcfce7; color:#15803d; padding:2px 8px; border-radius:4px;">🟢 Active</span>`;
+                if (c.running_status === 'TRIAL') {
+                    statusBadge = `<span style="font-size:10.5px; font-weight:700; background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:4px;">⭐ Trial</span>`;
+                } else if (c.running_status === 'SUSPENDED') {
+                    statusBadge = `<span style="font-size:10.5px; font-weight:700; background:#fee2e2; color:#b91c1c; padding:2px 8px; border-radius:4px;">🔴 Suspended</span>`;
+                }
+
+                const clientJsonEscaped = encodeURIComponent(JSON.stringify(c));
+
+                return `
+                    <tr style="border-bottom:1px solid var(--border); transition:background 0.15s;" onmouseover="this.style.background='rgba(99, 102, 241, 0.04)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding:12px 10px; vertical-align:top;">
+                            <div style="font-family:monospace; font-size:11px; font-weight:800; color:#6366f1;">${c.id || 'CLT-000'}</div>
+                            <strong style="font-size:13px; color:var(--text-heading); display:block; margin:2px 0;">${c.school_name || 'Unnamed School'}</strong>
+                            <div style="font-size:11px; color:var(--text-muted);">${c.city ? c.city + ', ' : ''}${c.state || ''}</div>
+                            <span style="font-size:10px; background:#f1f5f9; color:#475569; padding:1px 6px; border-radius:4px; font-weight:600; display:inline-block; margin-top:3px;">${c.board || 'State Board'}</span>
+                        </td>
+                        <td style="padding:12px 10px; vertical-align:top;">
+                            <div style="font-weight:700; color:var(--text-heading); font-size:12.5px;">👤 ${c.director_name || 'N/A'}</div>
+                            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">📞 ${c.phone || 'N/A'}</div>
+                            ${c.whatsapp ? `<a href="https://wa.me/91${c.whatsapp.replace(/\D/g, '')}" target="_blank" style="font-size:11px; color:#16a34a; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:3px; margin-top:3px;">💬 WhatsApp</a>` : ''}
+                        </td>
+                        <td style="padding:12px 10px; vertical-align:top;">
+                            <div style="font-size:12px;">सौदा: <strong>₹${deal.toLocaleString('en-IN')}</strong></div>
+                            <div style="font-size:11.5px; color:#16a34a; font-weight:700;">जमा: ₹${rec.toLocaleString('en-IN')}</div>
+                            <div style="font-size:12px; color:#c2410c; font-weight:800; margin-top:1px;">बाकी: ₹${due.toLocaleString('en-IN')}</div>
+                        </td>
+                        <td style="padding:12px 10px; vertical-align:top;">
+                            <div>${payBadge}</div>
+                            <div style="font-size:11px; color:var(--text-heading); font-weight:700; margin-top:4px;">
+                                ${c.next_due_date ? '📅 ' + c.next_due_date : '—'}
+                            </div>
+                            ${dueAlert}
+                            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">सेल: ${c.sale_date || '—'}</div>
+                        </td>
+                        <td style="padding:12px 10px; vertical-align:top;">
+                            <div style="margin-bottom:3px;">${statusBadge}</div>
+                            <div style="font-size:10.5px; color:var(--text-muted);">${c.license_tier || 'Annual'}</div>
+                            <div style="font-family:monospace; font-size:10.5px; font-weight:700; color:#475569; background:#f1f5f9; padding:2px 5px; border-radius:4px; display:inline-block; margin-top:2px;">
+                                ${c.hwid ? 'HWID: ' + c.hwid : 'No HWID'}
+                            </div>
+                            ${c.license_key ? `<div style="font-family:monospace; font-size:9.5px; color:#6366f1; margin-top:2px;" title="${c.license_key}">🔑 ${c.license_key.substring(0, 8)}...</div>` : ''}
+                        </td>
+                        <td style="padding:12px 10px; vertical-align:top; max-width:260px;">
+                            ${c.observations ? `<div style="font-size:11px; color:var(--text-heading); line-height:1.4; margin-bottom:4px;"><strong>फीडबैक:</strong> ${c.observations}</div>` : ''}
+                            ${c.issues_faced ? `<div style="font-size:10.5px; color:#b91c1c; line-height:1.3; margin-bottom:3px;"><strong>समस्याएं:</strong> ${c.issues_faced}</div>` : ''}
+                            ${c.requested_features ? `<div style="font-size:10.5px; color:#0284c7; line-height:1.3;"><strong>मांग:</strong> ${c.requested_features}</div>` : ''}
+                        </td>
+                        <td style="padding:12px 10px; vertical-align:top; text-align:center;">
+                            <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
+                                <button class="btn btn-outline" onclick="openCrmClientModalByData('${clientJsonEscaped}')" style="font-size:11px; padding:3px 8px; width:100%; justify-content:center;">
+                                    ✏️ एडिट
+                                </button>
+                                ${due > 0 ? `
+                                <button class="btn btn-outline" onclick="sendCrmWhatsAppReminderByData('${clientJsonEscaped}')" style="font-size:11px; padding:3px 8px; width:100%; justify-content:center; color:#15803d; border-color:#86efac; background:#f0fdf4;" title="1-क्लिक तकादा संदेश भेजें">
+                                    📲 तकादा
+                                </button>` : ''}
+                                <button class="btn btn-outline" onclick="openCrmKeyGenModalForClient('${c.hwid || ''}')" style="font-size:10.5px; padding:2px 6px; width:100%; justify-content:center; color:#7e22ce;" title="लाइसेंस की बनाएं">
+                                    🔑 की बनाएं
+                                </button>
+                                <button class="btn btn-outline" onclick="deleteCrmClient('${c.id}')" style="font-size:10px; padding:2px 6px; width:100%; justify-content:center; color:#dc2626;" title="हटाएं">
+                                    🗑️ हटाएं
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function calcCrmDue() {
+            const deal = Number(document.getElementById('crm-input-deal-val')?.value) || 0;
+            const recv = Number(document.getElementById('crm-input-recv-val')?.value) || 0;
+            const dueEl = document.getElementById('crm-input-due-val');
+            if (dueEl) dueEl.value = Math.max(0, deal - recv);
+        }
+
+        function openCrmClientModal(client) {
+            const modal = document.getElementById('modal-crm-client');
+            if (!modal) return;
+
+            document.getElementById('crm-modal-title').innerText = client ? '✏️ क्लाइंट स्कूल विवरण संपादित करें (Edit Client)' : '➕ नया क्लाइंट स्कूल जोड़ें (Onboard Client School)';
+            document.getElementById('crm-input-id').value = client ? client.id : '';
+            document.getElementById('crm-input-school-name').value = client ? client.school_name || '' : '';
+            document.getElementById('crm-input-board').value = client ? client.board || '' : 'CBSE / RBSE';
+            document.getElementById('crm-input-city').value = client ? client.city || '' : '';
+            document.getElementById('crm-input-state').value = client ? client.state || 'Rajasthan' : 'Rajasthan';
+            document.getElementById('crm-input-pin').value = client ? client.pin || '' : '';
+            document.getElementById('crm-input-director').value = client ? client.director_name || '' : '';
+            document.getElementById('crm-input-phone').value = client ? client.phone || '' : '';
+            document.getElementById('crm-input-whatsapp').value = client ? client.whatsapp || client.phone || '' : '';
+            document.getElementById('crm-input-sale-date').value = client ? client.sale_date || '' : new Date().toISOString().split('T')[0];
+            document.getElementById('crm-input-deal-val').value = client ? client.deal_value || '' : '';
+            document.getElementById('crm-input-recv-val').value = client ? client.received_amount || '' : '';
+            document.getElementById('crm-input-due-val').value = client ? client.balance_due || '' : '';
+            document.getElementById('crm-input-payment-mode').value = client ? client.payment_mode || '' : 'UPI / Cash';
+            document.getElementById('crm-input-due-date').value = client ? client.next_due_date || '' : '';
+            document.getElementById('crm-input-tier').value = client ? client.license_tier || '1-Year Annual License' : '1-Year Annual License';
+            document.getElementById('crm-input-hwid').value = client ? client.hwid || '' : '';
+            document.getElementById('crm-input-running-status').value = client ? client.running_status || 'ACTIVE' : 'ACTIVE';
+            document.getElementById('crm-input-license-key').value = client ? client.license_key || '' : '';
+            document.getElementById('crm-input-expiry-date').value = client ? client.expiry_date || '' : '';
+            document.getElementById('crm-input-observations').value = client ? client.observations || '' : '';
+            document.getElementById('crm-input-issues').value = client ? client.issues_faced || '' : '';
+            document.getElementById('crm-input-requested').value = client ? client.requested_features || '' : '';
+
+            modal.style.display = 'flex';
+        }
+
+        function openCrmClientModalByData(jsonStr) {
+            try {
+                const client = JSON.parse(decodeURIComponent(jsonStr));
+                openCrmClientModal(client);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function closeCrmClientModal() {
+            const modal = document.getElementById('modal-crm-client');
+            if (modal) modal.style.display = 'none';
+        }
+
+        async function saveCrmClient() {
+            const schoolName = document.getElementById('crm-input-school-name')?.value?.trim();
+            if (!schoolName) {
+                alert('⚠️ कृपया स्कूल का नाम दर्ज करें!');
+                return;
+            }
+
+            const payload = {
+                id: document.getElementById('crm-input-id')?.value || null,
+                school_name: schoolName,
+                board: document.getElementById('crm-input-board')?.value?.trim(),
+                city: document.getElementById('crm-input-city')?.value?.trim(),
+                state: document.getElementById('crm-input-state')?.value?.trim(),
+                pin: document.getElementById('crm-input-pin')?.value?.trim(),
+                director_name: document.getElementById('crm-input-director')?.value?.trim(),
+                phone: document.getElementById('crm-input-phone')?.value?.trim(),
+                whatsapp: document.getElementById('crm-input-whatsapp')?.value?.trim(),
+                sale_date: document.getElementById('crm-input-sale-date')?.value,
+                deal_value: Number(document.getElementById('crm-input-deal-val')?.value) || 0,
+                received_amount: Number(document.getElementById('crm-input-recv-val')?.value) || 0,
+                balance_due: Number(document.getElementById('crm-input-due-val')?.value) || 0,
+                payment_mode: document.getElementById('crm-input-payment-mode')?.value?.trim(),
+                next_due_date: document.getElementById('crm-input-due-date')?.value,
+                license_tier: document.getElementById('crm-input-tier')?.value,
+                hwid: document.getElementById('crm-input-hwid')?.value?.trim(),
+                running_status: document.getElementById('crm-input-running-status')?.value,
+                license_key: document.getElementById('crm-input-license-key')?.value?.trim(),
+                expiry_date: document.getElementById('crm-input-expiry-date')?.value,
+                observations: document.getElementById('crm-input-observations')?.value?.trim(),
+                issues_faced: document.getElementById('crm-input-issues')?.value?.trim(),
+                requested_features: document.getElementById('crm-input-requested')?.value?.trim()
+            };
+
+            try {
+                const res = await fetch('/api/vendor/clients', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('🎉 ' + data.message);
+                    closeCrmClientModal();
+                    loadCrmClients();
+                } else {
+                    alert('❌ ' + (data.error || 'त्रुटि हुई।'));
+                }
+            } catch (err) {
+                alert('त्रुटि: ' + err.message);
+            }
+        }
+
+        async function deleteCrmClient(id) {
+            if (!confirm(`क्या आप निश्चित रूप से क्लाइंट (${id}) को रिकॉर्ड से हटाना चाहते हैं?`)) return;
+            try {
+                const res = await fetch(`/api/vendor/clients/${id}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('सफलता: ' + data.message);
+                    loadCrmClients();
+                } else {
+                    alert('त्रुटि: ' + (data.error || 'हटाया नहीं जा सका।'));
+                }
+            } catch (err) {
+                alert('त्रुटि: ' + err.message);
+            }
+        }
+
+        async function generateKeyForModal() {
+            const hwid = document.getElementById('crm-input-hwid')?.value?.trim();
+            if (!hwid) {
+                alert('⚠️ कृपया पहले मशीन HWID दर्ज करें!');
+                return;
+            }
+            try {
+                const res = await fetch('/api/vendor/generate-license', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ hwid: hwid, validity_days: 365 })
+                });
+                const data = await res.json();
+                if (data.success && data.license_key) {
+                    document.getElementById('crm-input-license-key').value = data.license_key;
+                    if (!document.getElementById('crm-input-expiry-date').value) {
+                        const d = new Date();
+                        d.setFullYear(d.getFullYear() + 1);
+                        document.getElementById('crm-input-expiry-date').value = d.toISOString().split('T')[0];
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function openCrmKeyGenModal() {
+            document.getElementById('crm-keygen-hwid').value = '';
+            document.getElementById('crm-keygen-result-wrap').style.display = 'none';
+            document.getElementById('modal-crm-keygen').style.display = 'flex';
+        }
+
+        function openCrmKeyGenModalForClient(hwid) {
+            document.getElementById('crm-keygen-hwid').value = hwid || '';
+            document.getElementById('crm-keygen-result-wrap').style.display = 'none';
+            document.getElementById('modal-crm-keygen').style.display = 'flex';
+            if (hwid) generateKeyOfflinePopup();
+        }
+
+        function closeCrmKeyGenModal() {
+            document.getElementById('modal-crm-keygen').style.display = 'none';
+        }
+
+        async function generateKeyOfflinePopup() {
+            const hwid = document.getElementById('crm-keygen-hwid')?.value?.trim();
+            const days = parseInt(document.getElementById('crm-keygen-duration')?.value) || 365;
+            if (!hwid) {
+                alert('⚠️ कृपया मशीन Installation ID / HWID दर्ज करें!');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/vendor/generate-license', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ hwid: hwid, validity_days: days })
+                });
+                const data = await res.json();
+                if (data.success && data.license_key) {
+                    const resWrap = document.getElementById('crm-keygen-result-wrap');
+                    const resText = document.getElementById('crm-keygen-result-text');
+                    if (resText) resText.innerText = data.license_key;
+                    if (resWrap) resWrap.style.display = 'block';
+                }
+            } catch (err) {
+                alert('त्रुटि: ' + err.message);
+            }
+        }
+
+        function copyKeyGenResult() {
+            const key = document.getElementById('crm-keygen-result-text')?.innerText?.trim();
+            if (key) {
+                navigator.clipboard.writeText(key).then(() => {
+                    alert(`📋 लाइसेंस की कॉपी हो गई:\n${key}`);
+                }).catch(() => {
+                    prompt('की कॉपी करें:', key);
+                });
+            }
+        }
+
+        function sendCrmWhatsAppReminderByData(jsonStr) {
+            try {
+                const c = JSON.parse(decodeURIComponent(jsonStr));
+                const phone = (c.whatsapp || c.phone || '').replace(/\D/g, '');
+                if (!phone) {
+                    alert('⚠️ इस क्लाइंट का व्हाट्सएप नंबर उपलब्ध नहीं है!');
+                    return;
+                }
+
+                const cleanPhone = phone.length === 10 ? '91' + phone : phone;
+                const msg = `आदरणीय ${c.director_name || 'डायरेक्टर महोदय'}, नमस्कार। 🙏\n\nअपना स्कूल OS (Apna Software Hub) से संबंधित सूचना:\nआपके संस्थान *${c.school_name}* हेतु सॉफ्टवेयर की शेष किश्त राशि *₹${Number(c.balance_due || 0).toLocaleString('en-IN')}* की देय तिथि *${c.next_due_date || 'शीघ्र'}* है।\n\nकृपया सुविधानुसार भुगतान कर रसीद साझा करने का कष्ट करें ताकि आपकी सेवाएं व वार्षिक अपडेट निरंतर सुचारु रहें।\n\nहेल्पलाइन / तकनीकी सहायता: 8504985149 / 8303324088\nधन्यवाद!\n- अपना सॉफ्टवेयर हब (AI & Technology Division)`;
+
+                const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
+                window.open(url, '_blank');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function downloadCrmCsv() {
+            window.open('/api/vendor/export-csv', '_blank');
+        }
+
+        async function exportCrmToExcel() {
+            const clients = window.CRM_CLIENTS || [];
+            if (!clients.length) {
+                alert('⚠️ निर्यात हेतु कोई क्लाइंट रिकॉर्ड नहीं है!');
+                return;
+            }
+
+            if (typeof ExcelJS === 'undefined') {
+                alert('ExcelJS लोड नहीं हुआ, CSV डाउनलोड की जा रही है...');
+                downloadCrmCsv();
+                return;
+            }
+
+            try {
+                const wb = new ExcelJS.Workbook();
+                wb.creator = 'Apna Software Hub';
+                wb.created = new Date();
+
+                const ws = wb.addWorksheet('Client Portfolio Master', {
+                    views: [{ showGridLines: true }]
+                });
+
+                // Title Row
+                ws.mergeCells('A1:L1');
+                const titleCell = ws.getCell('A1');
+                titleCell.value = 'APNA SOFTWARE HUB — VENDOR CLIENT PORTFOLIO & SALES MASTER';
+                titleCell.font = { name: 'Arial', size: 14, bold: true, color: { argb: 'FFFFFFFF' } };
+                titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E1B4B' } };
+                titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
+                ws.getRow(1).height = 36;
+
+                // Subtitle Row
+                ws.mergeCells('A2:L2');
+                const subCell = ws.getCell('A2');
+                subCell.value = `Exported On: ${new Date().toLocaleString('en-IN')} | Total Clients: ${clients.length} | Master Authority: Hanu Ganeshan (8504985149)`;
+                subCell.font = { name: 'Arial', size: 10, italic: true, color: { argb: 'FFE2E8F0' } };
+                subCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF312E81' } };
+                subCell.alignment = { vertical: 'middle', horizontal: 'center' };
+                ws.getRow(2).height = 22;
+
+                // Headers
+                const headers = [
+                    'Client ID', 'School Name', 'Board', 'City', 'Director / Contact',
+                    'Phone / WhatsApp', 'Sale Date', 'Deal Value (₹)', 'Received (₹)',
+                    'Balance Due (₹)', 'Next Due Date', 'Status & HWID'
+                ];
+                const headerRow = ws.addRow(headers);
+                headerRow.height = 26;
+                headerRow.eachCell((cell) => {
+                    cell.font = { name: 'Arial', size: 10.5, bold: true, color: { argb: 'FFFFFFFF' } };
+                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4338CA' } };
+                    cell.alignment = { vertical: 'middle', horizontal: 'center' };
+                    cell.border = {
+                        top: { style: 'thin', color: { argb: 'FFCBD5E1' } },
+                        bottom: { style: 'medium', color: { argb: 'FF0F172A' } }
+                    };
+                });
+
+                // Data Rows
+                clients.forEach((c, idx) => {
+                    const deal = Number(c.deal_value) || 0;
+                    const rec = Number(c.received_amount) || 0;
+                    const due = Number(c.balance_due != null ? c.balance_due : (deal - rec));
+
+                    const row = ws.addRow([
+                        c.id || '',
+                        c.school_name || '',
+                        c.board || '',
+                        c.city || '',
+                        c.director_name || '',
+                        c.whatsapp || c.phone || '',
+                        c.sale_date || '',
+                        deal,
+                        rec,
+                        due,
+                        c.next_due_date || '',
+                        `${c.running_status || 'ACTIVE'} | ${c.hwid || 'No HWID'}`
+                    ]);
+
+                    row.height = 22;
+                    const isEven = idx % 2 === 0;
+                    const bgArgb = isEven ? 'FFFFFFFF' : 'FFF8FAFC';
+
+                    row.eachCell((cell, colNum) => {
+                        cell.font = { name: 'Arial', size: 10 };
+                        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: bgArgb } };
+                        cell.alignment = { vertical: 'middle', horizontal: colNum >= 8 && colNum <= 10 ? 'right' : 'left' };
+                        if (colNum >= 8 && colNum <= 10) {
+                            cell.numFmt = '₹#,##0';
+                        }
+                        cell.border = {
+                            bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } }
+                        };
+                    });
+                });
+
+                ws.columns = [
+                    { width: 14 }, { width: 34 }, { width: 18 }, { width: 16 }, { width: 22 },
+                    { width: 18 }, { width: 14 }, { width: 16 }, { width: 16 }, { width: 16 },
+                    { width: 16 }, { width: 24 }
+                ];
+
+                const buffer = await wb.xlsx.writeBuffer();
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `School_Clients_Master_${new Date().toISOString().split('T')[0]}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                alert('🎉 मास्टर एक्सेल फ़ाइल सफलतापूर्वक डाउनलोड हो गई!');
+            } catch (err) {
+                console.error('Excel Export Error:', err);
+                alert('एक्सेल निर्यात त्रुटि: ' + err.message);
+            }
+        }
+
+
 
         async function loadSuperTerms() {
             if (!currentUser || (currentUser.role !== 'super_admin' && currentUser.username !== 'hanuganeshan') || currentUser.is_demo) return;

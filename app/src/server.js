@@ -14,6 +14,7 @@ const BackupEODService = require('./services/backupEODService');
 const AttendanceService = require('./services/attendanceService');
 const FeedbackService = require('./services/feedbackService');
 const MigrationService = require('./services/migrationService');
+const VendorCrmService = require('./services/vendorCrmService');
 const { initDatabase, getDb, syncShadowVault, PRIMARY_DB_PATH, VAULT_DB_PATH } = require('./database/db');
 
 initDatabase();
@@ -160,6 +161,68 @@ const server = http.createServer(async (req, res) => {
             const body = await parseBody(req);
             const result = ExamService.rollbackPolicy(body.historyId);
             return sendJson(res, result.success ? 200 : 400, result);
+        }
+
+        // 1.2 Vendor Client Portfolio & Sales CRM (Developer & Vendor Authority Only)
+        if (pathname === '/api/vendor/clients' && method === 'GET') {
+            return sendJson(res, 200, VendorCrmService.getAll());
+        }
+        if (pathname === '/api/vendor/clients' && method === 'POST') {
+            const body = await parseBody(req);
+            const result = VendorCrmService.upsertClient(body);
+            return sendJson(res, result.success ? 200 : 400, result);
+        }
+        if (pathname.startsWith('/api/vendor/clients/') && method === 'DELETE') {
+            const clientId = pathname.replace('/api/vendor/clients/', '').trim();
+            const result = VendorCrmService.deleteClient(clientId);
+            return sendJson(res, result.success ? 200 : 404, result);
+        }
+        if (pathname === '/api/vendor/generate-license' && method === 'POST') {
+            const body = await parseBody(req);
+            const hwid = body.hwid || '';
+            const days = parseInt(body.validity_days) || 365;
+            const key = VendorCrmService.generateKey(hwid, days);
+            return sendJson(res, 200, { success: true, hwid, validity_days: days, license_key: key });
+        }
+        if (pathname === '/api/vendor/export-csv' && method === 'GET') {
+            const data = VendorCrmService.getAll();
+            const clients = data.clients || [];
+            let csv = "Client ID,School Name,Board,City,State,Director Name,Phone,WhatsApp,Email,Sale Date,Deal Value (INR),Received (INR),Balance Due (INR),Next Due Date,Payment Status,License Tier,HWID,License Key,Expiry Date,Running Status,Quality Score,Observations,Issues Faced,Requested Features\n";
+            clients.forEach(c => {
+                const escapeCsv = (str) => `"${String(str || '').replace(/"/g, '""')}"`;
+                csv += [
+                    escapeCsv(c.id),
+                    escapeCsv(c.school_name),
+                    escapeCsv(c.board),
+                    escapeCsv(c.city),
+                    escapeCsv(c.state),
+                    escapeCsv(c.director_name),
+                    escapeCsv(c.phone),
+                    escapeCsv(c.whatsapp),
+                    escapeCsv(c.email),
+                    escapeCsv(c.sale_date),
+                    c.deal_value || 0,
+                    c.received_amount || 0,
+                    c.balance_due || 0,
+                    escapeCsv(c.next_due_date),
+                    escapeCsv(c.payment_status),
+                    escapeCsv(c.license_tier),
+                    escapeCsv(c.hwid),
+                    escapeCsv(c.license_key),
+                    escapeCsv(c.expiry_date),
+                    escapeCsv(c.running_status),
+                    c.quality_score || 90,
+                    escapeCsv(c.observations),
+                    escapeCsv(c.issues_faced),
+                    escapeCsv(c.requested_features)
+                ].join(',') + "\n";
+            });
+            res.writeHead(200, {
+                'Content-Type': 'text/csv; charset=utf-8',
+                'Content-Disposition': 'attachment; filename="School_Clients_Master.csv"',
+                'Access-Control-Allow-Origin': '*'
+            });
+            return res.end(csv);
         }
 
         // 1.1 Centralized Platform Branding Settings
