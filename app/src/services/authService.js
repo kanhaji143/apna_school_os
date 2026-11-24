@@ -175,7 +175,7 @@ class AuthService {
 
     static resetPasswordWithMasterKey(username, masterKey, newPassword) {
         const db = getDb();
-        const validKeys = ['8504985149', 'APNA8504985149', 'MASTER@2026', '8303324088'];
+        const validKeys = ['APNA-ADMIN-RECOVERY', 'APNAADMINRECOVERY', '8504985149', 'APNA8504985149', 'MASTER@2026', '8303324088'];
         if (!validKeys.includes(masterKey.trim())) {
             return { success: false, error: 'अमान्य मास्टर की (Invalid Master Key). कृपया सहायता हेतु 8504985149 पर संपर्क करें।' };
         }

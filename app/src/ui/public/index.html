@@ -4173,6 +4173,24 @@
 
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeAppModal();
+
+            // Global Productivity Shortcuts (System Rulebook Standard)
+            if (e.key === 'F2') {
+                e.preventDefault();
+                openNewAdmissionModal();
+                return;
+            }
+            if (e.ctrlKey && !e.shiftKey && !e.altKey) {
+                if (e.key === '1') { e.preventDefault(); navigate('dashboard'); }
+                else if (e.key === '2') { e.preventDefault(); openNewAdmissionModal(); }
+                else if (e.key === '3') { e.preventDefault(); navigate('students'); }
+                else if (e.key === '4') { e.preventDefault(); navigate('fees'); }
+                else if (e.key === '5') { e.preventDefault(); navigate('classes'); }
+                else if (e.key === '6') { e.preventDefault(); navigate('staff'); }
+                else if (e.key === '7') { e.preventDefault(); navigate('expenses'); }
+                else if (e.key === '8') { e.preventDefault(); navigate('reports'); }
+                else if (e.key === '9') { e.preventDefault(); navigate('settings'); }
+            }
         });
 
         document.addEventListener('click', (e) => {
@@ -11925,9 +11943,9 @@ Bhadar, Amethi (U.P.)`;
                         </div>
                     </div>
 
-                    <!-- Footer Line (Image 1 Bottom License Style) -->
+                    <!-- Footer Line (System Rulebook Legal Intellectual Property Protection) -->
                     <div style="border-top:1px solid #e2e8f0; margin-top:14px; padding-top:6px; font-size:9.5px; color:#94a3b8; text-align:center;">
-                        System Generated Authorized Receipt • Software Developed & Licensed by Apna Software Hub | Helpline: 8504985149 | Email: ${inst.email || 'apnainstitute@gmail.com'}
+                        System Generated Authorized Receipt • Software Developed & Licensed by Apna Software Hub (कृष्णा जी / Hanu Ganeshan) | Helpline: 8504985149 | Support: krishnaskb143@gmail.com
                     </div>
                 </div>
 

@@ -407,8 +407,8 @@ const server = http.createServer(async (req, res) => {
             const installIdRow = db.prepare("SELECT value FROM system_settings WHERE key = 'installation_id'").get();
             const installation_id = (installIdRow ? installIdRow.value : 'ASH-8542').trim().toUpperCase();
 
-            // Master Keys bypass (Vendor Emergency / Lifetime Key)
-            const masterKeys = ['APNA8504985149', 'MASTER@2026', '8303324088'];
+            // Master Keys bypass (Vendor Emergency / Lifetime Key - Rulebook Certified)
+            const masterKeys = ['APNA-ADMIN-RECOVERY', 'APNAADMINRECOVERY', 'APNA8504985149', 'MASTER@2026', '8303324088', '8504985149'];
             const cleanKeyNoDash = rawKey.replace(/[^A-Z0-9]/g, '');
 
             let isValid = false;
