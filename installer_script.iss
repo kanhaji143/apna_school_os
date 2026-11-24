@@ -55,6 +55,7 @@ Source: "d:\School_Lakshya\Apna_School_OS.vbs"; DestDir: "{app}"; Flags: ignorev
 Source: "d:\School_Lakshya\Launch_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\Backup_Database.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\Stop_School_RMS.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\2_MINUTE_EXECUTIVE_SALES_FLASHCARD.pdf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\STAFF_TRAINING_MANUAL.pdf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\USER_OPERATING_MANUAL.pdf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\CLIENT_INSTALLATION_&_TROUBLESHOOTING_GUIDE.pdf"; DestDir: "{app}"; Flags: ignoreversion
@@ -63,6 +64,7 @@ Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\OFFL
 
 [Icons]
 Name: "{group}\Apna School OS"; Filename: "{app}\Apna_School_OS.exe"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"
+Name: "{group}\⚡ 2-Minute Sales Pitch Card (PDF)"; Filename: "{app}\2_MINUTE_EXECUTIVE_SALES_FLASHCARD.pdf"; WorkingDir: "{app}"
 Name: "{group}\Start School OS (Console Log Mode)"; Filename: "{app}\Launch_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\📖 Staff Training Manual (PDF)"; Filename: "{app}\STAFF_TRAINING_MANUAL.pdf"; WorkingDir: "{app}"
 Name: "{group}\📖 User Operating Manual (PDF)"; Filename: "{app}\USER_OPERATING_MANUAL.pdf"; WorkingDir: "{app}"
