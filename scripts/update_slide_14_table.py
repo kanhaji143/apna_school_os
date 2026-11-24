@@ -7,13 +7,12 @@ from pptx.enum.shapes import MSO_SHAPE
 
 PPTX_PATH = "01_CLIENT_DEPLOYMENT_PACKAGE/03_Presentations_and_Templates/Apna_School_OS_Client_Pitch_Deck.pptx"
 
-def update_slide_14_table():
+def update_slide_14_bilingual_table():
     prs = Presentation(PPTX_PATH)
     
     # Target slide 14 (index 13)
     if len(prs.slides) >= 14:
         slide = prs.slides[13]
-        # Remove old shapes on slide 14
         for shape in list(slide.shapes):
             sp = shape._element
             sp.getparent().remove(sp)
@@ -30,13 +29,13 @@ def update_slide_14_table():
     tf = header_box.text_frame
     tf.word_wrap = True
     p1 = tf.paragraphs[0]
-    p1.text = "⚡ 2-Minute Special Features Scorecard: What Makes Us Unique"
+    p1.text = "⚡ 2-Minute Executive Feature Scorecard (द्विभाषी फ़ीचर्स कार्ड)"
     p1.font.size = Pt(20)
     p1.font.bold = True
     p1.font.color.rgb = RGBColor(250, 204, 21) # Amber Gold
 
     p2 = tf.add_paragraph()
-    p2.text = "100% Offline Secured Architecture • Zero Monthly Cloud Bills • Self-Healing Vault • Multi-Station Campus Wi-Fi"
+    p2.text = "Bilingual Edition for CBSE, ICSE, Convent & State Board Schools • 100% Offline-First • Zero Cloud Bills"
     p2.font.size = Pt(10)
     p2.font.color.rgb = RGBColor(226, 232, 240)
 
@@ -51,37 +50,36 @@ def update_slide_14_table():
     table_shape = slide.shapes.add_table(rows, cols, left, top, width, height)
     table = table_shape.table
 
-    # Set column widths
-    table.columns[0].width = Inches(2.6)  # Feature
-    table.columns[1].width = Inches(1.5)  # Status
+    table.columns[0].width = Inches(2.7)  # Feature
+    table.columns[1].width = Inches(1.4)  # Status
     table.columns[2].width = Inches(5.1)  # Description
 
     # Header Row
-    headers = ["विशेष फ़ीचर (Feature Name)", "सिस्टम स्थिति", "1-लाइन जादुई प्रभाव व स्कूल को लाभ (1-Liner Impact)"]
+    headers = ["Special Feature (विशेष फ़ीचर)", "Status (स्थिति)", "Bilingual Magic Impact & Benefit (जादुई प्रभाव)"]
     for i, h in enumerate(headers):
         cell = table.cell(0, i)
         cell.fill.solid()
         cell.fill.fore_color.rgb = RGBColor(30, 41, 59) # Slate 800
         p = cell.text_frame.paragraphs[0]
         p.text = h
-        p.font.size = Pt(10)
+        p.font.size = Pt(9.5)
         p.font.bold = True
         p.font.color.rgb = RGBColor(255, 255, 255)
         p.alignment = PP_ALIGN.CENTER if i == 1 else PP_ALIGN.LEFT
 
     features = [
-        ("मल्टी-यूज़र लोकल वाई-फ़ाई एक्सेस", "✅ 100% Active", "मेन पीसी की IP से 20+ शिक्षक व स्टाफ एक साथ बिना इंटरनेट अपने फोन/लैपटॉप पर चला सकते हैं।"),
-        ("टीचर्स डेली अटेंडेंस पोर्टल", "✅ 100% Active", "शिक्षक क्लास में खड़े होकर मोबाइल से हाजिरी लगाएंगे; संवेदनशील फ़ीस व सैलरी डेटा शिक्षकों से ऑटो-लॉक रहेगा।"),
-        ("सेल्फ-हीलिंग शैडो वॉल्ट", "✅ 100% Active", "मुख्य फोल्डर या डेटाबेस डिलीट होने पर भी हिडन वॉल्ट से 1 सेकंड में 100% डेटा व रसीदें स्वतः रीस्टोर हो जाती हैं।"),
-        ("1-क्लिक द्विभाषी इंजन (हिन्दी ⇄ EN)", "✅ 100% Active", "टॉप मेन्यू से 1 सेकंड में पूरा सॉफ़्टवेयर शुद्ध हिंदी या इंग्लिश में बदल जाता है (शून्य पेज रीलोड, 0 लैग)।"),
-        ("डायरेक्टर पेनड्राइव पॉकेट बैकअप", "✅ 100% Active", "1-क्लिक में डायरेक्टर की जेब वाली पेनड्राइव में डेटाबेस कॉपी; रोज़ शाम को पूरा स्कूल सुरक्षित जेब में घर ले जाएं।"),
-        ("EOD डेली क्लोजिंग जीमेल रिपोर्ट", "✅ 100% Active", "शाम को स्कूल की छुट्टी पर दिनभर की कुल फ़ीस वसूली, खर्चे, कैश बैलेंस व हाजिरी सीधे डायरेक्टर के जीमेल पर।"),
-        ("पेरेंट्स को 1-क्लिक व्हाट्सएप रसीद", "✅ 100% Active", "फ़ीस जमा होते ही डिजिटल रसीद और बकाया फ़ीस का ऑटो-तकाज़ा अभिभावक के व्हाट्सएप पर 1-क्लिक में wa.me द्वारा।"),
-        ("4-स्तंभीय मार्कशीट व AI पेपर मेकर", "✅ 100% Active", "CBSE/ICSE/State Board आधारित समग्र रिपोर्ट कार्ड और 2 सेकंड में विषयवार परीक्षा पेपर उत्तर कुंजी सहित तैयार।"),
-        ("वेंडर क्लाइंट पोर्टफोलियो एवं CRM", "✅ 100% Active", "सुपर एडमिन में 100+ स्कूलों की बिक्री, बकाया पेमेंट, डिजिटल लाइसेंस व व्हाट्सएप पेमेंट रिमाइंडर का मास्टर कंट्रोल।"),
-        ("30-दिन VIP ट्रायल व एनुअल लॉक", "✅ 100% Active", "मशीन HWID लॉक प्रोटेक्शन, SHA-256 क्रिप्टोग्राफिक लाइसेंसिंग से 1-वर्ष या 10-वर्ष का लाइफटाइम ऑथेंटिकेशन।"),
-        ("मास्टर इमरजेंसी रिकवरी कीज", "✅ 100% Active", "APNA-ADMIN-RECOVERY व आधिकारिक हेल्पलाइन द्वारा पासवर्ड भूलने पर भी 1-सेकंड में लाइफटाइम आपातकालीन रीसेट।"),
-        ("शून्य-लैग स्पीड व ग्लोबल हॉटकीज़", "✅ 100% Active", "F2 दबाते ही न्यू एडमिशन फॉर्म, Ctrl+1 से 9 तक सुपरफ़ास्ट स्क्रीन स्विचिंग; बिना किसी क्लाउड बफरिंग के बिजली सी तेज़।")
+        ("Multi-User Campus Wi-Fi\n(मल्टी-यूज़र वाई-फ़ाई शेयरिंग)", "✅ 100% Active", "Zero internet needed. 1 host PC shares server over school Wi-Fi; 20+ staff connect on phones/PCs simultaneously. (बिना इंटरनेट 20+ डिवाइस)।"),
+        ("Teacher Mobile Attendance\n(टीचर्स मोबाइल हाजिरी पोर्टल)", "✅ 100% Active", "Teachers mark attendance directly on mobile phones. Sensitive fees, cash registers & salaries are locked from teachers. (सुरक्षित शिक्षक पोर्टल)।"),
+        ("Self-Healing Shadow Vault\n(सेल्फ-हीलिंग शैडो वॉल्ट)", "✅ 100% Active", "Zero data loss. If an operator deletes database or D:\\, the hidden vault automatically restores 100% records in 1 second. (1 सेकंड में रीस्टोर)।"),
+        ("1-Click Native Bilingual UI\n(1-क्लिक द्विभाषी इंजन)", "✅ 100% Active", "Instant top-bar toggle between authentic हिन्दी and English with 0.00s lag across 22+ modules. (शून्य पेज रीलोड, 0 लैग)।"),
+        ("Director's Pocket USB Vault\n(डायरेक्टर पेनड्राइव बैकअप)", "✅ 100% Active", "1-Click offline backup to Director's USB flash drive. Director safely carries 100% school data home in pocket. (जेब में सुरक्षित बैकअप)।"),
+        ("EOD Daily Closing Audit\n(दैनिक जीमेल ऑडिट रिपोर्ट)", "✅ 100% Active", "At day end, a complete financial and attendance audit (collections, expenses, cash balance) is sent to Director's Gmail in 1 click. (EOD ऑडिट)।"),
+        ("Direct Parent WhatsApp\n(पेरेंट्स 1-क्लिक व्हाट्सएप)", "✅ 100% Active", "Fee receipts, pending fee reminders, and attendance notifications are delivered to parent's WhatsApp via wa.me. (मुफ़्त व्हाट्सएप रसीद)।"),
+        ("4-Pillar Marksheets & AI\n(4-स्तंभीय मार्कशीट व AI पेपर)", "✅ 100% Active", "CBSE/ICSE/State Board holistic report cards; generate multi-section exam papers with answer keys in 2 seconds. (हॉलिस्टिक रिपोर्ट कार्ड)।"),
+        ("Vendor Client Master CRM\n(वेंडर क्लाइंट पोर्टफोलियो)", "✅ 100% Active", "Super Admin master command to manage 100+ client schools, track deal values, license validity & payment reminders. (100+ स्कूल प्रबंधन)।"),
+        ("Machine HWID Lock License\n(मशीन लॉक व एनुअल लाइसेंस)", "✅ 100% Active", "Tamper-proof machine hardware lock with 30-day free VIP trial and SHA-256 cryptographic annual & lifetime activation. (हार्डवेयर-लॉक्ड सुरक्षा)।"),
+        ("Master Emergency Recovery\n(मास्टर आपातकालीन रिकवरी)", "✅ 100% Active", "Permanent vendor master key (APNA-ADMIN-RECOVERY) and official phone helpline for instant emergency password reset. (आपातकालीन वेंडर रिकवरी)।"),
+        ("Zero-Lag Speed & Hotkeys\n(शून्य-लैग स्पीड व हॉटकीज़)", "✅ 100% Active", "F2 for instant New Admission, Ctrl+1 to 9 for lightning-fast tab navigation. Zero cloud spinning wheels, sub-50ms speed. (बिजली सी तेज़ स्पीड)।")
     ]
 
     for row_idx, (fname, fstatus, fdesc) in enumerate(features, start=1):
@@ -93,19 +91,19 @@ def update_slide_14_table():
         c0.fill.fore_color.rgb = bg
         p = c0.text_frame.paragraphs[0]
         p.text = fname
-        p.font.size = Pt(8.5)
+        p.font.size = Pt(8.0)
         p.font.bold = True
-        p.font.color.rgb = RGBColor(14, 116, 144) # Deep Teal
+        p.font.color.rgb = RGBColor(14, 116, 144)
         
         # Col 1: Status
         c1 = table.cell(row_idx, 1)
         c1.fill.solid()
-        c1.fill.fore_color.rgb = RGBColor(236, 253, 245) if row_idx % 2 == 1 else RGBColor(240, 253, 244) # Soft green
+        c1.fill.fore_color.rgb = RGBColor(236, 253, 245) if row_idx % 2 == 1 else RGBColor(240, 253, 244)
         p = c1.text_frame.paragraphs[0]
         p.text = fstatus
         p.font.size = Pt(8.5)
         p.font.bold = True
-        p.font.color.rgb = RGBColor(5, 150, 105) # Emerald Green
+        p.font.color.rgb = RGBColor(5, 150, 105)
         p.alignment = PP_ALIGN.CENTER
 
         # Col 2: 1-Liner Impact
@@ -114,11 +112,11 @@ def update_slide_14_table():
         c2.fill.fore_color.rgb = bg
         p = c2.text_frame.paragraphs[0]
         p.text = fdesc
-        p.font.size = Pt(8.0)
-        p.font.color.rgb = RGBColor(51, 65, 85) # Slate 700
+        p.font.size = Pt(7.8)
+        p.font.color.rgb = RGBColor(51, 65, 85)
 
     prs.save(PPTX_PATH)
-    print("✅ Slide 14 successfully updated with native 3-column table format!")
+    print("✅ Slide 14 successfully updated with Bilingual table format!")
 
 if __name__ == "__main__":
-    update_slide_14_table()
+    update_slide_14_bilingual_table()
