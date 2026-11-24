@@ -421,7 +421,7 @@ const server = http.createServer(async (req, res) => {
                 activationType = 'आजीवन मास्टर लाइसेंस (Lifetime Unlock)';
             } else {
                 // Test algorithmic verification across standard intervals
-                const standardDays = [365, 730, 1095, 1825, 3650, 30, 60, 90, 180];
+                const standardDays = [365, 730, 1095, 1825, 3650, 15, 30, 45, 60, 90, 180];
                 for (const days of standardDays) {
                     const salt = 'APNA_SOFTWARE_HUB_8504985149';
                     const rawStr = `${installation_id}_${days}_${salt}`;
