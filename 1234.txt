@@ -1,0 +1,43 @@
+### 🎯 TASK: Permanently Fix Windows 11 Error 4551 & Eliminate Loose .BAT/.VBS Scripts in Apna School OS
+
+#### 1. Background & Root Problem:
+When `Setup_Apna_School_OS.exe` or portable packages are downloaded via AnyDesk, WhatsApp, or browser onto Windows 11 (especially 24H2 with Smart App Control enabled), users get the blocking error:
+"Unable to execute file in the temporary directory. Setup aborted. Error 4551: An Application control policy has blocked this file."
+
+Moreover, using workaround batch files (`1_CLICK_UNBLOCK_SETUP.bat`) and VBScript (`Apna_School_OS.vbs`) scares clients and gets blocked by Windows Defender / ASR rules.
+
+#### 2. Requirements & Permanent Fixes to Implement:
+
+1. **Eliminate All Loose .BAT & .VBS Files:**
+   - Remove dependency on `1_CLICK_UNBLOCK_SETUP.bat`, `Launch_School_RMS.bat`, `Stop_School_RMS.bat`, and `Apna_School_OS.vbs`.
+   - Build/compile a clean, standalone native executable launcher (e.g., `Apna_School_OS.exe` using a lightweight C++/C#/Python or Go wrapper) that:
+     * Silently starts `bin/node.exe app/src/server.js` in the background with zero black CMD flashing.
+     * Polls `http://127.0.0.1:8085/api/health` until ready.
+     * Automatically launches Microsoft Edge or Google Chrome in standalone App mode (`--app=http://127.0.0.1:8085`).
+     * Handles clean process termination on app exit.
+
+2. **Inno Setup Script (`installer_script.iss`) Architecture Fixes:**
+   - Under `[Setup]`, update elevation and policy flags to prevent temporary helper extraction blocks:
+     ```iss
+     PrivilegesRequiredOverridesAllowed=commandline
+     PrivilegesRequired=auto
+     DefaultDirName={autopf}\Apna School OS
+     ```
+   - Embed complete official VersionInfo metadata so Windows Properties -> Details displays full brand credentials:
+     ```iss
+     VersionInfoVersion=2.1.0.0
+     VersionInfoProductVersion=2.1.0.0
+     VersionInfoCompany=Apna Software Hub (Helpline: 8504985149)
+     VersionInfoDescription=Apna School OS Setup - School Management Software (Helpline: 8504985149)
+     VersionInfoCopyright=Copyright © 2026 Apna Software Hub. All rights reserved.
+     AppComments=Apna School OS Enterprise Edition | Helpline: 8504985149
+     ```
+   - Update `[Icons]` and `[Run]` to target the newly compiled native `Apna_School_OS.exe` launcher instead of any `.vbs` or `.bat` files.
+
+3. **Authenticode Code-Signing (Zero Smart App Control / Error 4551 Blocks):**
+   - Provide/run an automated PowerShell script to sign the compiled `Setup_Apna_School_OS.exe` and the launcher `Apna_School_OS.exe` with a valid Authenticode SHA-256 certificate (`CN=Apna Software Hub` / `APNA Computer Institute`).
+   - Ensure the digital signature status verifies cleanly with `Get-AuthenticodeSignature`.
+
+4. **Deliverable & Verification:**
+   - Recompile the installer so it outputs a single, clean `Setup_Apna_School_OS.exe` (approx 50-60 MB).
+   - Verify that running the installer on Windows 11 does not produce Error 4551, does not require running any batch files, and starts the application seamlessly in 1 click.

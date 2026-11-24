@@ -3,7 +3,7 @@
 ; Developed & Maintained By Apna Software Hub (AI & Technology Division)
 ; Official Helpline: 8504985149 / 8303324088 | Email: krishnaskb143@gmail.com
 ; 100% Offline-First Secured Architecture | Self-Healing Shadow Vault
-; Compliant with SYSTEM_RULEBOOK_AND_TROUBLESHOOTING.md
+; Windows 11 Smart App Control & Error 4551 Hardened Architecture
 ; ==============================================================================
 
 [Setup]
@@ -27,6 +27,7 @@ Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
 PrivilegesRequired=admin
+PrivilegesRequiredOverridesAllowed=commandline
 DisableProgramGroupPage=auto
 ArchitecturesInstallIn64BitMode=x64compatible
 
@@ -46,6 +47,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
+Source: "d:\School_Lakshya\Apna_School_OS.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\School_Lakshya\bin\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "d:\School_Lakshya\app\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "d:\School_Lakshya\app_icon.ico"; DestDir: "{app}"; Flags: ignoreversion
@@ -60,7 +62,7 @@ Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\CAMP
 Source: "d:\School_Lakshya\01_CLIENT_DEPLOYMENT_PACKAGE\02_Official_Manuals\OFFLINE_WIFI_CAMPUS_NETWORKING_GUIDE.pdf"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\Apna School OS"; Filename: "{app}\Apna_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"
+Name: "{group}\Apna School OS"; Filename: "{app}\Apna_School_OS.exe"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"
 Name: "{group}\Start School OS (Console Log Mode)"; Filename: "{app}\Launch_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\📖 Staff Training Manual (PDF)"; Filename: "{app}\STAFF_TRAINING_MANUAL.pdf"; WorkingDir: "{app}"
 Name: "{group}\📖 User Operating Manual (PDF)"; Filename: "{app}\USER_OPERATING_MANUAL.pdf"; WorkingDir: "{app}"
@@ -70,7 +72,7 @@ Name: "{group}\📡 Offline Wi-Fi Campus Networking Guide (PDF)"; Filename: "{ap
 Name: "{group}\Backup School Database"; Filename: "{app}\Backup_Database.bat"; WorkingDir: "{app}"
 Name: "{group}\Stop School OS"; Filename: "{app}\Stop_School_RMS.bat"; WorkingDir: "{app}"
 Name: "{group}\{cm:UninstallProgram,Apna School OS}"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\Apna School OS"; Filename: "{app}\Apna_School_OS.vbs"; WorkingDir: "{app}"; IconFilename: "{app}\\app_icon.ico"; Tasks: desktopicon
+Name: "{autodesktop}\Apna School OS"; Filename: "{app}\Apna_School_OS.exe"; WorkingDir: "{app}"; IconFilename: "{app}\app_icon.ico"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\Apna_School_OS.vbs"; Description: "{cm:LaunchProgram,Apna Institute School OS}"; Flags: shellexec postinstall nowait skipifsilent
+Filename: "{app}\Apna_School_OS.exe"; Description: "{cm:LaunchProgram,Apna Institute School OS}"; Flags: postinstall nowait skipifsilent
