@@ -16,7 +16,7 @@ AppPublisherURL=https://apnasoftwarehub.com
 AppSupportURL=https://apnasoftwarehub.com
 AppUpdatesURL=https://apnasoftwarehub.com
 AppContact=8504985149
-AppComments=Official Helpline: 8504985149 / 8303324088 | Email: krishnaskb143@gmail.com | Developed & Licensed by Apna Software Hub (Hanu Ganeshan / Krishna ji)
+AppComments=Official Helpline: 8504985149 / 8303324088 | Email: krishnaskb143@gmail.com | Developed & Licensed by Apna Software Hub (Krishna ji)
 DefaultDirName={autopf}\Apna School OS
 DefaultGroupName=Apna School OS
 AllowNoIcons=yes
@@ -35,7 +35,7 @@ VersionInfoVersion=2.1.0.0
 VersionInfoProductVersion=2.1.0.0
 VersionInfoCompany=Apna Software Hub (Helpline: 8504985149)
 VersionInfoDescription=Apna School OS Enterprise Setup - Offline-First Multi-Board School Management Desktop Application (Helpline: 8504985149)
-VersionInfoCopyright=Copyright (C) 2026 Apna Software Hub (Hanu Ganeshan / Krishna ji). All rights reserved.
+VersionInfoCopyright=Copyright (C) 2026 Apna Software Hub (Krishna ji). All rights reserved.
 VersionInfoProductName=Apna School OS
 VersionInfoOriginalFileName=Setup_Apna_School_OS.exe
 

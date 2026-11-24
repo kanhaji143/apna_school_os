@@ -393,7 +393,7 @@ const server = http.createServer(async (req, res) => {
                 is_expired,
                 clock_tampered,
                 helpline: '8504985149 / 8303324088',
-                vendor_name: 'Hanu Ganeshan (Apna Software Hub)'
+                vendor_name: 'Apna Software Hub (Krishna ji)'
             });
         }
 
