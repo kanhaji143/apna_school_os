@@ -404,6 +404,13 @@
             </div>
 
             <div class="top-nav-right">
+                <!-- Live Offline Hardware Clock & Date Pill in Top Navigation -->
+                <div id="top-live-clock-pill" class="pill-badge" style="background:var(--bg-page); border:1px solid var(--border); color:var(--text-heading); font-weight:800; font-size:12px; display:flex; align-items:center; gap:6px; padding:4px 11px; border-radius:20px; box-shadow:0 1px 4px rgba(0,0,0,0.05);" title="ऑफ़लाइन सटीक समय व तारीख (Hardware Real-Time Clock)">
+                    <span style="color:#0284c7;">⏰</span>
+                    <span id="top-live-time">--:--:--</span>
+                    <span style="color:var(--border);">•</span>
+                    <span id="top-live-date" style="font-size:11px; color:var(--primary); font-weight:700;">बुधवार, 25 नवंबर 2026</span>
+                </div>
                 <span id="demo-mode-badge" class="pill-badge" style="background:#15803d; color:white; font-weight:700; display:none; padding:4px 10px; font-size:11.5px; border-radius:20px;" data-i18n="demo_badge">🎮 लाइव डेमो मोड (Live Demo)</span>
                 <!-- Universal 30-Day VIP Trial & License Status Badge -->
                 <div id="license-status-badge" class="pill-badge" onclick="openLicenseActivationModal()" style="cursor:pointer; font-weight:700; font-size:12px; padding:4px 12px; border-radius:20px; transition:all 0.2s; display:flex; align-items:center; gap:5px; background:linear-gradient(135deg, #fef3c7, #fde68a); color:#92400e; border:1px solid #f59e0b;" title="लाइसेंस स्थिति देखने या सक्रिय करने हेतु क्लिक करें">
@@ -570,12 +577,12 @@
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
                             <div>
                                 <h3 style="font-size:14px; font-weight:800; color:var(--text-heading);">Connected Services & Data Security</h3>
-                                <p style="font-size:11.5px; color:var(--text-muted);">Enterprise Grade Offline Protection</p>
+                                <p style="font-size:11.5px; color:var(--text-muted);">Apna Software Hub • 100% Offline Institutional Protection</p>
                             </div>
                         </div>
                         <div style="font-size:12px; display:flex; flex-direction:column; gap:9px;">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <span>🛡️ Enterprise Data Shield</span>
+                                <span>🛡️ Secured by Apna Software Hub Shield</span>
                                 <span style="background:#dcfce7; color:#15803d; font-size:10px; font-weight:800; padding:2px 7px; border-radius:10px;">ACTIVE (ISO/IEC 27001 ALIGNED)</span>
                             </div>
                             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -2584,18 +2591,19 @@
                         </div>
                     </div>
 
-                    <!-- Card 2: Enterprise Data Shield & Security Compliance -->
+                    <!-- Card 2: Apna Software Hub Data Shield & Security Compliance -->
                     <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:20px;">
                         <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
                             <span style="font-size:20px;">🛡️</span>
-                            <h3 style="font-size:16px; font-weight:800; color:var(--text-heading);">Enterprise Data Shield & Security Compliance</h3>
+                            <h3 style="font-size:16px; font-weight:800; color:var(--text-heading);">Apna Software Hub — Data Shield & ISO 27001 Compliance</h3>
                         </div>
                         <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px; line-height:1.4;">School records reside exclusively on this machine under private on-premise governance with automated disaster recovery architecture.</p>
                         <div style="font-size:11.5px; line-height:1.8; color:var(--text-heading); background:var(--bg-page); padding:10px 12px; border-radius:8px; border:1px solid var(--border);">
-                            <div><strong>Security Standard:</strong> <span style="color:#0284c7; font-weight:700;">ISO/IEC 27001 Aligned Enterprise Shield</span></div>
+                            <div><strong>Security Standard:</strong> <span style="color:#0284c7; font-weight:700;">ISO/IEC 27001 Aligned Security (Apna Software Hub Shield)</span></div>
                             <div><strong>Storage Protocol:</strong> <span style="font-weight:700;">100% Private On-Premise (Air-Gapped & Offline)</span></div>
                             <div><strong>Disaster Recovery:</strong> <span style="color:#15803d; font-weight:700;">🟢 Continuous Real-Time Mirror Active</span></div>
                             <div><strong>Active Records:</strong> <span id="st-student-count">426 Students (100% Healthy)</span></div>
+                            <div><strong>Licensed & Maintained By:</strong> <span style="color:#15803d; font-weight:700;">Apna Software Hub (Helpline: 8504985149 / 8303324088)</span></div>
                             <div id="st-superadmin-diagnostics" style="display:none; margin-top:6px; padding-top:6px; border-top:1px dashed var(--border); font-size:10.5px; color:var(--text-muted);">
                                 <div><strong>Primary DB:</strong> <code id="st-primary-path">D:\Apna_School_OS_Data\apna_records.db</code></div>
                                 <div><strong>Server Engine:</strong> Node.js 24 + SQLite WAL (Port 8085) | Vault: Active</div>
@@ -4020,37 +4028,41 @@
             const now = new Date();
             const hour = now.getHours();
             
-            let greetEn = 'Good Morning';
-            let greetHi = 'शुभ प्रभात';
+            const currentLang = (typeof APNA_I18N !== 'undefined' && APNA_I18N.current) 
+                ? APNA_I18N.current 
+                : (localStorage.getItem('apna_app_language') || 'hi');
+            const isHindi = currentLang === 'hi';
+
+            let greetText = '';
             let greetIcon = '🌅';
-            
+
             if (hour >= 12 && hour < 17) {
-                greetEn = 'Good Afternoon';
-                greetHi = 'शुभ दोपहर';
                 greetIcon = '☀️';
+                greetText = isHindi ? 'शुभ दोपहर' : 'Good Afternoon';
             } else if (hour >= 17 && hour < 21) {
-                greetEn = 'Good Evening';
-                greetHi = 'शुभ संध्या';
                 greetIcon = '🌆';
+                greetText = isHindi ? 'शुभ संध्या' : 'Good Evening';
             } else if (hour >= 21 || hour < 5) {
-                greetEn = 'Good Evening';
-                greetHi = 'शुभ रात्रि';
                 greetIcon = '🌙';
+                greetText = isHindi ? 'शुभ रात्रि' : 'Good Evening';
+            } else {
+                greetIcon = '🌅';
+                greetText = isHindi ? 'शुभ प्रभात' : 'Good Morning';
             }
 
-            let uName = 'School Director';
-            let uRole = 'Director / Owner';
+            let uName = isHindi ? 'स्कूल डायरेक्टर' : 'School Director';
+            let uRole = isHindi ? 'डायरेक्टर / ओनर' : 'Director / Owner';
             if (currentUser) {
-                uName = currentUser.full_name || currentUser.username || 'School Director';
+                uName = currentUser.full_name || currentUser.username || (isHindi ? 'स्कूल डायरेक्टर' : 'School Director');
                 if (currentUser.role === 'super_admin' || currentUser.username === 'hanuganeshan') {
                     uName = 'Platform Owner';
                     uRole = 'Super Admin';
                 } else if (currentUser.role === 'admin') {
-                    uRole = 'Director / Owner';
+                    uRole = isHindi ? 'डायरेक्टर / ओनर' : 'Director / Owner';
                 } else if (currentUser.role === 'clerk' || currentUser.role === 'accountant') {
-                    uRole = 'Accounts / Cashier';
+                    uRole = isHindi ? 'अकाउंटेंट / कैशियर' : 'Accounts / Cashier';
                 } else if (currentUser.role === 'teacher') {
-                    uRole = 'Faculty / Academics';
+                    uRole = isHindi ? 'शिक्षक / शिक्षा विभाग' : 'Faculty / Academics';
                 }
             }
 
@@ -4062,32 +4074,44 @@
             const monthNameHi = hindiMonths[now.getMonth()];
             const hindiDateStr = `${dayNameHi}, ${now.getDate()} ${monthNameHi} ${now.getFullYear()}`;
             const engDateStr = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            const shortEngDate = now.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
-            // 1. Dashboard Greeting & Date
+            const activeDateStr = isHindi ? hindiDateStr : engDateStr;
+            const liveClockTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+
+            // 1. Top Navbar Live Hardware Clock & Date Pill
+            const topTime = document.getElementById('top-live-time');
+            const topDate = document.getElementById('top-live-date');
+            if (topTime) topTime.innerText = liveClockTime;
+            if (topDate) topDate.innerText = isHindi ? `${dayNameHi}, ${now.getDate()} ${monthNameHi}` : shortEngDate;
+
+            // 2. Dashboard Greeting & Date
             const greetEl = document.getElementById('dash-greeting-text');
             if (greetEl) {
-                greetEl.innerHTML = `<span>${greetIcon}</span> <span>${greetEn}, ${uName}! (${greetHi}) • ${uRole}</span>`;
+                greetEl.innerHTML = `<span>${greetIcon}</span> <span>${greetText}, ${uName}! • ${uRole}</span>`;
             }
 
             const dateEl = document.getElementById('dash-date-text');
             if (dateEl) {
-                dateEl.innerHTML = `📅 <strong>${engDateStr}</strong> <span style="margin:0 6px; color:var(--border);">|</span> <span style="color:var(--text-muted); font-weight:600;">${hindiDateStr}</span>`;
+                const subText = isHindi ? 'आज के स्कूल संचालन की स्थिति (100% ऑफ़लाइन)' : "Today's institution operations (100% Offline)";
+                dateEl.innerHTML = `📅 <strong>${activeDateStr}</strong> <span style="margin:0 6px; color:var(--border);">•</span> <span style="color:var(--text-muted);">${subText}</span>`;
             }
 
-            // 2. Login Screen Greeting & Date
+            // 3. Login Screen Greeting & Date
             const loginGreetIcon = document.getElementById('login-greeting-icon');
             const loginGreetText = document.getElementById('login-greeting-text');
             const loginGreetDate = document.getElementById('login-greeting-date');
             if (loginGreetIcon) loginGreetIcon.innerText = greetIcon;
-            if (loginGreetText) loginGreetText.innerText = `${greetEn} (${greetHi})`;
-            if (loginGreetDate) loginGreetDate.innerText = hindiDateStr;
+            if (loginGreetText) loginGreetText.innerText = isHindi ? `${greetText} (Good Day)` : `${greetText} (शुभ दिन)`;
+            if (loginGreetDate) loginGreetDate.innerText = activeDateStr;
 
-            // 3. Live Time Clock Pill (Offline RTC)
-            const timeEl = document.getElementById('dash-live-time');
-            if (timeEl) {
-                timeEl.innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-            }
+            // 4. Live Clock in Dashboard (if present)
+            const dashTime = document.getElementById('dash-live-time');
+            if (dashTime) dashTime.innerText = liveClockTime;
         }
+
+        // Listen for language changes to update greeting and date format in real-time
+        window.addEventListener('apnaLanguageChanged', updateDynamicGreeting);
 
         function logoutApp() {
             // Prompt Daily EOD Backup & Report Check (Matching APNA Computer RMS Image 2)
@@ -14922,7 +14946,18 @@ Bhadar, Amethi (U.P.)`;
             }
         }
 
-        window.onload = init;
+        window.onload = function() {
+            updateDynamicGreeting();
+            init();
+        };
+
+        // Instant initialization for clock, date & greeting
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDynamicGreeting();
+            if (!window._greetingTimer) window._greetingTimer = setInterval(updateDynamicGreeting, 1000);
+        });
+        updateDynamicGreeting();
+        if (!window._greetingTimer) window._greetingTimer = setInterval(updateDynamicGreeting, 1000);
     </script>
 </body>
 </html>
