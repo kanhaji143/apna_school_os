@@ -432,7 +432,7 @@ const server = http.createServer(async (req, res) => {
                     if (rawKey === expectedFormatted || cleanKeyNoDash === expectedClean) {
                         isValid = true;
                         validityDays = days;
-                        activationType = days >= 1825 ? 'आजीवन लाइसेंस' : `${days} दिन वैध`;
+                        activationType = days >= 1825 ? 'आजीवन (Lifetime) लाइसेंस' : (days >= 365 ? `${Math.round(days / 365)} वर्ष वार्षिक लाइसेंस` : `${days} दिन ट्रायल विस्तार`);
                         break;
                     }
                 }
@@ -459,10 +459,13 @@ const server = http.createServer(async (req, res) => {
             const newExpiryDateObj = new Date(baseDate.getTime() + (validityDays * 24 * 60 * 60 * 1000));
             const newExpiryStr = newExpiryDateObj.toISOString().split('T')[0];
 
+            const isTrialExtension = validityDays <= 90;
+            const newLicenseStatus = isTrialExtension ? 'TRIAL_EXTENDED' : 'ACTIVATED';
+
             db.prepare(`
-                INSERT INTO system_settings (key, value, updated_at) VALUES ('license_status', 'ACTIVATED', CURRENT_TIMESTAMP)
-                ON CONFLICT(key) DO UPDATE SET value = 'ACTIVATED', updated_at = CURRENT_TIMESTAMP
-            `).run();
+                INSERT INTO system_settings (key, value, updated_at) VALUES ('license_status', ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP
+            `).run(newLicenseStatus);
 
             db.prepare(`
                 INSERT INTO system_settings (key, value, updated_at) VALUES ('license_expiry_date', ?, CURRENT_TIMESTAMP)
@@ -476,11 +479,15 @@ const server = http.createServer(async (req, res) => {
 
             syncShadowVault();
 
+            const message = isTrialExtension
+                ? `🎉 बधाई! सॉफ़्टवेयर ट्रायल सफलतापूर्वक ${validityDays} दिन के लिए बढ़ा दिया गया है! नई वैधता: ${newExpiryStr} (${activationType})`
+                : `🎉 बधाई! सॉफ़्टवेयर अधिकृत रूप से सक्रिय (Activated) हो गया है! नई वैधता: ${newExpiryStr} (${activationType})`;
+
             return sendJson(res, 200, {
                 success: true,
-                message: `🎉 बधाई! सॉफ़्टवेयर सफलतापूर्वक सक्रिय (Activated) हो गया है! नई वैधता: ${newExpiryStr} (${activationType})`,
+                message,
                 expiry_date: newExpiryStr,
-                license_status: 'ACTIVATED'
+                license_status: newLicenseStatus
             });
         }
 
