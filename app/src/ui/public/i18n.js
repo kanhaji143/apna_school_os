@@ -18,7 +18,7 @@ const APNA_I18N = {
             demo_badge: "🎮 Live Demo Mode",
             trial_loading: "30-Day VIP Trial (Loading...)",
             training_pdf_btn: "📖 Training Manual (PDF)",
-            refresh_btn: "🔄 Refresh",
+            refresh_btn: "🔄 Refresh & Sync",
             eod_btn: "📧 EOD Mail",
             logout_btn: "🚪 Logout",
             search_placeholder: "Search students, classes, receipts... (Ctrl+K)",
@@ -103,7 +103,7 @@ const APNA_I18N = {
             demo_badge: "🎮 लाइव डेमो डेटा मोड",
             trial_loading: "30-दिन VIP ट्रायल (लोडिंग...)",
             training_pdf_btn: "📖 ट्रेनिंग मैनुअल (PDF)",
-            refresh_btn: "🔄 रिफ्रेश करें",
+            refresh_btn: "🔄 रिफ्रेश व EOD सिंक",
             eod_btn: "📧 EOD रिपोर्ट",
             logout_btn: "🚪 लॉगआउट",
             search_placeholder: "छात्र, कक्षा, रसीद खोजें... (Ctrl+K)",
@@ -196,10 +196,14 @@ const APNA_I18N = {
         const activeLang = this.current;
         const dict = this.dictionaries[activeLang] || this.dictionaries['en'];
 
-        // Update Language Switcher Button in Header
+        // Update Language Selector in Header (Dropdown or Button)
+        const langDropdown = document.getElementById('lang-dropdown');
+        if (langDropdown) {
+            langDropdown.value = activeLang;
+        }
         const langBtnText = document.getElementById('lang-switch-text');
         if (langBtnText) {
-            langBtnText.textContent = dict.lang_toggle_btn;
+            langBtnText.textContent = activeLang === 'hi' ? 'हिन्दी' : 'English';
         }
 
         // 1. Elements with data-i18n (replaces textContent)
@@ -255,6 +259,16 @@ function t(key, fallback) {
 
 function toggleAppLanguage() {
     APNA_I18N.toggle();
+}
+
+function changeAppLanguage(lang) {
+    if (typeof APNA_I18N !== 'undefined') {
+        APNA_I18N.apply(lang);
+        if (typeof showToast === 'function') {
+            const msg = lang === 'hi' ? '🇮🇳 भाषा बदलकर हिन्दी की गई।' : '🇬🇧 Language switched to English.';
+            showToast(msg, 'success');
+        }
+    }
 }
 
 // Auto-run on DOMContentLoaded

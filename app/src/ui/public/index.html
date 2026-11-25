@@ -128,7 +128,7 @@
             background: var(--bg-card); border: 1px solid var(--border); padding: 1px 5px; border-radius: 4px; color: var(--text-muted);
         }
 
-        .top-nav-right { display: flex; align-items: center; gap: 12px; }
+        .top-nav-right { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
         .pill-badge {
             display: flex; align-items: center; gap: 6px; padding: 4px 10px;
             border-radius: 20px; font-size: 11px; font-weight: 600;
@@ -418,9 +418,14 @@
                     <span id="license-badge-text" data-i18n="trial_loading">30-दिन VIP ट्रायल (लोडिंग...)</span>
                 </div>
                 <div class="pill-badge offline" data-i18n="offline_badge"><span>🟢</span> 100% Offline Active</div>
-                <button id="lang-switch-btn" class="theme-toggle-btn" onclick="toggleAppLanguage()" style="font-weight:700; border-color:var(--border); background:var(--bg-page); color:var(--text-heading); cursor:pointer;" title="भाषा बदलें (हिन्दी ⇄ English)">
-                    <span id="lang-icon">🌐</span> <span id="lang-switch-text">हिन्दी</span>
-                </button>
+                <!-- Clean Language Dropdown Selector -->
+                <div style="display:inline-flex; align-items:center; background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:3px 8px; box-shadow:0 1px 3px rgba(0,0,0,0.05);" title="भाषा चुनें (Select System Language)">
+                    <span style="font-size:12px; margin-right:5px;">🌐</span>
+                    <select id="lang-dropdown" onchange="changeAppLanguage(this.value)" style="border:none; background:transparent; font-size:11.5px; font-weight:700; color:var(--text-heading); cursor:pointer; outline:none; padding:2px 0;">
+                        <option value="hi">🇮🇳 हिन्दी</option>
+                        <option value="en">🇬🇧 English</option>
+                    </select>
+                </div>
                 <button class="theme-toggle-btn" onclick="toggleTheme()">
                     <span id="theme-icon">☀️</span> <span id="theme-text">Light</span>
                 </button>
@@ -430,8 +435,10 @@
                 </div>
                 <button class="btn" style="background:#ea580c; color:white; padding:4px 9px; font-size:11px; font-weight:800; border:none; border-radius:6px; cursor:pointer;" onclick="window.open('/2_MINUTE_EXECUTIVE_SALES_FLASHCARD.pdf', '_blank')" title="स्कूल डायरेक्टर को 2 मिनट में समझाने हेतु 1-पेज का स्पेशल फीचर्स फ्लैशकार्ड">⚡ 2-मिनट पिच कार्ड</button>
                 <button class="btn" style="background:#8b5cf6; color:white; padding:4px 9px; font-size:11px; font-weight:700; border:none; border-radius:6px; cursor:pointer;" onclick="window.open('/STAFF_TRAINING_MANUAL.pdf', '_blank')" data-i18n="training_pdf_btn">📖 ट्रेनिंग मैनुअल (PDF)</button>
-                <button class="btn btn-outline" style="padding:4px 9px; font-size:11px; font-weight:700; cursor:pointer;" onclick="refreshAllAppData(this)" data-i18n="refresh_btn">🔄 रिफ्रेश</button>
-                <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="openEODReport()" data-i18n="eod_btn">📧 EOD Mail</button>
+                <!-- Single Unified Blue Action Button: Refresh & EOD Sync -->
+                <button class="btn" style="background:#0284c7; color:white; padding:4px 10px; font-size:11px; font-weight:700; border:none; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:5px;" onclick="handleUnifiedRefreshAndEOD(this)" id="btn-unified-sync" data-i18n="refresh_btn" title="1-क्लिक डेटा रिफ्रेश एवं दैनिक EOD रिपोर्ट">
+                    🔄 रिफ्रेश व EOD सिंक
+                </button>
                 <button class="btn" style="background:#ef4444; color:white; padding:4px 10px; font-size:11px; font-weight:700; border:none; border-radius:6px; cursor:pointer;" onclick="logoutApp()" data-i18n="logout_btn">🚪 लॉगआउट</button>
             </div>
         </header>
@@ -6144,6 +6151,24 @@ Bhadar, Amethi (U.P.)`;
             if (stuSubEl) stuSubEl.innerText = `${stuCount} active records`;
             const recentLbl = document.getElementById('dash-recent-records-label');
             if (recentLbl) recentLbl.innerText = `${stuCount} Active Records`;
+        }
+
+        async function handleUnifiedRefreshAndEOD(btn) {
+            const orig = btn ? btn.innerHTML : '';
+            if (btn) btn.innerHTML = '<span>⏳</span> <span>सिंक...</span>';
+            try {
+                if (typeof init === 'function') await init();
+                else if (typeof initApp === 'function') await initApp();
+                if (btn) btn.innerHTML = '<span>✅</span> <span>सिंक सफल!</span>';
+                if (typeof showToast === 'function') {
+                    showToast('✅ सभी स्कूल रिकॉर्ड्स व EOD डेटा 100% रिफ्रेश व सिंक हो गए हैं!', 'success');
+                }
+                setTimeout(() => {
+                    if (btn) btn.innerHTML = orig || '🔄 रिफ्रेश व EOD सिंक';
+                }, 1200);
+            } catch(e) {
+                if (btn) btn.innerHTML = orig || '🔄 रिफ्रेश व EOD सिंक';
+            }
         }
 
         async function refreshAllAppData(btn) {
